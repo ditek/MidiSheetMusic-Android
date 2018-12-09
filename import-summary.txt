@@ -1,0 +1,63 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* NotePair114.png
+* NotePair512.png
+* README.html
+* WindowDiagram.png
+* android_icon.png
+* blue_background.png
+* choose_instruments.png
+* choose_song.png
+* choose_tracks.png
+* linux_icon.png
+* mac_icon.png
+* main_screenshot.png
+* midi_logo.png
+* midisheetmusic.css
+* note_colors.png
+* note_letters.png
+* piano_highlight.png
+* proguard.cfg
+* sheet_highlight.png
+* sheet_music.png
+* sheet_music_promo.png
+* sheet_music_settings.png
+* split_track.png
+* symbol_diagram.png
+* white_background.png
+* win_icon.png
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => app\src\main\AndroidManifest.xml
+* assets\ => app\src\main\assets\
+* res\ => app\src\main\res\
+* src\ => app\src\main\java\
+* src\com\midisheetmusic\Changelog.txt => app\src\main\resources\com\midisheetmusic\Changelog.txt
+* src\com\midisheetmusic\FileUri.java.orig => app\src\main\resources\com\midisheetmusic\FileUri.java.orig
+* src\com\midisheetmusic\sharedpreferences.txt => app\src\main\resources\com\midisheetmusic\sharedpreferences.txt
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)
