@@ -36,7 +36,7 @@ class BoxedInt {
  *   Create a new SheetMusic control from the given midi file and options.
  * 
  * onDraw()
- *   Method called to draw the SheetMuisc
+ *   Method called to draw the SheetMusic
  *
  * shadeNotes()
  *   Shade all the notes played at a given pulse time.

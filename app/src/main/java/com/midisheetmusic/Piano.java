@@ -185,10 +185,7 @@ public class Piano extends SurfaceView implements SurfaceHolder.Callback {
          * and we use different colors for highlighting the left hand and
          * right hand notes.
          */
-        useTwoColors = false;
-        if (tracks.size() == 2) {
-            useTwoColors = true;
-        }
+        useTwoColors = tracks.size() == 2;
 
         showNoteLetters = options.showNoteLetters;
         this.invalidate();

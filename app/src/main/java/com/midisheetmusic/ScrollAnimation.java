@@ -100,7 +100,14 @@ public class ScrollAnimation {
                 
                 moveX = event.getX();
                 moveY = event.getY();
-                moveTime = currentTime; 
+                moveTime = currentTime;
+
+                // If this is a tap, do nothing.
+                if (currentTime - downTime < 500 &&
+                        Math.abs(moveX - downX) <= 20 &&
+                        Math.abs(moveY - downY) <= 20) {
+                    return true;
+                }
 
                 if (scrollVert) {
                     listener.scrollUpdate(0, (int)deltaY);
@@ -128,8 +135,8 @@ public class ScrollAnimation {
 
                 // If this is a tap, inform the listener.
                 if (upTime - downTime < 500 &&
-                    Math.abs(overallDeltaX) <= 5 &&
-                    Math.abs(overallDeltaY) <= 5) {
+                    Math.abs(overallDeltaX) <= 20 &&
+                    Math.abs(overallDeltaY) <= 20) {
 
                     listener.scrollTapped((int)downX, (int)downY);
                     return true;
