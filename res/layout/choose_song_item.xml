@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:background="#000000"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView android:id="@+id/choose_song_icon"
+        android:background="#000000"
+        android:padding="8dip"
+        android:layout_width="48dip" 
+        android:layout_height="48dip" />
+
+    <TextView android:id="@+id/choose_song_name"
+        android:layout_gravity="center_vertical"
+        android:layout_width="0dip"
+        android:layout_weight="1.0"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:textSize="14dip"
+        android:textColor="#f0f0f0" />
+
+</LinearLayout>
+

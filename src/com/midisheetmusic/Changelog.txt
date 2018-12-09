@@ -1,0 +1,230 @@
+MidiSheetMusic 2.5.1 (Aug 25, 2012)
+
+- Fixed crash that occurs when you change the default time signature
+
+MidiSheetMusic 2.5 (Aug 20, 2012)
+
+- Add menu option to browse filesystem for midi files
+
+- Add settings to pick colors for left/right hand shading
+
+- Save and restore per-song settings
+
+- UI changes to screens "Choose File", "Settings", and splash screen
+
+MidiSheetMusic 2.4.2 (May 21, 2012)
+
+- Fixed crashes/hangs due to previous SD card scanning feature.
+
+MidiSheetMusic 2.4.1 (May 19, 2012)
+
+- More fixes/improvements to scanning the SD card for midi files (Android).
+
+MidiSheetMusic 2.4 (Apr 16, 2012)
+
+- Android now supports saving the sheet music as images.
+
+- Added support for displaying lyrics.
+
+- Workaround for wrong TimeSignature format in Acid Music Studio.
+
+- New option to mute tracks, but still keep them displayed.
+
+- Show note letters in english (C, C#, D), Do-Re-Mi, or numbers.
+
+- More easy songs.
+
+- Fixed bug where Save As fails for sample songs.
+
+MidiSheetMusic 2.3 (Jan 15, 2012)
+
+- MidiSheetMusic now ships with over 50 sample MIDI songs.
+
+- Added new menu "Open Sample Song" to select one of the sample songs.
+
+- Added a new menu option "Show Measure Numbers" to display the 
+  measure numbers for each staff.
+
+- Added a new menu and dialog "Play Measures in a Loop", which allows you
+  to select a range of measures (like 5 through 10), and play just those
+  measures in a loop.
+
+- Improved the algorithm that chooses how to connect chords with beams.
+  For example, added support for beams connecting 4 chords and 6 chords.
+
+- Fixed a bug where the notes aren't vertically aligned towards the very 
+  end of the song.
+
+- Fixed a bug in Windows, where the sound didn't play if the filename was 
+  too long.
+
+- Fixed a bug in Windows, where the sound and highlighting didn't sync up
+  when the midi file had too many ControlChange events.
+
+- Fix a bug when using horizontal scrolling, where the sheet music 
+  suddenly jumps to the start of the song during playback.
+
+- De-select percussion tracks by default.
+
+- Fix a bug on Mac OS X, where you couldn't open midi files with 
+  non-ascii filenames.
+
+- Added a project build file (SheetMusicDLL.csproj) for developers who 
+  want to build the SheetMusic Control as a standalone DLL library,
+  independent of the MidiSheetMusic executable.
+
+- Ported MidiSheetMusic to the Android platform.
+
+MidiSheetMusic 2.2 (June 26, 2011)
+
+- Improved the appearance of the sheet music by doing "full justification".  
+  That is, increase the horizontal spacing of the symbols so that they
+  fill out the staff.
+
+- Other minor improvements to the sheet music appearance.
+
+- Improved the appearance of the piano, to look more realistic.
+
+- Added a new menu option "Show Note Letters" which displays the actual
+  note letters (A, A#, Bb, etc) beside the notes in the sheet music.
+
+- When the song has exactly two tracks, use two different colors for shading
+  the notes during playback (one for left hand, one for right hand).
+
+- In the piano, keep the notes shaded for their full duration.
+
+- Added a new menu option "Show Note Letters" which displays the actual
+  note letters (A, A#, Bb, etc) beside the notes in the sheet music.
+
+- Fixed a bug with the G-flat key signature, where B-flat was being 
+  displayed as A.
+
+- Fixed a bug in the "Choose Instruments" dialog, where typing in your own
+  instrument (rather than choosing from the drop-down list) causes the
+  application to crash.
+
+- Retain the pause position while changing the sheet music settings.
+  Previously, changing any settings (like transpose) while the music was
+  paused caused the music to restart from the beginning.  Now, the music
+  will start from where it was paused.
+
+- Print the page numbers at the bottom right-hand corner.
+
+- Added tutorial videos to the website.
+
+
+MidiSheetMusic 2.1 (Feb 6, 2011)
+
+- Ported MidiSheetMusic to Ubuntu Linux, using C#/Mono.
+  It uses Timidity for playing the MIDI sound.
+
+- Changed how we choose black notes.  Before, we would use either all
+  sharps or all flats, depending on the key signature.  If the key
+  was F major (1 flat), then we only use flats (e.g. we use G-flat
+  instead of F-sharp).  Now, we use the following method:
+
+  * Use F# and C# instead of G-flat and D-flat
+  * Use B-flat instead of A#
+  * For all other black keys, use the same accidental (sharp/flat)
+    that the key signature uses. For C major, use sharps.
+
+  This required modifications to the KeySignature methods
+  GetWhiteNote and GetAccidental.
+
+- Changed MidiFile.ReadTrack so that if it encounters a truncated
+  Midi file, it returns what it has parsed so far, instead of 
+  throwing an exception.
+
+- Improved the accuracy and speed of the MidiFile.SplitTrack() method.
+
+- Previously, the Volume slider only worked on Windows XP.
+  Fixed it to work on Windows Vista and Windows 7.
+
+- When printing, include the MIDI filename at the top of the first page.
+
+- Fixed errors in the MusicSymbolDiagram at the bottom of README.html.
+
+- Display the message "Use the menu File:Open to select a MIDI file" on
+  startup.  
+
+
+MidiSheetMusic 2.0 (Oct 10, 2010)
+
+- Added the following new features:
+  * Playing the Midi sound
+  * Changing the Midi sound options, such as speed, transposed notes,
+    instruments, and tracks to play.
+  * Highlighting the sheet music notes as the midi sound is being played.
+  * Highlighting the piano notes as the midi sound is being played.
+
+- The main classes/methods for the new features are:
+  * MidiPlayer - The panel for playing, pausing, stopping the music
+  * Piano - The GUI control for displaying the piano notes
+  * SheetMusic.ShadeNotes - A method to highlight the sheet music notes
+  * InstrumentDialog - A dialog for choosing the track instruments
+
+- The sheet music can now be scrolled horizontally or vertically
+
+- Added separate 'Change Key Signature' and 'Transpose' menus.
+
+- Display the Time Signature
+
+- Updated README.html (and website) look-and-feel
+
+MidiSheetMusic 1.4 (March 7, 2010)
+
+- Fixed bug where MidiSheetMusic printed blank pages when the paper
+  size was less than 8.5 x 11 inches.
+
+- Printed Sheet music is now scaled to fill up any paper size.
+
+- When printing two-staff piano songs, keep then upper and lower staffs
+  on the same page.
+
+- Added menu options "Select All Tracks" and "Deselect All Tracks".
+
+- Added menu option "Combine Notes Within Interval".
+
+- Improved the performance of the SplitTracks method.
+
+- Changed the icon to look more like Sheet Music.
+
+- Updated README.html to match the website look-and-feel.
+
+- Ported MidiSheetMusic to the Apple Mac OS X.
+
+MidiSheetMusic 1.3 (March 9 2009)
+
+- Fixed OpenFileDialog and SaveFileDialog problems by marking 
+  the application as single-threaded, i.e. by adding the attribute
+  [STAThread] to the Main() function.
+
+- Added an option to display the notes in color (a different
+  color for each note in the 12-note scale).
+
+- Added a dialog to choose the note colors.
+
+- Added a Help Contents dialog, which explains each menu option.
+
+- Fixed error where horizontal lines (for notes displayed below the staff)
+  were off by one pixel.
+
+MidiSheetMusic 1.2 (September 8 2008)
+
+- Fixed bug on Windows Vista SP1, where the OpenFileDialog
+  and SaveFileDialog hang.
+
+- Updated the README.html with some brief source documentation.
+
+MidiSheetMusic 1.1 (June 21 2008)
+
+- Added the Large/Small Notes option under the Zoom menu.
+- Added a menu option to change the time signature (3/4, 4/4, etc)
+- Added a menu option to change the measure length.
+- Added a menu option to shift the notes left or right.
+
+MidiSheetMusic 1.0 (May 12 2008)
+
+- Initial Release
+
+

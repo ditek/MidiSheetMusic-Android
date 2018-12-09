@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="transpose_entries">
+        <item>Up 12 notes</item>
+        <item>Up 11 notes</item>
+        <item>Up 10 notes</item>
+        <item>Up 9 notes</item>
+        <item>Up 8 notes</item>
+        <item>Up 7 notes</item>
+        <item>Up 6 notes</item>
+        <item>Up 5 notes</item>
+        <item>Up 4 notes</item>
+        <item>Up 3 notes</item>
+        <item>Up 2 notes</item>
+        <item>Up 1 note</item>
+        <item>None</item>
+        <item>Down 1 note</item>
+        <item>Down 2 notes</item>
+        <item>Down 3 notes</item>
+        <item>Down 4 notes</item>
+        <item>Down 5 notes</item>
+        <item>Down 6 notes</item>
+        <item>Down 7 notes</item>
+        <item>Down 8 notes</item>
+        <item>Down 9 notes</item>
+        <item>Down 10 notes</item>
+        <item>Down 11 notes</item>
+        <item>Down 12 notes</item>
+    </string-array>
+
+    <string-array name="transpose_values">
+        <item>12</item>
+        <item>11</item>
+        <item>10</item>
+        <item>9</item>
+        <item>8</item>
+        <item>7</item>
+        <item>6</item>
+        <item>5</item>
+        <item>4</item>
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+        <item>-2</item>
+        <item>-3</item>
+        <item>-4</item>
+        <item>-5</item>
+        <item>-6</item>
+        <item>-7</item>
+        <item>-8</item>
+        <item>-9</item>
+        <item>-10</item>
+        <item>-11</item>
+        <item>-12</item>
+    </string-array>
+
+    <string-array name="key_signature_entries">
+        <item>Default</item>
+        <item>A major         F# minor </item>
+        <item>B-flat major   G minor </item>
+        <item>B major         A-flat minor</item>
+        <item>C major         A minor</item>
+        <item>D-flat major   B-flat minor</item>
+        <item>D major         B minor</item>
+        <item>E-flat major   C minor</item>
+        <item>E major         C# minor</item>
+        <item>F major         D minor</item>
+        <item>G-flat major   E-flat minor</item>
+        <item>G major         E minor</item>
+        <item>A-flat major    F minor</item>
+    </string-array>
+
+    <string-array name="key_signature_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+    </string-array>
+
+    <string-array name="combine_interval_entries">
+        <item>20 milliseconds</item>
+        <item>40 milliseconds</item>
+        <item>60 milliseconds</item>
+        <item>80 milliseconds</item>
+        <item>100 milliseconds</item>
+    </string-array>
+
+    <string-array name="combine_interval_values">
+        <item>20</item>
+        <item>40</item>
+        <item>60</item>
+        <item>80</item>
+        <item>100</item>
+    </string-array>
+
+    <string-array name="show_note_letter_entries">
+        <item>None</item>
+        <item>Letters (A, A#)</item>
+        <item>Fixed Do-Re-Mi</item>
+        <item>Movable Do-Re-Mi</item>
+        <item>Fixed Numbers</item>
+        <item>Movable Numbers</item>
+    </string-array>
+
+    <string-array name="show_note_letter_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+</resources>

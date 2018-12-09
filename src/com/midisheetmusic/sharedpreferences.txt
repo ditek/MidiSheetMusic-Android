@@ -1,0 +1,12 @@
+The SharedPreferences used by MidiSheetMusic.
+
+String lastBrowsedDirectory : The last directory browsed when choosing song
+
+When new songs are opened, we set the following MidiOptions
+based on the values used in previous songs:
+
+boolean scrollVert  : The scrolling direction (vertical/horizontal)
+boolean shade1Color : The shade color
+boolean shade2Color : The second shade color
+boolean showPiano   : Whether the piano is shown or not
+

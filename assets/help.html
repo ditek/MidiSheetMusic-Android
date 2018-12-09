@@ -1,0 +1,158 @@
+<html>
+<head>
+  <style type="text/css">
+    body {
+        font-family: "verdana", "sans-serif";
+        font-size: 12pt;
+        line-height: 1.4em;
+        color: #202020;
+        background-image: url(blue_background.png);
+        text-align: left;
+        margin: 0px 0px;
+        padding: 20px 20px;
+    }
+
+    h1 {
+        font-family: "arial", "helvetica";
+        font-size: 18pt;
+        color: #000020;
+    }
+    h2 {
+        font-family: "arial", "helvetica";
+        font-size: 18pt;
+        color: #000020;
+    }
+  </style>
+</head>
+<body>
+  <img src="midi_logo.png" />
+  <p>
+  MidiSheetMusic is an app for learning to play your favorite MIDI songs.
+  It simultaneously:
+  <ul>
+    <li>Plays MIDI music files
+    <li>Highlights the piano notes
+    <li>Highlights the sheet music notes
+  </ul>
+  <p>
+
+
+  <h2>Playback options</h2>
+  A picture of the main playback screen is shown below:
+  <p>
+  <img src="playback_screen.png" />
+  <p>
+  The playback controls are at the top, with the piano and
+  sheet music underneath.  The playback controls, from left
+  to right, are:
+  <ul>
+    <li><b>Rewind</b> Rewind the music by one measure
+    <li><b>Stop</b> Stop the music, and return to the start of the song.
+    <li><b>Play</b> Start playing the music.
+    <li><b>Fast Forward</b> Fast forward the music by one measure. 
+    <li><b>Speed Bar</b> Change the speed of the music playback, from
+        1 to 100% of the original speed.
+  </ul>
+  <p>
+  When the play button is pressed, and the music starts playing,
+  the playback controls are temporarily hidden, to give more
+  screen space to the piano and sheet music.
+  <p>
+  To pause the playback, simply tap anywhere on the screen.
+  <p>
+  The Android menu button has four options:
+  <ul>
+    <li>Choose Song: Choose another song
+    <li>Settings: Adjust the sheet music settings
+    <li>Save As Images: Save the sheet music as PNG images (one per page). 
+        The images are saved to the album Pictures/MidiSheetMusic.
+    <li>Help: Show this help screen
+  </ul>
+  <p>
+
+  <h2>Sheet Music Settings </h2>
+  You can adjust the following Sheet Music Settings:
+  <ul>
+    <li><b>Select Tracks To Display</b> <br/>
+      MIDI files are divided into tracks, where each track generally
+      represents a separate musical instrument (piano, violin, etc).
+      The piano songs that come with MidiSheetMusic use two tracks:
+      one for the left hand and one for the right hand.  For example,
+      if you enable only the right-hand track, then only the right-hand
+      notes are displayed and played.
+    <li><b>Select Tracks To Mute</b> <br/>
+      You can mute individual tracks during playback. The tracks are still displayed.
+    <li><b>Select Instruments For Each Track</b> <br/>
+      For each track, you can choose what instrument to use during playback.
+    <li><b>Scroll Vertically</b> <br />
+      Scroll the sheet music either vertically or horizontally during playback.
+    <li><b>Show the Piano</b> <br />
+      When checked, the piano notes will be highlighted during playback.
+      You can hide the piano to give more screen space to the sheet music.
+    <li><b>Show Lyrics</b> <br />
+      If the MIDI file contains lyrics, display them.
+    <li><b>Show Note Letters</b> <br />
+      When checked, display the note letters next to each note.
+      You can display either English letters (C, C#), Do-Re-Mi, or Numbers.
+      With Fixed Do-Re-Mi and Numbers, Do (number 1) is always the letter C.
+      With Movable Do-Re-Mi and numbers, Do (number 1) is the first letter of the key signature.
+    <li><b>Transpose Notes</b> <br />
+      Transpose the notes up or down. This changes both the sheet music
+      and the pitch of the notes during playback.
+    <li><b>Key Signature</b> <br />
+      MIDI files often do not include the key signature of the music.
+      In those cases, MidiSheetMusic must guess the key signature.
+      You can override the key signature used in the sheet music by
+      changing this option. This option does not affect the pitch of
+      the notes during playback.
+    <li><b>Time Signature</b> <br />
+      MIDI files often do not include a time signature.  In those cases,
+      MidiSheetMusic will default to 4/4 time.  You can override the
+      default time signature using this option.
+    <li><b>Combine Interval</b> <br />
+      MidiSheetMusic must determine whether a group of notes belong to
+      the same chord.  Notes that are played at the exact same time
+      definitely belong to the same chord.  However, notes that are
+      played just a couple milliseconds apart will sound as if they
+      are played at the same time.  These notes should also be part
+      of the same chord.  This option determines the interval (in
+      milliseconds) that notes will be considered part of the same
+      chord.
+    <li><b>Right Hand Color</b> <br />
+      Select the color used for highlighting the right hand notes.
+    <li><b>Left Hand Color</b> <br />
+      Select the color used for highlighting the left hand notes.
+    <li><b>Show Measure Numbers</b> <br />
+      Display the measure numbers in each staff.
+    <li><b>Play Measures in a Loop</b> <br />
+      Play a subset of measures continuously in a loop. This it useful for
+      learning small parts of a song at a time.
+    <li><b>Start/End Measure</b> <br />
+      Select the measure range to play in a loop.
+  </ul>
+  <p>
+  <h2>What is a MIDI file?</h2>
+  <p>
+  A MIDI file is a type of music file. It is a standard format for
+  recording music from electronic instruments, such as electronic
+  keyboards/pianos.  
+  <p>
+  MidiSheetMusic comes with over 50 sample classical piano songs.
+  You can also download additional MIDI files from the Internet,
+  and open them with MidiSheetMusic. When choosing a song, you
+  browse the filesystem for MIDI files.
+  <p>
+  <h2>About</h2>
+  MidiSheetMusic was developed by Madhav Vaidyanathan. The website is at:<br>
+  <a href="http://midisheetmusic.sourceforge.net/">
+  http://midisheetmusic.sourceforge.net/
+  </a>
+  <p>
+  MidiSheetMusic is also available for Microsoft Windows
+  and Mac OS X, with additional features such as printing.
+  <p>&nbsp;
+  <p>&nbsp;
+  <p>&nbsp;
+</body>
+</html>
+

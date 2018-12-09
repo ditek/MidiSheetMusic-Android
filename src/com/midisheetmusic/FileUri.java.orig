@@ -1,0 +1,245 @@
+/*
+ * Copyright (c) 2011-2012 Madhav Vaidyanathan
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License version 2.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ */
+
+package com.midisheetmusic;
+
+import android.content.*;
+import android.content.res.*;
+import java.io.*;
+import java.util.*;
+import android.net.*;
+import android.provider.*;
+import org.json.*;
+import android.app.Activity;
+
+/** @class FileUri
+ * Represents a reference to a file.
+ * The file could be either in the /assets directory, 
+ * the internal storage, or the external storage.
+ */
+public class FileUri implements Comparator<FileUri> {
+    public static final int FileUriAsset = 1;
+    public static final int FileUriContentProvider = 2;
+    public static final int FileUriFilepath = 3;
+    
+    private int type;                 /** The type of file reference */
+
+    private AssetManager asset;       /** For reading files in /assets */
+    private String filepath;          /** The path to the file */
+
+    private ContentResolver resolver; /** For reading from storage */
+    private Uri uri;                  /** The URI path to the file */
+
+    private String displayName;       /** The name to display */
+
+    /** Create a new reference to a file under /assets */
+    public FileUri(AssetManager asset, String path, String display) {
+        type = FileUriAsset;
+        this.asset = asset;
+        filepath = path;
+        displayName = display;
+        displayName = displayName.replace("__", ": ");
+        displayName = displayName.replace("_", " ");
+        displayName = displayName.replace(".mid", "");
+    }
+
+    /** Create a new reference to a file in internal/external storage.
+     *  The URI should be MediaStore.Audio.Media.EXTERNAL_CONTENT_URI/id
+     */
+    public FileUri(ContentResolver resolver, Uri uri, String display) {
+        type = FileUriContentProvider;
+        this.resolver = resolver;
+        this.uri = uri;
+        displayName = display;
+        displayName = displayName.replace("__", ": ");
+        displayName = displayName.replace("_", " ");
+        displayName = displayName.replace(".mid", "");
+    }
+
+    /** Create a new reference to a file in internal/external storage.
+     */
+    public FileUri(String filepath) {
+        type = FileUriFilepath;
+        this.filepath = filepath;
+        File file = new File(filepath);
+        displayName = file.getName();
+        displayName = displayName.replace("__", ": ");
+        displayName = displayName.replace("_", " ");
+        displayName = displayName.replace(".mid", "");
+    }
+
+    /** Return the display name */
+    public String toString() {
+        return displayName;
+    }
+
+    /** Return true if this is a directory */
+    public boolean isDirectory() {
+        if (filepath != null && filepath.endsWith("/")) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /** Return the filepath */
+    public String filePath() {
+        return filepath;
+    }
+
+    /** Compare two files by their display name */
+    public int compare(FileUri f1, FileUri f2) {
+        return f1.displayName.compareToIgnoreCase(f2.displayName);
+    }
+
+    /** Return the file contents as a byte array.
+     *  If any IO error occurs, return null.
+     */
+    public byte[] getData() {
+        try {
+            byte[] data;
+            int totallen, len, offset;
+        
+            // First, determine the file length
+            data = new byte[4096];
+            InputStream file;
+            if (asset != null) {
+                file = asset.open(filepath);
+            }
+            else if (resolver != null) {
+                file = resolver.openInputStream(uri);
+            }
+            else {
+                file = new FileInputStream(filepath);
+            }
+            totallen = 0;
+            len = file.read(data, 0, 4096);
+            while (len > 0) {
+                totallen += len;
+                len = file.read(data, 0, 4096);
+            }
+            file.close();
+        
+            // Now read in the data
+            offset = 0;
+            data = new byte[totallen];
+
+            if (asset != null) {
+                file = asset.open(filepath);
+            }
+            else if (resolver != null) {
+                file = resolver.openInputStream(uri);
+            }
+            else {
+                file = new FileInputStream(filepath);
+            }
+            while (offset < totallen) {
+                len = file.read(data, offset, totallen - offset);
+                if (len <= 0) {
+                    throw new MidiFileException("Error reading midi file", offset);
+                }
+                offset += len;
+            }
+            return data;
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    /* Convert this file reference to a JSON string */
+    public JSONObject toJson() {
+        try {
+            JSONObject json = new JSONObject();
+            json.put("type", type);
+            if (filepath != null) {
+                json.put("filepath", filepath);
+            }
+            if (uri != null) {
+                json.put("uri", uri.toString());
+            }
+            if (displayName != null) {
+                json.put("displayName", displayName);
+            }
+            return json;
+        }
+        catch (JSONException e) {
+            return null;
+        }
+        catch (NullPointerException e) {
+            return null;
+        }
+    }
+
+    /* Initialize this file reference from a json string */
+    public static FileUri fromJson(JSONObject obj, Activity activity) {
+        try {
+            int type = obj.optInt("type", 0);
+            String displayName = obj.optString("displayName", null);
+            String filepath = obj.optString("filepath", null);
+            String uriString = obj.optString("uri", null);
+
+            if (type == 0 || displayName == null) {
+                return null;
+            }
+
+            if (type == FileUriAsset && filepath != null) {
+                AssetManager assets = activity.getResources().getAssets();
+                return new FileUri(assets, filepath, displayName);
+            }
+            else if (type == FileUriContentProvider && uriString != null) {
+                Uri uri = Uri.parse(uriString);
+                return new FileUri(activity.getContentResolver(), uri, displayName);
+            }
+            else if (type == FileUriFilepath && filepath != null) {
+                return new FileUri(filepath);
+            }
+            else {
+                return null;
+            }
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+    
+    public static boolean equalStrings(String s1, String s2) {
+        if ((s1 == null && s2 != null) ||
+            (s1 != null && s2 == null)) {
+            return false;
+        }
+        if (s1 == null && s2 == null) {
+            return true;
+        }
+        return s1.equals(s2);
+    }
+    
+    /* Return true if the two FileUri json objects are equal */
+    public static boolean equalJson(JSONObject obj1, JSONObject obj2) {
+        int type1 = obj1.optInt("type", 0);
+        String displayName1 = obj1.optString("displayName", null);
+        String filepath1 = obj1.optString("filepath", null);
+        String uriString1 = obj1.optString("uri", null);
+
+        int type2 = obj2.optInt("type", 0);
+        String displayName2 = obj2.optString("displayName", null);
+        String filepath2 = obj2.optString("filepath", null);
+        String uriString2 = obj2.optString("uri", null);
+
+        return (type1 == type2 && 
+                equalStrings(displayName1, displayName2) &&
+                equalStrings(filepath1, filepath2) &&
+                equalStrings(uriString1, uriString2) );
+    }
+}
+

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MidiSheetMusic</string>
+    <string name="choose_song">Choose Song</string>
+    <string name="song_settings_str">Song Settings</string>
+    <string name="save_images_str">Save As Images</string>
+    <string name="save_images_descr_str">Save the sheet music as images, in the directory /Pictures/MidiSheetMusic, with the following filename</string>
+    <string name="help_str">Help</string>
+    <string name="sheet_prefs_title">Sheet Music Preferences</string>
+    <string name="restore_defaults">Restore Default Settings</string>
+    <string name="select_tracks_to_display">Select Tracks to Display</string>
+    <string name="select_tracks_to_mute">Select Tracks to Mute</string>
+    <string name="select_instruments_per_track">Select Instruments For Each Track</string>
+    <string name="set_all_to_piano">Set All Instruments to Piano</string>
+    <string name="scroll_vertically">Scroll Vertically</string>
+    <string name="show_piano">Show the Piano</string>
+    <string name="show_lyrics">Show Lyrics</string>
+    <string name="show_note_letters">Show Note Letters</string>
+    <string name="combine_to_two_staffs">Combine To Two Staffs</string>
+    <string name="combine_to_two_staffs_summary">Combine all the tracks into two staffs (left hand and right hand staffs). </string>
+    <string name="split_to_two_staffs">Split Track Into Two Staffs</string>
+    <string name="split_to_two_staffs_summary">Split the single track into two staffs (left hand and right hand staffs).</string>
+    <string name="transpose">Transpose Notes</string>
+    <string name="key_signature">Key Signature</string>
+    <string name="time_signature">Time Signature</string>
+    <string name="combine_interval">Combine Interval</string>
+    <string name="combine_interval_summary">Notes within the given interval (in milliseconds) are combined into a single chord</string>
+    <string name="right_hand_color">Right Hand Color</string>
+    <string name="left_hand_color">Left Hand Color</string>
+    <string name="show_measures">Show Measure Numbers</string>
+    <string name="play_measures_in_loop_title">Settings for Play Measures in a Loop</string>
+    <string name="play_measures_in_loop">Play Measures in a Loop</string>
+    <string name="play_measures_in_loop_start">Start Measure</string>
+    <string name="play_measures_in_loop_end">End Measure</string>
+    <string name="scan_button_title">Scan SD Card for MIDI files</string>
+    <string name="scan_files_str">Scan for MIDI Files</string>
+    <string name="browse_files_str">Browse for MIDI Files</string>
+
+</resources>

@@ -1,0 +1,692 @@
+<html>
+  <head>
+    <title>Midi Sheet Music</title>
+    <link rel="stylesheet" type="text/css" href="midisheetmusic.css">
+  </head>
+
+  <body>
+    <div id="topbackground">
+      <center><img src="midi_logo.png" alt="Midi Sheet Music" /></center>
+    </div>
+    <div id="menu">
+      <center>
+        <table>
+          <tr>
+            <td><a href="#Home">Home</a></td>
+            <td><a href="#Download">Download</a></td>
+            <td><a href="#Features">Features</a></td>
+            <td><a href="#Help">Help</a></td>
+            <td><a href="#Build">Build</a></td>
+            <td><a href="#Source">Source</a></td>
+          </tr>
+        </table>
+      </center>
+    </div>
+    <a name="Home"></a>
+    <div id="mainbody">
+      <p>
+
+      <h1>Convert MIDI Files to Sheet Music</h1>
+      Midi Sheet Music is a free program that simultaneously:
+      <ul>
+        <li>Plays MIDI music files
+        <li>Highlights the piano notes
+        <li>Highlights the sheet music notes
+      </ul>
+      <p>
+      <img src="main_screenshot.png" />
+      <p>
+      MidiSheetMusic was developed by
+      <a href="mailto:madhav_vaidy@users.sourceforge.net">Madhav Vaidyanathan.</a>
+      <p>
+      For additional information, see the project homepage at<br>
+      <a href="http://sourceforge.net/projects/midisheetmusic/">
+        http://sourceforge.net/projects/midisheetmusic/
+      </a>
+      <p>&nbsp;
+      <p>&nbsp;
+      <h1><a name="Download">Download</a></h1>
+      <p>
+      MidiSheetMusic runs on Microsoft Windows, Mac OS X, and Linux.  The latest version is MidiSheetMusic-2.4. <br>
+      Please see the <a href="#Installation">Installation</a> section below for supported
+      Operating Systems.  Microsoft Windows XP requires an additional download in
+      order for MidiSheetMusic to work.
+      <p>
+      <table border=0 cellpadding=10>
+        <tr>
+
+          <td>
+            <div class="download_button">
+              <a href="http://sourceforge.net/projects/midisheetmusic/files/midisheetmusic/2.4/MidiSheetMusic-2.4.exe/download">
+                <img src="win_icon.png" /> &nbsp;Download Windows
+              </a>
+            </div>
+          </td>
+
+          <td>
+            <div class="download_button">
+              <a href="http://sourceforge.net/projects/midisheetmusic/files/midisheetmusic/2.4/MidiSheetMusic-2.4-mac.zip/download">
+                <img src="mac_icon.png" /> &nbsp; Download Mac OS X
+              </a>
+            </div>
+          </td>
+
+          <td>
+            <div class="download_button">
+              <a href="http://sourceforge.net/projects/midisheetmusic/files/midisheetmusic/2.4/midisheetmusic-2.4-linux.ubuntu.deb/download">
+                <img src="linux_icon.png" /> &nbsp;Download Linux
+              </a>
+            </div>
+          </td>
+
+        </tr>
+        <tr>
+
+          <td>
+            <div class="download_button">
+              <a href="https://market.android.com/details?id=com.midisheetmusic">
+                <img src="android_icon.png" /> &nbsp;Download Android &nbsp;&nbsp;
+              </a>
+            </div>
+          </td>
+
+        </tr>
+      </table>
+
+      <p>&nbsp;<p>
+      Additional source downloads are available at the project homepage, at <br>
+      <a href="http://sourceforge.net/projects/midisheetmusic/files/midisheetmusic/2.4/"> http://sourceforge.net/projects/midisheetmusic/files/midisheetmusic/2.4/ </a>
+      <p>
+      <p>&nbsp;
+
+
+      <h1><a name="Installation">Installation</a></h1>
+      <p>
+      <h2><img src="win_icon.png" />&nbsp;Microsoft Windows</h2>
+      <p>
+      Download the MidiSheetMusic-2.4.exe file, and double-click to run.
+      <p>
+      Supported systems:
+      <p>
+      Microsoft Windows 7<br>
+      Microsoft Vista<br>
+      Microsoft Windows XP + Microsoft .NET Framework 2.0<br>
+      <p>
+      <font color="#bb0000"><b>For Windows XP, you must download and install
+       the Microsoft .NET framework.
+      </b></font> <br>
+      Otherwise, MidiSheetMusic will not run on Windows XP.
+      <p>
+      You can download the Microsoft .NET framework for free at<br>
+      <a href="http://msdn.microsoft.com/netframework/downloads/updates/default.aspx">
+        http://msdn.microsoft.com/netframework/downloads/updates/default.aspx
+      </a>
+      <p>
+      To determine if the Microsoft .NET Framework is installed, <br>
+      check if the following directory exists:<br>
+      <code>C:\WINDOWS\Microsoft.NET\Framework\&lt;version&gt;</code> <br>
+      <p>&nbsp;
+      <p>&nbsp;
+      <p>&nbsp;
+      <h2><img src="mac_icon.png" />&nbsp;Mac OS X</h2><br>
+      Requires: Mac OS X 10.4 (Tiger) or higher<br>
+      <p>
+      Download the MidiSheetMusic-2.4-mac.zip file.<br>
+      Double-click on the zip file. The MidiSheetMusic-2.4.app icon will appear.<br>
+      Drag the MidiSheetMusic-2.4 icon into the Applications folder, and into the Dock.<br>
+      <p>&nbsp;
+      <p>&nbsp;
+      <p>&nbsp;
+      <h2><img src="linux_icon.png"/>&nbsp;Linux Ubuntu</h2><br>
+      Requires: Linux Ubuntu 9.04 (Jaunty) or higher. To install:
+      <p>
+      Double-click the midisheetmusic-2.4-linux.ubuntu.deb. <br>
+      The Ubuntu Package Installer window will appear.<br>
+      Click the Install Package button to complete the installation. <br>
+      MidiSheetMusic has a dependency on the Timidity++ MIDI player, which will also be installed. <br>
+      After the installation, MidiSheetMusic will appear under the menu <br>
+      <code> Applications : Sound and Video </code>
+      <p>&nbsp;
+      <p>&nbsp;
+
+
+      <h1><a name="Features">Features</a></h1>
+      <p>
+      <table border=0 cellpadding=20 cellspacing=0 width="100%">
+        <tr>
+          <td>
+            <img class="feature" src="sheet_highlight.png" /><br>
+            Highlight the Sheet Music
+          </td>
+          <td>
+            <img class="feature" src="piano_highlight.png" /><br>
+            Highlight the piano notes
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img class="feature" src="note_letters.png" /><br>
+            Display the note letters
+          </td>
+          <td>
+            <img class="feature" src="note_colors.png" /><br>
+            Color-code the notes
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img class="feature" src="choose_tracks.png" /><br>
+            Select which MIDI tracks to play
+          </td>
+          <td>
+            <img class="feature"  src="choose_instruments.png" /><br>
+            Select which instruments to use
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <img class="feature" src="split_track.png" /><br>
+            Split one MIDI track into two staffs
+          </td>
+        </tr>
+      </table>
+      <p>
+      <h2>Sheet Music Features </h2>
+      <ul>
+        <li> Displaying sheet music from MIDI music files
+        <li> Printing the Sheet Music
+        <li> Saving the Sheet Music as PNG images or PDF file
+        <li> Displaying the note letters next to each note
+        <li> Displaying the notes in different colors
+        <li> Selecting which MIDI Tracks to display
+        <li> Combining MIDI Tracks into two staffs (left hand and right hand) for piano songs
+        <li> Adjusting the key signature, time signature, and measure length
+        <li> Transposing the notes up or down
+        <li> Displaying the measure numbers
+      </ul>
+      <p>
+      <h2>Playback Features</h2>
+      <ul>
+        <li> Playing the MIDI music
+        <li> Highlighting the piano notes as the music is played back
+        <li> Highlighting the sheet music notes as the music is played back
+        <li> Adjusting the speed of the playback
+        <li> Selecting which MIDI Tracks to play
+        <li> Selecting the instruments to use for each MIDI Track
+        <li> Playing a subset of measures in a continuous loop
+      </ul>
+      <p>&nbsp;
+      <p>&nbsp;
+
+
+      <h1><a name="Help">Help</a></h1>
+      <p>
+      Below are some commonly asked questions
+      <p>
+      <ul>
+        <li>Where do I find MIDI files?
+          <p>
+          MIDI music files are available all over the internet:
+          <p>
+          Classical music MIDI files<br>
+          <a href="http://www.classicalmidiconnection.com/">http://www.classicalmidiconnection.com/</a><br>
+          <a href="http://www.kunstderfuge.com/">http://www.kunstderfuge.com/</a><br>
+          <p>
+          Rock/Pop/Hip-Hop/Contemporary MIDI files<br>
+          <a href="http://www.hamienet.com/">http://www.hamienet.com/</a>
+          <p>
+          Video game music MIDI files<br>
+          <a href="http://www.midishrine.com/">http://www.midishrine.com/</a>
+          <p>
+
+        <li>On Windows XP, MidiSheetMusic-2.1.exe gives an error dialog which I double-click it.
+          <p>
+          Make sure you have Microsoft .NET installed.  See the <a href="#Installation">Installation</a>
+          section on how to install Microsoft .NET for Windows XP.
+          <p>
+        <li>On Windows XP, I can't hear any music
+          <p>
+          In the Control Panel, click on:<br>
+          <code>
+          Sounds and Audio Devices (Classic View), or<br>
+          Sounds, Speech, and Audio Devices -> Adjust the system volume (Category View)<br>
+          </code>
+          <p>
+          A Sounds and Audio Device Properties dialog will appear.<br>
+          Click on the Advanced button.  A Master Volume dialog will appear. <br>
+          Verify that both the Master Volume and SW Synth volume are at maximum and are not muted.
+          <p>
+        <li>On Windows, I can hear the music, but the Volume slider doesn't change the volume level.
+          <p>
+          This is a bug in MidiSheetMusic-2.0.  This is fixed in MidiSheetMusic-2.1.
+          <p>
+        <li>On Linux, I can't hear any music.
+          <p>
+          Verify that the Timidity++ music player is working.  On the command line run<br>
+          <code># /usr/bin/timidity sample.mid</code>
+          <p>
+          If you don't hear the MIDI music, then your Linux sound is not working.<br>
+          For troubleshooting Linux sound problems on Ubuntu, see:<br>
+          <a href="http://ubuntuforums.org/showthread.php?t=843012">
+          http://ubuntuforums.org/showthread.php?t=843012
+          </a>
+          <p>
+        <li>I'm using a different Linux distribution (not Ubuntu). How do I install MidiSheetMusic?
+          <p>
+          Unfortunately, you'll need to build MidiSheetMusic from the source. <br>
+          You can get the source at<br>
+          <a href="http://sourceforge.net/projects/midisheetmusic/files/midisheetmusic/2.1/MidiSheetMusic-2.1-linux-src.tar.gz/download">
+          http://sourceforge.net/projects/midisheetmusic/files/midisheetmusic/2.1/MidiSheetMusic-2.1-linux-src.tar.gz/download</a><br>
+          Follow the instructions in the README.html file for building from the source.
+          <p>
+        <li>How can I submit a bug/question for this product
+         <p>
+          Go to the MidiSheetMusic help forum at<br>
+          <a href="http://sourceforge.net/projects/midisheetmusic/forums/forum/821401">
+          http://sourceforge.net/projects/midisheetmusic/forums/forum/821401
+          </a>
+          <p>
+          Scroll to the bottom.  You can add questions anonymously, without logging in.<br>
+          Click on the "Add Topic" button to submit your question.
+      </ul>
+      <p>&nbsp;
+      <p>&nbsp;
+
+
+      <h1><a name="Build">Building the Source</a></h1>
+      <p>
+      The Midi Sheet Music program is open source software, released under
+      the GNU General Public License version 2.
+      <p>
+      Download and install Eclipse from <br>
+      <code>http://www.eclipse.org/</code>
+      <p>
+      Download and install the Android ADT Eclipse Plugin from<br>
+      <code>http://developer.android.com/sdk/eclipse-adt.html</code>
+      <p>
+      Load the MidiSheetMusic project into Eclipse, using the menu<br>
+      <code>File -> New Android Project </code> or <br>
+      <code>File -> New Project -> Android -> Android Project </code>
+      <p>
+      Select the radio button <code> Create project from existing source</code>.
+      In the Location field, click the <code>Browse</code> button and select this
+      directory (<code>MidiSheetMusic-2.4-android-src</code>). Then click <code>Finish</code>.
+      <p>
+      For details on how to build and run an Android project, see the documentation at<br>
+      <code>http://developer.android.com/</code>
+      <p>
+      <p>
+      <p>&nbsp;
+      <h1><a name="Source">Source Code Overview</a></h1>
+      <p>
+      A brief description of the source code is given here.
+      <p>
+      <img src="WindowDiagram.png" />
+      <p>
+      <table border=1 cellpadding=4 cellspacing=0>
+        <tr>
+          <td valign="top">
+             <code>ChooseSongActivity.java</code>
+          </td>
+          <td>
+            The ativity used to display a list of songs to choose from.
+            The list is created from the songs shipped with MidiSheetMusic
+            (in the assets directory), and also by searching for midi files
+            in the internal/external device storage. 
+            When a song is chosen, this calls the SheetMusicActivity, passing
+            the raw midi byte[] data as a parameter in the Intent.
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+             <code>SheetMusicActivity.java</code>
+          </td>
+          <td>
+            The main activity that contains the MidiPlayer, Piano, and SheetMusic.
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+             <code>SettingsActivity.java</code>
+          </td>
+          <td>
+            The activity created by the "Settings" menu. This is used to modify
+            various sheet music and playback settings (which tracks to display,
+            which instruments to use, and so forth).  After pressing the back button,
+            the settings are stored in a MidiOptions object, and are passed back
+            to the SheetMusicActivity.
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <code>MidiFile.java</code>
+          </td>
+
+          <td>
+            This class is used to read in and parse a MIDI file.  The
+            constructor takes a filename as argument, and returns a MidiFile
+            class containing the following:
+            <ul>
+              <li>The MIDI tracks (<code>List&lt;MidiTrack&gt;</code>)
+              <li>The MIDI time signature (<code>TimeSignature</code>)
+              <li>The MIDI events per track (<code>MidiEvent</code>)
+              <li>The instrument per track (<code>MidiTrack.Instrument</code>)
+              <li>The notes per track (<code>List&lt;MidiNote&gt;</code>)
+              <li>For each note, the note number, start pulse time, and duration 
+                   (<code>MidiNote</code>).
+            </ul>
+            The <code>MidiFile</code> class has two methods for applying
+            the menu options to the MIDI song:
+            <ul>
+              <li><code>ChangeMidiNotes</code> modifies the parsed MidiNote data.
+              <li><code>ChangeSound</code> creates a new MIDI music file for playback, with the new instruments, speed, transpose, etc.
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <code>SheetMusic.java</code>
+          </td>
+          <td>
+            This is a graphical Control that displays the actual sheet music.
+            It takes a parsed <code>MidiFile</code> as argument, as well as the
+            <code>MidiOptions</code> specified by the menu items. The class
+            also supports highlighting notes during playback (<code>ShadeNotes</code>).
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <code>MidiPlayer.java</code>
+          </td>
+          <td>
+            This is the toolbar at the top containing the controls (play, stop,
+            speed, volume) for playing the music.  It uses the 
+            <code>MidiFile.ChangeSound()</code> method to modify the sound 
+            settings, and create a new MIDI music file for playback.
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <code>Piano.java</code>
+          </td>
+          <td>
+            The Piano is used to display the notes being played as the MIDI music
+            is being played.  The method <code>ShadeNotes</code> is used to
+            highlight the appropriate notes.
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <code>Staff.java</code>
+          </td>
+          <td>
+            The <code>SheetMusic</code> displayed consists of a list of Staffs.
+            Each Staff instance corresponds to one horizontal staff.  Each
+            Staff contains a list of <code>MusicSymbols</code> to draw (clefs, notes,
+            accidentals, rests, bars, etc). The actual Music Symbols are
+            described in the diagram below.
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <code>ChordSymbol.java</code>
+          </td>
+          <td>
+            The main music symbol is the ChordSymbol, which represents a group of notes
+            that are played at the same time. Chords are the most complicated symbols
+            to draw because of the many variations in note placement, stem placement, etc.
+            The Music Symbol Diagram below illustrates several types of chord symbols:
+            <ul>
+              <li> Chords with one note (#6, #7, #8).
+              <li> Chords with multiple notes (#9, #11).
+              <li> Chords with one stem (#6, #7, #8).
+              <li> Chords with two stems in different directions (#9, #11)
+              <li> Notes with different durations (#11).
+              <li> Notes with accidental (sharp/flat/natural) symbols (#11).
+              <li> Notes that vertically overlap (#11).
+              <li> Stems positioned on the left side of notes (#9).
+              <li> Stems positioned on the right side of notes (#6).
+              <li> Stems that connect two chords together (#7, #8).
+              <li> Stems that are only part of one chord (#6).
+            </ul>
+          </td>
+        </tr>
+      </table>
+      <p>
+      <table border=1 cellpadding=2 cellspacing=0>
+        <tr>
+          <td>
+          <font face="arial,helvetica" size="2">
+          <b>Music Symbol Diagram</b><br>
+          </font>
+          <img src="symbol_diagram.png" alt="screenshot"></img>
+<br>
+<pre>
+1.
+ClefSymbol {
+    smallsize = false;
+    clef = Clef.Treble
+}
+
+2.
+AccidSymbol {
+    accid = Accid.Sharp
+    whitenote = { letter = F; octave = 5 }
+    clef = Clef.Treble
+}
+
+3.
+TimeSigSymbol {
+    numerator = 4;
+    denominator = 4;
+}
+
+4.
+BarSymbol
+
+5.
+RestSymbol {
+    duration = NoteDuration.Quarter
+}
+
+6.
+ChordSymbol {
+    clef = Clef.Treble
+    notedata = [
+       {
+        note = { letter = F; octave = 4 }
+        duration = NoteDuration.Eighth
+        leftside = true;
+        accid = Accid.None;
+       }
+     ];
+     accidsymbols = null
+     hastwostems = false
+     stem1 = {
+         duration = NoteDuration.Eighth
+         direction = Up
+         top = { letter = F; octave = 4 }
+         bottom = { letter = F; octave = 4 }
+         end = { letter = E; octave = 5 }
+         notesoverlap = false
+         side = RightSide
+         pair = null
+         width_to_pair = 0
+         receiver_in_pair = false
+     }
+     stem2 = null;
+}
+
+7.
+ChordSymbol {
+    clef = Clef.Treble
+    notedata = [
+       {
+        note = { letter = G; octave = 4 }
+        duration = NoteDuration.Sixteenth
+        leftside = true;
+        accid = Accid.None;
+       }
+     ];
+     accidsymbols = null
+     hastwostems = false
+     stem1 = {
+         duration = NoteDuration.Sixteenth
+         direction = Up
+         top = { letter = G; octave = 4 }
+         bottom = { letter = G; octave = 4 }
+         end = { letter = A; octave = 6 }
+         notesoverlap = false
+         side = RightSide
+         pair = <ChordSymbol 7>
+         width_to_pair = 2*SheetMusic.NoteHeight +
+                         SheetMusic.NoteHeight/2
+         receiver_in_pair = false
+     }
+     stem2 = null;
+}
+
+8.
+ChordSymbol {
+    clef = Clef.Treble
+    notedata = [
+       {
+        note = { letter = A; octave = 5 }
+        duration = NoteDuration.Sixteenth
+        leftside = true;
+        accid = Accid.None;
+       }
+     ];
+     accidsymbols = null
+     hastwostems = false
+     stem1 = {
+         duration = NoteDuration.Sixteenth
+         direction = Up
+         top = { letter = A; octave = 5 }
+         bottom = { letter = A; octave = 5 }
+         end = { letter = B; octave = 6 }
+         notesoverlap = false
+         side = RightSide
+         pair = null
+         width_to_pair = 0
+         receiver_in_pair = true;
+     }
+     stem2 = null;
+}
+
+9.
+ChordSymbol {
+    clef = Clef.Treble
+    notedata = [
+       {
+        note = { letter = B; ocatve = 4 }
+        duration = NoteDuration.Quarter
+        leftside = true;
+        accid = Accid.None;
+       }
+       {
+        note = { letter = E; ocatve = 4 }
+        duration = NoteDuration.Quarter
+        leftside = true;
+        accid = Accid.None;
+       }
+       {
+        note = { letter = G; ocatve = 4 }
+        duration = NoteDuration.Eighth
+        leftside = true;
+        accid = Accid.None;
+       }
+     ];
+     accidsymbols = null
+     hastwostems = true
+     stem1 = {
+         duration = NoteDuration.Quarter
+         direction = Down
+         top = { letter = E; octave = 4 }
+         bottom = { letter = B; octave = 4 }
+         end = { letter = C; octave = 3 }
+         notesoverlap = false
+         side = LeftSide
+         pair = null
+         width_to_pair = 0
+         receiver_in_pair = false
+     }
+     stem2 = {
+         duration = NoteDuration.Eighth
+         direction = Up
+         top = { letter = G; octave = 4 }
+         bottom = { letter = G; octave = 4 }
+         end = { letter = F; octave = 5 }
+         notesoverlap = false
+         side = RightSide
+         pair = <ChordSymbol ?>
+         width_to_pair = 2*SheetMusic.NoteHeight +
+                          SheetMusic.NoteHeight/2
+         receiver_in_pair = false
+     }
+}
+
+10.
+BlankSymbol
+
+11.
+ChordSymbol {
+    clef = Clef.Bass
+    notedata = [
+       {
+        note = { letter = D; ocatve = 3 }
+        duration = NoteDuration.Quarter
+        leftside = true;
+        accid = Accid.Natural;
+       }
+       {
+        note = { letter = E; ocatve = 3 }
+        duration = NoteDuration.DottedHalf
+        leftside = false;
+        accid = Accid.None;
+       }
+     ];
+     accidsymbols = [
+        {
+         accid = Accid.Natural
+         whitenote = { letter = D; octave = 3 }
+         clef = Clef.Bass
+       }
+     ]
+     hastwostems = true
+     stem1 = {
+         duration = NoteDuration.Quarter
+         direction = Down
+         top = { letter = D; octave = 3 }
+         bottom = { letter = D; octave = 3 }
+         end = { letter = E; octave = 2 }
+         notesoverlap = false
+         side = LeftSide
+         pair = null
+         width_to_pair = 0
+         receiver_in_pair = false
+     }
+     stem2 = {
+         duration = NoteDuration.Half
+         direction = Up
+         top = { letter = E; octave = 3 }
+         bottom = { letter = E; octave = 3 }
+         end = { letter = D; octave = 4 }
+         notesoverlap = false
+         side = RightSide
+         pair = null
+         width_to_pair = 0
+         receiver_in_pair = false
+     }
+}
+
+            </pre>
+          </td>
+        </tr>
+      </table>
+      <p>
+      <p>&nbsp;
+      <p>&nbsp;
+    </div>
+  </body>
+</html>

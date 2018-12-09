@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.midisheetmusic"
+      android:versionCode="9"
+      android:versionName="2.6">
+    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="8" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <application android:icon="@drawable/icon" android:label="@string/app_name">
+        <activity android:name=".MidiSheetMusicActivity"
+                  android:screenOrientation="landscape"
+                  android:configChanges="orientation"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ChooseSongActivity" >
+        </activity>
+        <activity android:name=".FileBrowserActivity" >
+        </activity>
+        <activity android:name=".AllSongsActivity" >
+        </activity>
+        <activity android:name=".RecentSongsActivity" >
+        </activity>
+        <activity android:name=".SettingsActivity" >
+        </activity>
+        <activity android:name=".HelpActivity" >
+        </activity>
+        <activity android:name=".SheetMusicActivity" 
+                  android:screenOrientation="landscape"
+                  android:configChanges="orientation">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file"  android:host="*" android:pathPattern=".*\\.mid" android:mimeType="*/*"  />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

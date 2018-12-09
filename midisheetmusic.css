@@ -1,0 +1,125 @@
+
+body {
+    font-family: "verdana", "sans-serif";
+    font-size: 12pt;
+    line-height: 1.4em;
+    color: #202020;
+    background-image: url(blue_background.png);
+    text-align: center;
+    margin: 0px 0px;
+    padding: 0px 0px;
+}
+td {
+    font-family: "verdana", "sans-serif";
+    font-size: 12pt;
+    line-height: 1.4em;
+    color: #202020;
+}
+pre {
+    font-family: "courier new";
+    font-size: 10pt;
+}
+h1 {
+    font-family: "arial", "helvetica";
+    font-size: 20pt;
+    color: #000020;
+}
+h2 {
+    font-family: "arial", "helvetica";
+    font-size: 14pt;
+    color: #000020;
+}
+
+code {
+    font-family: "courier new";
+    font-size: 12pt;
+    line-height: 1.4em;
+    color: #202020;
+}
+
+div#topbackground {
+    width: 100%;
+    height: 90px;
+
+    /* IE10 */ 
+    background-image: -ms-radial-gradient(center, circle farthest-side, #FFFFFF 0%, #000020 100%);
+
+    /* Mozilla Firefox */ 
+    background-image: -moz-radial-gradient(center, circle farthest-side, #FFFFFF 0%, #000020 100%);
+
+    /* Opera */ 
+    background-image: -o-radial-gradient(center, circle farthest-side, #FFFFFF 0%, #000020 100%);
+
+    /* Webkit (Safari/Chrome 10) */ 
+    background-image: -webkit-gradient(radial, center center, 0, center center, 490, color-stop(0, #FFFFFF), color-stop(1, #000020));
+
+    /* Webkit (Chrome 11+) */ 
+    background-image: -webkit-radial-gradient(center, circle farthest-side, #FFFFFF 0%, #000020 100%);
+
+    text-align: center;
+    margin: 0px 0px;
+    /* border: 1px solid #D2C0B0; */
+}
+
+div#mainbody {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    width: 900px;
+    text-align: left;
+    color: #202020;
+    background-image: url(white_background.png);
+}
+
+div#menu {
+    background: #000020;
+    color: #EEEEEE;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+#menu td {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-family: "arial", "helvetica";
+    font-size: 14pt;
+    font-weight: bold;
+    color: #EEEEEE;
+}
+#menu a {
+    text-decoration: none;
+    color: #EEEEEE;
+}
+#menu a:hover {
+    text-decoration: none;
+    color: #C0C0C8;
+}
+
+img.feature {
+    border: 3px solid #000020;
+    margin: 5px 5px;
+}
+
+.download_button a {
+    border: 1px solid black;
+    background: #C0C0C8;
+    color: #000020;
+    padding: 20px 10px 10px 10px;
+    font-family: "verdana", "sans-serif";
+    font-size: 12pt;
+    font-weight: bold;
+    display: inline;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.download_button img {
+    vertical-align: bottom;
+    border: 0px;
+}
+
+.download_button a:hover {
+    background: #90909E;
+}
+
+
