@@ -138,10 +138,11 @@ public class Piano extends SurfaceView implements SurfaceHolder.Callback {
             6*WhiteKeyWidth + BlackKeyWidth/2
         };
 
-        int width = margin*2 + BlackBorder*2 + WhiteKeyWidth * KeysPerOctave * MaxOctave;
+//        int width = margin*2 + BlackBorder*2 + WhiteKeyWidth * KeysPerOctave * MaxOctave;
+        int width = screenwidth;
         int height = margin*2 + BlackBorder*3 + WhiteKeyHeight;
         setMeasuredDimension(width, height);
-        bufferBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bufferBitmap = Bitmap.createBitmap(screenwidth, height, Bitmap.Config.ARGB_8888);
         bufferCanvas = new Canvas(bufferBitmap);
         this.invalidate();
         draw();
@@ -375,7 +376,7 @@ public class Piano extends SurfaceView implements SurfaceHolder.Callback {
         bufferCanvas.translate(margin + BlackBorder, margin + BlackBorder);
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.WHITE);
-        bufferCanvas.drawRect(0, 0, 0 + WhiteKeyWidth * KeysPerOctave * MaxOctave, 
+        bufferCanvas.drawRect(0, 0, WhiteKeyWidth * KeysPerOctave * MaxOctave ,
                         WhiteKeyHeight, paint);
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(gray1);

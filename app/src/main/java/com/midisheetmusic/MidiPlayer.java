@@ -125,8 +125,10 @@ public class MidiPlayer extends LinearLayout {
         this.setPadding(0, 0, 0, 0);
         CreateButtons();
 
-        int screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
-        int screenheight = activity.getWindowManager().getDefaultDisplay().getHeight();
+        Point screenSize = new Point();
+        activity.getWindowManager().getDefaultDisplay().getSize(screenSize);
+        int screenwidth = screenSize.x;
+        int screenheight = screenSize.y;
         Point newsize = MidiPlayer.getPreferredSize(screenwidth, screenheight);
         resizeButtons(newsize.x, newsize.y);
         player = new MediaPlayer();
@@ -223,12 +225,16 @@ public class MidiPlayer extends LinearLayout {
         /* Create the Speed bar */
         speedText = new TextView(activity);
         speedText.setText("   Speed: 100%   ");
+        speedText.setTextColor(Color.WHITE);
         speedText.setGravity(Gravity.CENTER);
         this.addView(speedText);
 
         speedBar = new SeekBar(activity);
         speedBar.setMax(150);
         speedBar.setProgress(100);
+
+        ColorFilter filter = speedBar.getThumb().getColorFilter();
+        speedBar.getProgressDrawable().setColorFilter(Color.parseColor("#00BB87"), PorterDuff.Mode.SRC_IN);
         speedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
                 speedText.setText("   Speed: " + String.format(Locale.US, "%03d", progress) + "%   ");
