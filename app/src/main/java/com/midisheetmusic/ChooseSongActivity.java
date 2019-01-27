@@ -45,15 +45,15 @@ public class ChooseSongActivity extends TabActivity {
         final TabHost tabHost = getTabHost();
 
         tabHost.addTab(tabHost.newTabSpec("All")
-                .setIndicator("All", new BitmapDrawable(allFilesIcon))
+                .setIndicator("All", new BitmapDrawable(this.getResources(), allFilesIcon))
                 .setContent(new Intent(this, AllSongsActivity.class)));
 
         tabHost.addTab(tabHost.newTabSpec("Recent")
-                .setIndicator("Recent", new BitmapDrawable(recentFilesIcon))
+                .setIndicator("Recent", new BitmapDrawable(this.getResources(), recentFilesIcon))
                 .setContent(new Intent(this, RecentSongsActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
 
         tabHost.addTab(tabHost.newTabSpec("Browse")
-                .setIndicator("Browse", new BitmapDrawable(browseFilesIcon))
+                .setIndicator("Browse", new BitmapDrawable(this.getResources(), browseFilesIcon))
                 .setContent(new Intent(this, FileBrowserActivity.class)));
 
     }
