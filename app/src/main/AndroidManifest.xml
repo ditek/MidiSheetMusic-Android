@@ -21,6 +21,7 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".HelpActivity" />
         <activity android:name=".SheetMusicActivity"
+                android:theme="@style/PlayerTheme"
                   android:screenOrientation="landscape"
                   android:configChanges="orientation">
             <intent-filter>
