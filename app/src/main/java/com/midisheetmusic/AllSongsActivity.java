@@ -212,11 +212,6 @@ public class AllSongsActivity extends ListActivity implements TextWatcher {
         filterText = (EditText) findViewById(R.id.name_filter);
         filterText.addTextChangedListener(this);
         filterText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-
-        // hide keyboard by default
-        filterText.clearFocus();
-        InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        manager.hideSoftInputFromWindow(filterText.getWindowToken(), 0);
     }
 
 
