@@ -133,6 +133,9 @@ public class MidiPlayer extends LinearLayout {
         resizeButtons(newsize.x, newsize.y);
         player = new MediaPlayer();
         setBackgroundColor(Color.BLACK);
+
+        // Keep screen on
+        this.activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     /** Get the preferred width/height given the screen width/height */
