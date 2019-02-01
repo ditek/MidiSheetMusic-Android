@@ -62,6 +62,10 @@ public class SheetMusicActivity extends Activity {
 
         // Parse the MidiFile from the raw bytes
         Uri uri = this.getIntent().getData();
+        if (uri == null) {
+            this.finish();
+            return;
+        }
         String title = this.getIntent().getStringExtra(MidiTitleID);
         if (title == null) {
             title = uri.getLastPathSegment();
