@@ -698,7 +698,7 @@ public class Piano extends SurfaceView implements SurfaceHolder.Callback {
                 player.Pause();
             }
         }
-        return super.onTouchEvent(event);
+        return true;
     }
 }
 
