@@ -48,6 +48,7 @@ public class MidiSheetMusicActivity extends Activity {
 
     /** Start the ChooseSongActivity when the "Choose Song" button is clicked */
     private void chooseSong() {
+        // Check if we have WRITE_EXTERNAL_STORAGE permission
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
@@ -81,7 +82,6 @@ public class MidiSheetMusicActivity extends Activity {
     private void loadImages() {
         ClefSymbol.LoadImages(this);
         TimeSigSymbol.LoadImages(this);
-        MidiPlayer.LoadImages(this);
     }
 
     /** Always use landscape mode for this activity. */

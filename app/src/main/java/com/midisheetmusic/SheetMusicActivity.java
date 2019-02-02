@@ -58,7 +58,6 @@ public class SheetMusicActivity extends Activity {
 
         ClefSymbol.LoadImages(this);
         TimeSigSymbol.LoadImages(this);
-        MidiPlayer.LoadImages(this);
 
         // Parse the MidiFile from the raw bytes
         Uri uri = this.getIntent().getData();

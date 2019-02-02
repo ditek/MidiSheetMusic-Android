@@ -16,14 +16,12 @@ import java.util.*;
 import java.io.*;
 import android.app.*;
 import android.content.*;
-import android.content.res.*;
-import android.util.*;
 import android.graphics.*;
 import android.view.*;
 import android.widget.*;
 import android.os.*;
 import android.media.*;
-
+import android.util.AttributeSet;
 
 /** @class MidiPlayer
  *
@@ -53,19 +51,11 @@ import android.media.*;
  * and determines which notes to shade.
  */
 public class MidiPlayer extends LinearLayout {
-    static Bitmap rewindImage;           /** The rewind image */
-    static Bitmap playImage;             /** The play image */
-    static Bitmap pauseImage;            /** The pause image */
-    static Bitmap stopImage;             /** The stop image */
-    static Bitmap fastFwdImage;          /** The fast forward image */
-    static Bitmap volumeImage;           /** The volume image */
-    static Bitmap settingsImage;         /** The settings image */
-
     private ImageButton rewindButton;    /** The rewind button */
     private ImageButton playButton;      /** The play/pause button */
     private ImageButton stopButton;      /** The stop button */
     private ImageButton fastFwdButton;   /** The fast forward button */
-    private ImageButton settingsButton;  /** The fast forward button */
+    private ImageView settingsButton;  /** The fast forward button */
     private TextView speedText;          /** The "Speed %" label */
     private SeekBar speedBar;    /** The seekbar for controlling the playback speed */
 
@@ -91,28 +81,11 @@ public class MidiPlayer extends LinearLayout {
     double prevPulseTime;       /** Time (in pulses) music was last at */
     Activity activity;          /** The parent activity. */
 
-    
-    /** Load the play/pause/stop button images */
-    public static void LoadImages(Context context) {
-        if (rewindImage != null) {
-            return;
-        }
-        Resources res = context.getResources();
-        rewindImage = BitmapFactory.decodeResource(res, R.drawable.rewind);
-        playImage = BitmapFactory.decodeResource(res, R.drawable.play);
-        pauseImage = BitmapFactory.decodeResource(res, R.drawable.pause);
-        stopImage = BitmapFactory.decodeResource(res, R.drawable.stop);
-        fastFwdImage = BitmapFactory.decodeResource(res, R.drawable.fastforward);
-        settingsImage = BitmapFactory.decodeResource(res, R.drawable.settings);
-    }
-
-
     /** Create a new MidiPlayer, displaying the play/stop buttons, and the
      *  speed bar.  The midifile and sheetmusic are initially null.
      */
     public MidiPlayer(Activity activity) {
         super(activity);
-        LoadImages(activity);
         this.activity = activity;
         this.midifile = null;
         this.options = null;
@@ -122,20 +95,78 @@ public class MidiPlayer extends LinearLayout {
         startPulseTime = 0;
         currentPulseTime = 0;
         prevPulseTime = -10;
-        this.setPadding(0, 0, 0, 0);
-        CreateButtons();
+        init();
 
-        Point screenSize = new Point();
-        activity.getWindowManager().getDefaultDisplay().getSize(screenSize);
-        int screenwidth = screenSize.x;
-        int screenheight = screenSize.y;
-        Point newsize = MidiPlayer.getPreferredSize(screenwidth, screenheight);
-        resizeButtons(newsize.x, newsize.y);
         player = new MediaPlayer();
         setBackgroundColor(Color.BLACK);
 
         // Keep screen on
         this.activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    public MidiPlayer(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    public MidiPlayer(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init();
+    }
+
+    /** Create the rewind, play, stop, and fast forward buttons */
+    void init() {
+        inflate(activity, R.layout.player_toolbar, this);
+
+        rewindButton = findViewById(R.id.btn_back);
+        stopButton = findViewById(R.id.btn_replay);
+        playButton = findViewById(R.id.btn_play);
+        fastFwdButton = findViewById(R.id.btn_forward);
+        settingsButton = findViewById(R.id.btn_settings);
+        speedText = findViewById(R.id.txt_speed);
+        speedBar = findViewById(R.id.speed_bar);
+
+        rewindButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Rewind();
+            }
+        });
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Stop();
+            }
+        });
+        playButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Play();
+            }
+        });
+        fastFwdButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                FastForward();
+            }
+        });
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                activity.openOptionsMenu();
+            }
+        });
+
+        speedBar.getProgressDrawable().setColorFilter(Color.parseColor("#00BB87"), PorterDuff.Mode.SRC_IN);
+        speedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
+                speedText.setText("   Speed: " + String.format(Locale.US, "%3d", progress) + "%   ");
+            }
+            public void onStartTrackingTouch(SeekBar bar) {
+            }
+            public void onStopTrackingTouch(SeekBar bar) {
+            }
+        });
+
+        /* Initialize the timer used for playback, but don't start
+         * the timer yet (enabled = false).
+         */
+        timer = new Handler();
     }
 
     /** Get the preferred width/height given the screen width/height */
@@ -162,163 +193,6 @@ public class MidiPlayer extends LinearLayout {
         setMeasuredDimension(width, height);
     }
 
-    /** When this view is resized, adjust the button sizes */
-    @Override
-    protected void 
-    onSizeChanged(int newwidth, int newheight, int oldwidth, int oldheight) {
-        resizeButtons(newwidth, newheight);
-        super.onSizeChanged(newwidth, newheight, oldwidth, oldheight);
-    }
-     
-
-    /** Create the rewind, play, stop, and fast forward buttons */
-    void CreateButtons() {
-        this.setOrientation(LinearLayout.HORIZONTAL);
-
-        /* Create the rewind button */
-        rewindButton = new ImageButton(activity);
-        rewindButton.setBackgroundColor(Color.BLACK);
-        rewindButton.setImageBitmap(rewindImage);
-        rewindButton.setScaleType(ImageView.ScaleType.FIT_XY);
-        rewindButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Rewind();
-            }
-        });
-        this.addView(rewindButton);
-
-        /* Create the stop button */
-        stopButton = new ImageButton(activity);
-        stopButton.setBackgroundColor(Color.BLACK);
-        stopButton.setImageBitmap(stopImage);
-        stopButton.setScaleType(ImageView.ScaleType.FIT_XY);
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Stop();
-            }
-        });
-        this.addView(stopButton);
-
-        
-        /* Create the play button */
-        playButton = new ImageButton(activity);
-        playButton.setBackgroundColor(Color.BLACK);
-        playButton.setImageBitmap(playImage);
-        playButton.setScaleType(ImageView.ScaleType.FIT_XY);
-        playButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Play();
-            }
-        });
-        this.addView(playButton);        
-        
-        /* Create the fastFwd button */        
-        fastFwdButton = new ImageButton(activity);
-        fastFwdButton.setBackgroundColor(Color.BLACK);
-        fastFwdButton.setImageBitmap(fastFwdImage);
-        fastFwdButton.setScaleType(ImageView.ScaleType.FIT_XY);
-        fastFwdButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                FastForward();
-            }
-        });
-        this.addView(fastFwdButton);
-
-
-        /* Create the Speed bar */
-        speedText = new TextView(activity);
-        speedText.setText("   Speed: 100%   ");
-        speedText.setTextColor(Color.WHITE);
-        speedText.setGravity(Gravity.CENTER);
-        this.addView(speedText);
-
-        speedBar = new SeekBar(activity);
-        speedBar.setMax(150);
-        speedBar.setProgress(100);
-
-        ColorFilter filter = speedBar.getThumb().getColorFilter();
-        speedBar.getProgressDrawable().setColorFilter(Color.parseColor("#00BB87"), PorterDuff.Mode.SRC_IN);
-        speedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
-                speedText.setText("   Speed: " + String.format(Locale.US, "%03d", progress) + "%   ");
-            }
-            public void onStartTrackingTouch(SeekBar bar) {
-            }
-            public void onStopTrackingTouch(SeekBar bar) {
-            }
-        });
-        this.addView(speedBar);
-
-        /* Create the settings button */        
-        settingsButton = new ImageButton(activity);
-        settingsButton.setBackgroundColor(Color.BLACK);
-        settingsButton.setImageBitmap(settingsImage);
-        settingsButton.setScaleType(ImageView.ScaleType.FIT_XY);
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                activity.openOptionsMenu();
-            }
-        });
-        this.addView(settingsButton);
-
-        /* Initialize the timer used for playback, but don't start
-         * the timer yet (enabled = false).
-         */
-        timer = new Handler();
-    }
-
-    void resizeButtons(int newwidth, int newheight) {
-        int buttonheight = newheight;
-        int pad = buttonheight/6;
-        rewindButton.setPadding(pad, pad, pad, pad);
-        stopButton.setPadding(pad, pad, pad, pad);
-        playButton.setPadding(pad, pad, pad, pad);
-        fastFwdButton.setPadding(pad, pad, pad, pad);
-        settingsButton.setPadding(pad, pad, pad, pad);
-
-        LinearLayout.LayoutParams params;
-        
-        params = new LinearLayout.LayoutParams(buttonheight, buttonheight);
-        params.width = buttonheight;
-        params.height = buttonheight;
-        params.bottomMargin = 0;
-        params.topMargin = 0;
-        params.rightMargin = 0;
-        params.leftMargin = buttonheight/6;
-
-        rewindButton.setLayoutParams(params);
-        
-        params = new LinearLayout.LayoutParams(buttonheight, buttonheight);
-        params.bottomMargin = 0;
-        params.topMargin = 0;
-        params.rightMargin = 0;
-        params.leftMargin = 0;
-
-        playButton.setLayoutParams(params);
-        stopButton.setLayoutParams(params);
-        fastFwdButton.setLayoutParams(params);
-
-        params = (LinearLayout.LayoutParams) speedText.getLayoutParams();
-        params.height = buttonheight;
-        speedText.setLayoutParams(params);
-        
-        params = new LinearLayout.LayoutParams(buttonheight * 5, buttonheight);
-        params.width = buttonheight * 5;
-        params.bottomMargin = 0;
-        params.leftMargin = 0;
-        params.topMargin = 0;
-        params.rightMargin = 0;
-        speedBar.setLayoutParams(params);
-        speedBar.setPadding(pad, pad, pad, pad);
-
-        params = new LinearLayout.LayoutParams(buttonheight, buttonheight);
-        params.bottomMargin = 0;
-        params.topMargin = 0;
-        params.rightMargin = 0;
-        params.leftMargin = buttonheight/8;
-        settingsButton.setLayoutParams(params);
-    }
-    
     public void SetPiano(Piano p) {
         piano = p;
     }
@@ -573,6 +447,9 @@ public class MidiPlayer extends LinearLayout {
     void DoStop() { 
         playstate = stopped;
         timer.removeCallbacks(TimerCallback);
+        // Scroll to the beginning
+        sheet.ShadeNotes(0, 0, SheetMusic.ImmediateScroll);
+        // Remove shading
         sheet.ShadeNotes(-10, (int)prevPulseTime, SheetMusic.DontScroll);
         sheet.ShadeNotes(-10, (int)currentPulseTime, SheetMusic.DontScroll);
         piano.ShadeNotes(-10, (int)prevPulseTime);

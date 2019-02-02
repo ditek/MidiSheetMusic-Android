@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<merge xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--xmlns:tools="http://schemas.android.com/tools"-->
+<!--tools:parentTag="android.widget.LinearLayout">-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="16dp"
+    android:orientation="horizontal">
+
+    <ImageButton
+        android:id="@+id/btn_back"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="4dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="4dp"
+        android:paddingBottom="8dp"
+        android:src="@drawable/ic_back" />
+
+    <ImageButton
+        android:id="@+id/btn_replay"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="4dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="4dp"
+        android:paddingBottom="8dp"
+        android:src="@drawable/replay" />
+
+    <ImageButton
+        android:id="@+id/btn_play"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="4dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="4dp"
+        android:paddingBottom="8dp"
+        android:scaleY="1.5"
+        android:src="@drawable/ic_play" />
+
+    <ImageButton
+        android:id="@+id/btn_forward"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="4dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="4dp"
+        android:paddingBottom="8dp"
+        android:src="@drawable/ic_forward" />
+
+    <TextView
+        android:id="@+id/txt_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:text="   Speed: 100%   "
+        tools:text="   Speed: 100%   " />
+
+    <SeekBar
+        android:id="@+id/speed_bar"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:max="150"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:progress="100" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <ImageButton
+        android:id="@+id/btn_settings"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:src="@drawable/ic_settings" />
+</LinearLayout>
+<!--</merge>-->
