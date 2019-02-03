@@ -34,13 +34,8 @@ public class TimeSigSymbol implements MusicSymbol {
     public TimeSigSymbol(int numer, int denom) {
         numerator = numer;
         denominator = denom;
-        if (numer >= 0 && numer < images.length && images[numer] != null &&
-            denom >= 0 && denom < images.length && images[numer] != null) {
-            candraw = true;
-        }
-        else {
-            candraw = false;
-        }
+        candraw = numer >= 0 && numer < images.length && images[numer] != null &&
+                denom >= 0 && denom < images.length && images[numer] != null;
         width = getMinWidth();
     }
 

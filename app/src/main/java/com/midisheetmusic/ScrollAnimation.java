@@ -198,7 +198,7 @@ public class ScrollAnimation {
         if (scrollVert) {
             listener.scrollUpdate(0, (int)delta);
         }
-        else if (!scrollVert) {
+        else {
             listener.scrollUpdate((int)delta, 0);
         }
         if (percentDone < 1.0) {

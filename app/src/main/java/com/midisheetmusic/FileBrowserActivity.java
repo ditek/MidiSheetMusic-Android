@@ -25,11 +25,9 @@ import android.content.*;
 
 
 public class FileBrowserActivity extends ListActivity {
-    private ArrayList<FileUri> filelist; /* List of files in the directory */
     private String directory;            /* Current directory being displayed */
     private TextView directoryView;      /* TextView showing directory name */
     private String rootdir;              /* The top level root directory */
-    private IconArrayAdapter<FileUri> adapter;
 
 
     @Override
@@ -68,12 +66,13 @@ public class FileBrowserActivity extends ListActivity {
         }
         SharedPreferences.Editor editor = getPreferences(0).edit();
         editor.putString("lastBrowsedDirectory", directory);
-        editor.commit();
+        editor.apply();
         directoryView.setText(directory);
 
-        filelist = new ArrayList<FileUri>();
-        ArrayList<FileUri> sortedDirs = new ArrayList<FileUri>();
-        ArrayList<FileUri> sortedFiles = new ArrayList<FileUri>();
+        /* List of files in the directory */
+        ArrayList<FileUri> filelist = new ArrayList<>();
+        ArrayList<FileUri> sortedDirs = new ArrayList<>();
+        ArrayList<FileUri> sortedFiles = new ArrayList<>();
         if (!newdirectory.equals(rootdir)) {
             String parentDirectory = new File(directory).getParent() + "/";
             Uri uri = Uri.parse("file://" + parentDirectory);
@@ -95,7 +94,7 @@ public class FileBrowserActivity extends ListActivity {
                     }
                     else if (filename.endsWith(".mid") || filename.endsWith(".MID") ||
                              filename.endsWith(".midi") || filename.endsWith(".MIDI")) {
-                        
+
                         Uri uri = Uri.parse("file://" + file.getAbsolutePath());
                         FileUri fileuri = new FileUri(uri, uri.getLastPathSegment());
                         sortedFiles.add(fileuri);
@@ -114,10 +113,11 @@ public class FileBrowserActivity extends ListActivity {
         }
         filelist.addAll(sortedDirs);
         filelist.addAll(sortedFiles);
-        adapter = new IconArrayAdapter<FileUri>(this, android.R.layout.simple_list_item_1, filelist);
+        IconArrayAdapter<FileUri> adapter =
+                new IconArrayAdapter<>(this, android.R.layout.simple_list_item_1, filelist);
         this.setListAdapter(adapter);
     }
-    
+
 
     /** When a user selects an item:
      * - If it's a directory, load that directory.
@@ -128,13 +128,15 @@ public class FileBrowserActivity extends ListActivity {
         super.onListItemClick(parent, view, position, id);
         FileUri file = (FileUri) this.getListAdapter().getItem(position);
         if (file.isDirectory()) {
-            this.loadDirectory(file.getUri().getPath());
-             return;
+            String path = file.getUri().getPath();
+            if (path != null) {
+                this.loadDirectory(path);
+            }
         }
         else {
             ChooseSongActivity.openFile(file);
         }
-    }  
+    }
 }
 
 

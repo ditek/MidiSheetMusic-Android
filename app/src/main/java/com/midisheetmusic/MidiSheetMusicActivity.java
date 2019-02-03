@@ -23,7 +23,7 @@ import android.content.*;
 import android.content.res.*;
 import android.support.v4.content.ContextCompat;
 
-/** @class MidiSheetMusicActivity
+/**
  * This is the launch activity for MidiSheetMusic.
  * It simply displays the splash screen, and a button to choose a song.
  */
@@ -62,7 +62,7 @@ public class MidiSheetMusicActivity extends Activity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE_EXT_STORAGE_: {
                 if (grantResults.length > 0

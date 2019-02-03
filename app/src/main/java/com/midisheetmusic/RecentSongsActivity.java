@@ -31,7 +31,6 @@ import android.graphics.*;
  */
 public class RecentSongsActivity extends ListActivity {
     private ArrayList<FileUri> filelist; /* List of recent files opened */
-    private IconArrayAdapter<FileUri> adapter;
 
 
     @Override
@@ -41,7 +40,7 @@ public class RecentSongsActivity extends ListActivity {
         getListView().setBackgroundColor(Color.rgb(0, 0, 0));
         // Load the list of songs
         loadFileList();
-        adapter = new IconArrayAdapter<FileUri>(this, android.R.layout.simple_list_item_1, filelist);
+        IconArrayAdapter<FileUri> adapter = new IconArrayAdapter<FileUri>(this, android.R.layout.simple_list_item_1, filelist);
         this.setListAdapter(adapter);
     }
 

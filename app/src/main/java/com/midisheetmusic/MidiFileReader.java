@@ -14,6 +14,8 @@
 package com.midisheetmusic;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+
 import android.util.*;
 
 
@@ -38,9 +40,9 @@ public class MidiFileReader {
     private int parse_offset;  /** The current offset while parsing */
 
     /** Create a new MidiFileReader for the given filename */
-    /** Not used
+    /* Not used
     public MidiFileReader(String filename) {
-        try { 
+        try {
             File info = new File(filename);
             FileInputStream file = new FileInputStream(filename);
             data = new byte[ (int)info.length() ];
@@ -62,7 +64,7 @@ public class MidiFileReader {
             throw new MidiFileException("Cannot open file " + filename, 0);
         }
     }
-    **/
+    */
 
     /** Create a new MidiFileReader from the given data */
     public MidiFileReader(byte[] bytes) {
@@ -126,12 +128,7 @@ public class MidiFileReader {
     public String ReadAscii(int len) {
         checkRead(len);
         String s = "";
-        try {
-            s = new String(data, parse_offset, len, "US-ASCII");
-        }
-        catch (UnsupportedEncodingException e) {
-            s = new String(data, parse_offset, len);
-        }
+        s = new String(data, parse_offset, len, StandardCharsets.US_ASCII);
         parse_offset += len;
         return s;
     }

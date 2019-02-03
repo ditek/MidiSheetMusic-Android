@@ -45,13 +45,13 @@ public class LyricSymbol {
     public int getMinWidth() { 
         float widthPerChar = 10.0f * 2.0f/3.0f;
         float width = text.length() * widthPerChar;
-        if (text.indexOf("i") >= 0) {
+        if (text.contains("i")) {
             width -= widthPerChar/2.0f;
         }
-        if (text.indexOf("j") >= 0) {
+        if (text.contains("j")) {
             width -= widthPerChar/2.0f;
         }
-        if (text.indexOf("l") >= 0) {
+        if (text.contains("l")) {
             width -= widthPerChar/2.0f;
         }
         return (int)width;
@@ -59,7 +59,7 @@ public class LyricSymbol {
 
     @Override
     public String toString() {
-        return String.format("Lyric start={0} x={1} text={2}",
+        return String.format("Lyric start=%1$s x=%2$s text=%3$s",
                              starttime, x, text);
     }
 

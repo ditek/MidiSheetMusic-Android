@@ -56,12 +56,7 @@ public class FileUri implements Comparator<FileUri> {
     /** Return true if this is a directory */
     public boolean isDirectory() {
         String path = uri.getPath();
-        if (path != null && path.endsWith("/")) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return path != null && path.endsWith("/");
     }
 
     /** Return the uri */

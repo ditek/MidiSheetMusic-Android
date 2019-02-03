@@ -12,6 +12,7 @@
 
 package com.midisheetmusic;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.io.*;
 import android.app.*;
@@ -277,7 +278,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
      * @param key        The Key Signature, for determining sharps/flats.
      * @param time       The Time Signature, for determining the measures.
      * @param clefs      The clefs to use for each measure.
-     * @ret An array of ChordSymbols
+     * @return An array of ChordSymbols
      */
     private
     ArrayList<ChordSymbol> CreateChords(ArrayList<MidiNote> midinotes, 
@@ -382,9 +383,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
             int starttime = symbol.getStartTime();
             RestSymbol[] rests = GetRests(time, prevtime, starttime);
             if (rests != null) {
-                for (RestSymbol r : rests) {
-                    result.add(r);
-                }
+                result.addAll(Arrays.asList(rests));
             }
 
             result.add(symbol);
@@ -899,12 +898,9 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
             }
             hasLyrics = true;
             for (MidiEvent ev : track.getLyrics()) {
-                try {
-                    String text = new String(ev.Value, 0, ev.Value.length, "UTF-8");
-                    LyricSymbol sym = new LyricSymbol(ev.StartTime, text);
-                    lyrics.add(sym);
-                }
-                catch (UnsupportedEncodingException e) {}
+                String text = new String(ev.Value, 0, ev.Value.length, StandardCharsets.UTF_8);
+                LyricSymbol sym = new LyricSymbol(ev.StartTime, text);
+                lyrics.add(sym);
             }
         }
         if (!hasLyrics) {

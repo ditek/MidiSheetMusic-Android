@@ -130,21 +130,20 @@ public class MidiTrack {
         }
         if (lyrics != null) {
             track.lyrics = new ArrayList<MidiEvent>();
-            for (MidiEvent ev : lyrics) {
-                track.lyrics.add(ev);
-            }
+            track.lyrics.addAll(lyrics);
         }
         return track;
     }
 
     @Override
     public String toString() {
-        String result = "Track number=" + tracknum + " instrument=" + instrument + "\n";
+        StringBuilder result = new StringBuilder(
+                "Track number=" + tracknum + " instrument=" + instrument + "\n");
         for (MidiNote n : notes) {
-           result = result + n + "\n";
+           result.append(n).append("\n");
         }
-        result += "End Track\n";
-        return result;
+        result.append("End Track\n");
+        return result.toString();
     }
 }
 

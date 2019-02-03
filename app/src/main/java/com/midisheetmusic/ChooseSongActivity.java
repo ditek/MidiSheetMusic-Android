@@ -21,12 +21,13 @@ import org.json.*;
 import android.graphics.*;
 import android.graphics.drawable.*;
 
-/** @class ChooseSongActivity
- * The ChooseSongActivity class is a tabbed view for choosing a song to play.
+/**
+ * ChooseSongActivity is a tabbed view for choosing a song to play.
  * There are 3 tabs:
- * - All    (AllSongsActivity)    : Display a list of all songs
- * - Recent (RecentSongsActivity) : Display of list of recently opened songs
- * - Browse (FileBrowserActivity) : Let the user browse the filesystem for songs
+ * <ul>
+ *  <li> All    (AllSongsActivity)    : Display a list of all songs
+ *  <li> Recent (RecentSongsActivity) : Display of list of recently opened songs
+ *  <li> Browse (FileBrowserActivity) : Let the user browse the filesystem for songs
  */
 public class ChooseSongActivity extends TabActivity {
 
@@ -116,7 +117,7 @@ public class ChooseSongActivity extends TabActivity {
                 }
             }
             editor.putString("recentFiles", recentFiles.toString() );
-            editor.commit();
+            editor.apply();
         }
         catch (Exception e) {
         }

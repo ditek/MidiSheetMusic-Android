@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.midisheetmusic"
+    package="com.midisheetmusic"
     android:versionCode="9"
     android:versionName="2.6">
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <application android:icon="@drawable/icon" android:label="@string/app_name"
+    <application
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".MidiSheetMusicActivity"
-                  android:configChanges="orientation"
-                  android:label="@string/app_name">
+        <activity
+            android:name=".MidiSheetMusicActivity"
+            android:configChanges="orientation"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -20,14 +24,19 @@
         <activity android:name=".RecentSongsActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".HelpActivity" />
-        <activity android:name=".SheetMusicActivity"
-                android:theme="@style/PlayerTheme"
-                  android:screenOrientation="landscape"
-                  android:configChanges="orientation">
+        <activity
+            android:name=".SheetMusicActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape"
+            android:theme="@style/PlayerTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="file"  android:host="*" android:pathPattern=".*\\.mid" android:mimeType="*/*"  />
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.mid"
+                    android:scheme="file" />
             </intent-filter>
         </activity>
     </application>

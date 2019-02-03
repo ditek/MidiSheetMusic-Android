@@ -87,12 +87,7 @@ public class MidiOptions implements Serializable {
         }
         scrollVert = true;
         largeNoteSize = true;
-        if (tracks.length != 2) {
-            twoStaffs = true;
-        }
-        else {
-            twoStaffs = false;
-        }
+        twoStaffs = tracks.length != 2;
         showNoteLetters = NoteNameNone;
         showMeasures = false;
         showLyrics = true;
@@ -230,19 +225,13 @@ public class MidiOptions implements Serializable {
     /* Merge in the saved options to this MidiOptions.*/
     void merge(MidiOptions saved) {
         if (saved.tracks.length == tracks.length) {
-            for (int i = 0; i < tracks.length; i++) {
-                tracks[i] = saved.tracks[i];
-            }
+            System.arraycopy(saved.tracks, 0, tracks, 0, tracks.length);
         }
         if (saved.mute.length == mute.length) {
-            for (int i = 0; i < mute.length; i++) {
-                mute[i] = saved.mute[i];
-            }
+            System.arraycopy(saved.mute, 0, mute, 0, mute.length);
         }
         if (saved.instruments.length == instruments.length) {
-            for (int i = 0; i < instruments.length; i++) {
-                instruments[i] = saved.instruments[i];
-            }
+            System.arraycopy(saved.instruments, 0, instruments, 0, instruments.length);
         }
         if (saved.time != null) {
             time = new TimeSignature(saved.time.getNumerator(), saved.time.getDenominator(), 
@@ -269,41 +258,35 @@ public class MidiOptions implements Serializable {
 
     @Override
     public String toString() {
-        String result = "MidiOptions: tracks: ";
-        for (int i = 0; i < tracks.length; i++) {
-            result += tracks[i] + ", ";
+        StringBuilder result = new StringBuilder("MidiOptions: tracks: ");
+        for (boolean track : tracks) {
+            result.append(track).append(", ");
         }
-        result += " Instruments: ";
-        for (int i = 0; i < instruments.length; i++) {
-            result += instruments[i] + ", ";
+        result.append(" Instruments: ");
+        for (int instrument : instruments) {
+            result.append(instrument).append(", ");
         }
-        result += " scrollVert " + scrollVert;
-        result += " twoStaffs " + twoStaffs;
-        result += " transpose" + transpose;
-        result += " key " + key;
-        result += " combine " + combineInterval;
-        result += " tempo " + tempo;
-        result += " pauseTime " + pauseTime;
+        result.append(" scrollVert ").append(scrollVert);
+        result.append(" twoStaffs ").append(twoStaffs);
+        result.append(" transpose").append(transpose);
+        result.append(" key ").append(key);
+        result.append(" combine ").append(combineInterval);
+        result.append(" tempo ").append(tempo);
+        result.append(" pauseTime ").append(pauseTime);
         if (time != null) {
-            result += " time " + time.toString();
+            result.append(" time ").append(time.toString());
         }
-        return result;
+        return result.toString();
     }
 
     public MidiOptions copy() {
         MidiOptions options = new MidiOptions();
         options.tracks = new boolean[tracks.length];
-        for (int i = 0; i < tracks.length; i++) {
-            options.tracks[i] = tracks[i];
-        }
+        System.arraycopy(tracks, 0, options.tracks, 0, tracks.length);
         options.mute = new boolean[mute.length];
-        for (int i = 0; i < mute.length; i++) {
-            options.mute[i] = mute[i];
-        }
+        System.arraycopy(mute, 0, options.mute, 0, mute.length);
         options.instruments = new int[instruments.length];
-        for (int i = 0; i < instruments.length; i++) {
-            options.instruments[i] = instruments[i];
-        }
+        System.arraycopy(instruments, 0, options.instruments, 0, instruments.length);
         options.defaultTime = defaultTime;
         options.time = time;
         options.useDefaultInstruments = useDefaultInstruments;

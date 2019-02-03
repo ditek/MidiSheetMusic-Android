@@ -14,6 +14,7 @@
 package com.midisheetmusic;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import android.util.*;
 
@@ -759,9 +760,8 @@ public class MidiFile {
     /** Copy len bytes from src to dest, at the given offsets */
     private static void
     ArrayCopy(byte[] src, int srcoffset, byte[] dest, int destoffset, int len) {
-        for (int i = 0; i < len; i++) {
-            dest[destoffset + i] = src[srcoffset + i];
-        }
+        if (len >= 0)
+            System.arraycopy(src, srcoffset, dest, destoffset, len);
     }
 
             
@@ -778,7 +778,7 @@ public class MidiFile {
         byte[] buf = new byte[16384];
 
         /* Write the MThd, len = 6, track mode, number tracks, quarter note */
-        file.write("MThd".getBytes("US-ASCII"), 0, 4);
+        file.write("MThd".getBytes(StandardCharsets.US_ASCII), 0, 4);
         IntToBytes(6, buf, 0);
         file.write(buf, 0, 4);
         buf[0] = (byte)(trackmode >> 8); 
@@ -793,7 +793,7 @@ public class MidiFile {
 
         for (ArrayList<MidiEvent> list : allevents) {
             /* Write the MTrk header and track length */
-            file.write("MTrk".getBytes("US-ASCII"), 0, 4);
+            file.write("MTrk".getBytes(StandardCharsets.US_ASCII), 0, 4);
             int len = GetTrackLength(list);
             IntToBytes(len, buf, 0);
             file.write(buf, 0, 4);
@@ -1018,7 +1018,7 @@ public class MidiFile {
             MidiTrack track = tracks.get(tracknum);
             int realtrack = track.trackNumber();
             instruments[realtrack] = options.instruments[tracknum];
-            if (options.tracks[tracknum] == false || options.mute[tracknum] == true) {
+            if (!options.tracks[tracknum] || options.mute[tracknum]) {
                 keeptracks[realtrack] = false;
             }
         }
@@ -1053,8 +1053,8 @@ public class MidiFile {
 
         /* Change the tracks to include */
         int count = 0;
-        for (int tracknum = 0; tracknum < keeptracks.length; tracknum++) {
-            if (keeptracks[tracknum]) {
+        for (boolean keeptrack : keeptracks) {
+            if (keeptrack) {
                 count++;
             }
         }
@@ -1101,7 +1101,7 @@ public class MidiFile {
             MidiTrack track = tracks.get(tracknum);
             int channel = track.getNotes().get(0).getChannel();
             instruments[channel] = options.instruments[tracknum];
-            if (options.tracks[tracknum] == false || options.mute[tracknum] == true) {
+            if (!options.tracks[tracknum] || options.mute[tracknum]) {
                 keepchannel[channel] = false;
             }
         }
@@ -1736,27 +1736,20 @@ public class MidiFile {
     /** Return true if the data starts with the header MTrk */
     public static boolean hasMidiHeader(byte[] data) {
         String s;
-        try {
-            s = new String(data, 0, 4, "US-ASCII");
-            if (s.equals("MThd"))
-                return true;
-            else
-                return false;
-        }
-        catch (UnsupportedEncodingException e) {
-            return false;
-        }
+        s = new String(data, 0, 4, StandardCharsets.US_ASCII);
+        return s.equals("MThd");
     }
 
 
     @Override
     public String toString() {
-        String result = "Midi File tracks=" + tracks.size() + " quarter=" + quarternote + "\n";
-        result += timesig.toString() + "\n";
+        StringBuilder result = new StringBuilder(
+                "Midi File tracks=" + tracks.size() + " quarter=" + quarternote + "\n");
+        result.append(timesig.toString()).append("\n");
         for(MidiTrack track : tracks) {
-            result += track.toString();
+            result.append(track.toString());
         }
-        return result;
+        return result.toString();
     }
 
     /* Command-line program to print out a parsed Midi file. Used for debugging.
@@ -1767,7 +1760,7 @@ public class MidiFile {
      *
      */
     public static void main2(String[] args) {
-        /**
+        /*
         if (args.length == 0) {
             System.out.println("Usage: MidiFile <filename>");
             return;
@@ -1797,7 +1790,7 @@ public class MidiFile {
 
         MidiFile f = new MidiFile(data, "");
         System.out.print(f.toString());
-        **/
+        */
     }
 
 }  /* End class MidiFile */

@@ -100,12 +100,7 @@ public class DictInt {
         while (lastpos < size && key > keys[lastpos]) {
             lastpos++;
         }
-        if (lastpos < size && key == keys[lastpos]) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return lastpos < size && key == keys[lastpos];
     }
 
 

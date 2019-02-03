@@ -26,13 +26,12 @@ import android.content.res.*;
 import android.media.*;
 import java.util.zip.CRC32;
 
-/** @class SheetMusicActivity
- *
- * The SheetMusicActivity is the main activity. The main components are:
- * - MidiPlayer : The buttons and speed bar at the top.
- * - Piano : For highlighting the piano notes during playback.
- * - SheetMusic : For highlighting the sheet music notes during playback.
- *
+/**
+ * SheetMusicActivity is the main activity. The main components are:
+ * <ul>
+ *  <li> MidiPlayer : The buttons and speed bar at the top.
+ *  <li> Piano : For highlighting the piano notes during playback.
+ *  <li> SheetMusic : For highlighting the sheet music notes during playback.
  */
 public class SheetMusicActivity extends Activity {
 
@@ -233,6 +232,7 @@ public class SheetMusicActivity extends Activity {
             filename = URLEncoder.encode(name, "utf-8");
         }
         catch (UnsupportedEncodingException e) {
+            Toast.makeText(this, "Error: unsupported encoding in filename", Toast.LENGTH_SHORT).show();
         }
         if (!options.scrollVert) {
             options.scrollVert = true;
@@ -249,9 +249,8 @@ public class SheetMusicActivity extends Activity {
                 path.mkdirs();
                 OutputStream stream = new FileOutputStream(file);
                 image.compress(Bitmap.CompressFormat.PNG, 0, stream);
-                image = null;
                 stream.close();
-    
+
                 // Inform the media scanner about the file
                 MediaScannerConnection.scanFile(this, new String[] { file.toString() }, null, null);
             }
@@ -318,7 +317,7 @@ public class SheetMusicActivity extends Activity {
         if (json != null) {
             editor.putString("" + midiCRC, json);
         }
-        editor.commit();
+        editor.apply();
 
         // Recreate the sheet music with the new options
         createSheetMusic(options);

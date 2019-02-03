@@ -13,6 +13,8 @@
 package com.midisheetmusic;
 
 import java.util.*;
+
+import android.support.annotation.NonNull;
 import android.widget.*;
 import android.util.Log;
 import android.view.*;
@@ -53,8 +55,9 @@ class IconArrayAdapter<T> extends ArrayAdapter<T> {
      *  The view consists of a Note Pair icon on the left-side,
      *  and the name of the song.
      */
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.choose_song_item, null);
          }
@@ -62,13 +65,16 @@ class IconArrayAdapter<T> extends ArrayAdapter<T> {
          ImageView image = (ImageView)convertView.findViewById(R.id.choose_song_icon);
          text.setHighlightColor(Color.WHITE);
          FileUri file = (FileUri) this.getItem(position);
-         if (file.isDirectory()) {
-             image.setImageBitmap(directoryIcon);
-             text.setText(file.getUri().getPath());
-         }
-         else {
-             image.setImageBitmap(midiIcon);
-             text.setText(file.toString());
+         if (file != null) {
+             if (file.isDirectory()) {
+                 image.setImageBitmap(directoryIcon);
+                 text.setText(file.getUri().getPath());
+             } else {
+                 image.setImageBitmap(midiIcon);
+                 text.setText(file.toString());
+             }
+         } else {
+             text.setText(R.string.err_file_not_found);
          }
          return convertView;
     }

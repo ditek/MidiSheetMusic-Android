@@ -28,8 +28,8 @@ import android.database.*;
 import android.text.*;
 
 
-/** @class ScanMidiFiles
- * The ScanMidiFiles class is used to scan for midi files
+/**
+ * ScanMidiFiles class is used to scan for midi files
  * on a background thread.
  */
 class ScanMidiFiles extends AsyncTask<Integer, Integer, ArrayList<FileUri> > {
@@ -132,13 +132,13 @@ class ScanMidiFiles extends AsyncTask<Integer, Integer, ArrayList<FileUri> > {
 
 
 
-/** @class AllSongsActivity
- * The AllSongsActivity class is used to display a list of
+/**
+ * AllSongsActivity is used to display a list of
  * songs to choose from.  The list is created from the songs
  * shipped with MidiSheetMusic (in the assets directory), and 
  * also by searching for midi files in the internal/external 
  * device storage.
- *
+ * <br/><br/>
  * When a song is chosen, this calls the SheetMusicAcitivty, passing
  * the raw midi byte[] data as a parameter in the Intent.
  */ 
@@ -185,7 +185,7 @@ public class AllSongsActivity extends ListActivity implements TextWatcher {
     public void onResume() {
         super.onResume();
         if (songlist == null || songlist.size() == 0) {
-            songlist = new ArrayList<FileUri>();
+            songlist = new ArrayList<>();
             loadAssetMidiFiles();
             loadMidiFilesFromProvider(MediaStore.Audio.Media.INTERNAL_CONTENT_URI);
             loadMidiFilesFromProvider(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
@@ -197,7 +197,7 @@ public class AllSongsActivity extends ListActivity implements TextWatcher {
 
             // Remove duplicates
             ArrayList<FileUri> origlist = songlist;
-            songlist = new ArrayList<FileUri>();
+            songlist = new ArrayList<>();
             String prevname = "";
             for (FileUri file : origlist) {
                 if (!file.toString().equals(prevname)) {
@@ -231,9 +231,7 @@ public class AllSongsActivity extends ListActivity implements TextWatcher {
         if (songlist == null || newfiles == null) {
             return;
         }
-        for (FileUri file : newfiles) {
-            songlist.add(file);
-        }
+        songlist.addAll(newfiles);
         // Sort the songlist by name
         Collections.sort(songlist, songlist.get(0));
 
@@ -277,10 +275,10 @@ public class AllSongsActivity extends ListActivity implements TextWatcher {
      */
     private void loadMidiFilesFromProvider(Uri content_uri) {
         ContentResolver resolver = getContentResolver();
-        String columns[] = { 
-            MediaStore.Audio.Media._ID,
-            MediaStore.Audio.Media.TITLE, 
-            MediaStore.Audio.Media.MIME_TYPE 
+        String[] columns = {
+                MediaStore.Audio.Media._ID,
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.MIME_TYPE
         };
         String selection = MediaStore.Audio.Media.MIME_TYPE + " LIKE '%mid%'";
         Cursor cursor = resolver.query(content_uri, columns, selection, null, null);
@@ -339,16 +337,8 @@ public class AllSongsActivity extends ListActivity implements TextWatcher {
     public void afterTextChanged(Editable s) {
     }
 
-   
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
     }
-
-    /** Start the FileBrowser activity, which is used to select a midi file */
-    void browseForSongs() {
-        Intent intent = new Intent(this, FileBrowserActivity.class);
-        startActivity(intent);
-    }
-
 }
 

@@ -157,17 +157,12 @@ public class ChordSymbol implements MusicSymbol {
             notedata[i].whitenote = key.GetWhiteNote(midi.getNumber());
             notedata[i].duration = time.GetNoteDuration(midi.getEndTime() - midi.getStartTime());
             notedata[i].accid = key.GetAccidental(midi.getNumber(), midi.getStartTime() / time.getMeasure());
-            
+
             if (i > 0 && (notedata[i].whitenote.Dist(notedata[i-1].whitenote) == 1)) {
                 /* This note (notedata[i]) overlaps with the previous note.
                  * Change the side of this note.
                  */
-
-                if (notedata[i-1].leftside) {
-                    notedata[i].leftside = false;
-                } else {
-                    notedata[i].leftside = true;
-                }
+                notedata[i].leftside = !notedata[i - 1].leftside;
             } else {
                 notedata[i].leftside = true;
             }
@@ -556,7 +551,7 @@ public class ChordSymbol implements MusicSymbol {
                                  -SheetMusic.NoteWidth/2 + SheetMusic.NoteWidth, 
                                  -SheetMusic.NoteHeight/2 + 1 + SheetMusic.NoteHeight-3);
                 canvas.drawOval(rect, paint);
-                
+
             }
             else {
                 paint.setStyle(Paint.Style.FILL);
@@ -803,16 +798,11 @@ public class ChordSymbol implements MusicSymbol {
 
         /* If the notes are too far apart, don't use a beam */
         if (direction == Stem.Up) {
-            if (Math.abs(firstStem.getTop().Dist(lastStem.getTop())) >= 11) {
-                return false;
-            }
+            return Math.abs(firstStem.getTop().Dist(lastStem.getTop())) < 11;
         }
         else {
-            if (Math.abs(firstStem.getBottom().Dist(lastStem.getBottom())) >= 11) {
-                return false;
-            }
+            return Math.abs(firstStem.getBottom().Dist(lastStem.getBottom())) < 11;
         }
-        return true;
     }
 
 
@@ -977,22 +967,23 @@ public class ChordSymbol implements MusicSymbol {
 
     @Override
     public String toString() {
-        String result = String.format("ChordSymbol clef=%1$s start=%2$s end=%3$s width=%4$s hastwostems=%5$s ", 
-                                      clef, getStartTime(), getEndTime(), getWidth(), hastwostems);
+        StringBuilder result = new StringBuilder(String.format(
+                "ChordSymbol clef=%1$s start=%2$s end=%3$s width=%4$s hastwostems=%5$s ",
+                clef, getStartTime(), getEndTime(), getWidth(), hastwostems));
         for (AccidSymbol symbol : accidsymbols) {
-            result += symbol.toString() + " ";
+            result.append(symbol.toString()).append(" ");
         }
         for (NoteData note : notedata) {
-            result += String.format("Note whitenote=%1$s duration=%2$s leftside=%3$s ",
-                                    note.whitenote, note.duration, note.leftside);
+            result.append(String.format("Note whitenote=%1$s duration=%2$s leftside=%3$s ",
+                    note.whitenote, note.duration, note.leftside));
         }
         if (stem1 != null) {
-            result += stem1.toString() + " ";
+            result.append(stem1.toString()).append(" ");
         }
         if (stem2 != null) {
-            result += stem2.toString() + " ";
+            result.append(stem2.toString()).append(" ");
         }
-        return result; 
+        return result.toString();
     }
 
 }

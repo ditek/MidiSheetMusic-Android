@@ -209,10 +209,10 @@ public class AccidSymbol implements MusicSymbol {
         paint.setStrokeWidth(1);
     }
 
-    
+
     public String toString() {
         return String.format(
-          "AccidSymbol accid={0} whitenote={1} clef={2} width={3}",
+          "AccidSymbol accid=%1$s whitenote=%2$s clef=%3$s width=%4$s",
           accid, whitenote, clef, width);
     }
 

@@ -23,31 +23,33 @@ import android.os.*;
 import android.media.*;
 import android.util.AttributeSet;
 
-/** @class MidiPlayer
- *
+/**
  * The MidiPlayer is the panel at the top used to play the sound
- * of the midi file.  It consists of:
- *
- * - The Rewind button
- * - The Play/Pause button
- * - The Stop button
- * - The Fast Forward button
- * - The Playback speed bar
+ * of the midi file. It consists of:
+ * <ul>
+ *  <li/> The Rewind button
+ *  <li/> The Play/Pause button
+ *  <li/> The Stop button
+ *  <li/> The Fast Forward button
+ *  <li/> The Playback speed bar
+ * </ul>
  *
  * The sound of the midi file depends on
- * - The MidiOptions (taken from the menus)
- *   Which tracks are selected
- *   How much to transpose the keys by
- *   What instruments to use per track
- * - The tempo (from the Speed bar)
- * - The volume
+ * <ul>
+ *  <li/> The MidiOptions (taken from the menus)
+ *  <li/> Which tracks are selected
+ *  <li/> How much to transpose the keys by
+ *  <li/> What instruments to use per track
+ *  <li/> The tempo (from the Speed bar)
+ *  <li/> The volume
+ * </ul>
  *
  * The MidiFile.ChangeSound() method is used to create a new midi file
  * with these options.  The mciSendString() function is used for 
  * playing, pausing, and stopping the sound.
- *
+ * <br/><br/>
  * For shading the notes during playback, the method
- * SheetMusic.ShadeNotes() is used.  It takes the current 'pulse time',
+ * `SheetMusic.ShadeNotes()` is used.  It takes the current 'pulse time',
  * and determines which notes to shade.
  */
 public class MidiPlayer extends LinearLayout {
@@ -173,8 +175,7 @@ public class MidiPlayer extends LinearLayout {
     public static Point getPreferredSize(int screenwidth, int screenheight) {
         int height = (int) (5.0 * screenwidth / ( 2 + Piano.KeysPerOctave * Piano.MaxOctave));
         height = height * 2/3 ;
-        Point result = new Point(screenwidth, height);
-        return result;
+        return new Point(screenwidth, height);
     }
 
     /** Determine the measured width and height.
@@ -184,13 +185,10 @@ public class MidiPlayer extends LinearLayout {
     protected void onMeasure(int widthspec, int heightspec) {
         super.onMeasure(widthspec, heightspec);
         int screenwidth = MeasureSpec.getSize(widthspec);
-        int screenheight = MeasureSpec.getSize(heightspec);
-
         /* Make the button height 2/3 the piano WhiteKeyHeight */
-        int width = screenwidth;
         int height = (int) (5.0 * screenwidth / ( 2 + Piano.KeysPerOctave * Piano.MaxOctave));
         height = height * 2/3;
-        setMeasuredDimension(width, height);
+        setMeasuredDimension(screenwidth, height);
     }
 
     public void SetPiano(Piano p) {
@@ -293,7 +291,6 @@ public class MidiPlayer extends LinearLayout {
                     offset += len;
             }
             in.close();
-            MidiFile testmidi = new MidiFile(data, name); 
         }
         catch (IOException e) {
             Toast toast = Toast.makeText(activity, "CheckFile: " + e.toString(), Toast.LENGTH_LONG);
@@ -393,7 +390,6 @@ public class MidiPlayer extends LinearLayout {
 
         sheet.ShadeNotes((int)currentPulseTime, (int)prevPulseTime, SheetMusic.GradualScroll);
         piano.ShadeNotes((int)currentPulseTime, (int)prevPulseTime);
-        return;
       }
     };
 
@@ -414,9 +410,8 @@ public class MidiPlayer extends LinearLayout {
         if (midifile == null || sheet == null || numberTracks() == 0) {
             return;
         }
-        else if (playstate == playing) {
+        if (playstate == playing) {
             playstate = initPause;
-            return;
         }
     }
 
@@ -551,7 +546,6 @@ public class MidiPlayer extends LinearLayout {
       public void run() {
         if (midifile == null || sheet == null) {
             playstate = stopped;
-            return;
         }
         else if (playstate == stopped || playstate == paused) {
             /* This case should never happen */
@@ -583,7 +577,6 @@ public class MidiPlayer extends LinearLayout {
             sheet.ShadeNotes((int)currentPulseTime, (int)prevPulseTime, SheetMusic.GradualScroll);
             piano.ShadeNotes((int)currentPulseTime, (int)prevPulseTime);
             timer.postDelayed(TimerCallback, 100);
-            return;
         }
         else if (playstate == initPause) {
             long msec = SystemClock.uptimeMillis() - startTime;
@@ -595,7 +588,6 @@ public class MidiPlayer extends LinearLayout {
             piano.ShadeNotes((int)currentPulseTime, (int)prevPulseTime);
             playstate = paused;
             timer.postDelayed(ReShade, 1000);
-            return;
         }
       }
     };

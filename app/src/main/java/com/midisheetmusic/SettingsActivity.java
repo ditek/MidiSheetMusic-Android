@@ -21,22 +21,23 @@ import android.graphics.*;
 import android.graphics.drawable.ColorDrawable;
 
 
-/** @class SettingsActivity
- *  This activity is created by the "Settings" menu option.
- *  The user can change settings such as:
- *  - Which tracks to display
- *  - Which tracks to mute
- *  - Which instruments to use during playback
- *  - Whether to scroll horizontally or vertically
- *  - Whether to display the piano or not
- *  - Whether to display note letters or not
- *  - Transpose the notes to another key
- *  - Change the key signature or time signature displayed
- *  - Change how notes are combined into chords (the time interval)
- *  - Change the colors for shading the left/right hands.
- *  - Whether to display measure numbers
- *  - Play selected measures in a loop
- * 
+/**
+ * This activity is created by the "Settings" menu option.
+ * The user can change settings such as: <ul>
+ *  <li/> Which tracks to display
+ *  <li/> Which tracks to mute
+ *  <li/> Which instruments to use during playback
+ *  <li/> Whether to scroll horizontally or vertically
+ *  <li/> Whether to display the piano or not
+ *  <li/> Whether to display note letters or not
+ *  <li/> Transpose the notes to another key
+ *  <li/> Change the key signature or time signature displayed
+ *  <li/> Change how notes are combined into chords (the time interval)
+ *  <li/> Change the colors for shading the left/right hands.
+ *  <li/> Whether to display measure numbers
+ *  <li/> Play selected measures in a loop
+ * </ul>
+ *
  * When created, pass an Intent parameter containing MidiOptions.
  * When destroyed, this activity passes the result MidiOptions to the Intent.
  */
@@ -80,9 +81,6 @@ public class SettingsActivity extends PreferenceActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // getWindow().setBackgroundDrawable(new ColorDrawable(Color.rgb(40, 40, 40)));
-        // getListView().setBackgroundColor(Color.TRANSPARENT);
-        // getListView().setCacheColorHint(Color.TRANSPARENT);
         setTitle("MidiSheetMusic: Settings");
         options = (MidiOptions) this.getIntent().getSerializableExtra(settingsID);
         defaultOptions = (MidiOptions) this.getIntent().getSerializableExtra(defaultSettingsID);
@@ -372,7 +370,7 @@ public class SettingsActivity extends PreferenceActivity
         root.addPreference(loopEnd);
     }
 
-    /* Create the "Restore Default Settings" preference */
+    /** Create the "Restore Default Settings" preference */
     private void createRestoreDefaultPrefs(PreferenceScreen root) {
         restoreDefaults = new Preference(this);
         restoreDefaults.setTitle(R.string.restore_defaults);
@@ -403,16 +401,18 @@ public class SettingsActivity extends PreferenceActivity
         options.showNoteLetters = Integer.parseInt(showNoteLetters.getValue());
         options.transpose = Integer.parseInt(transpose.getValue());
         options.key = Integer.parseInt(key.getValue());
-        if (time.getValue().equals("Default")) {
-            options.time = null;
-        }
-        else if (time.getValue().equals("3/4")) {
-            options.time = new TimeSignature(3, 4, options.defaultTime.getQuarter(),
-                                             options.defaultTime.getTempo());
-        }
-        else if (time.getValue().equals("4/4")) {
-            options.time = new TimeSignature(4, 4, options.defaultTime.getQuarter(),
-                                             options.defaultTime.getTempo());
+        switch (time.getValue()) {
+            case "Default":
+                options.time = null;
+                break;
+            case "3/4":
+                options.time = new TimeSignature(3, 4, options.defaultTime.getQuarter(),
+                        options.defaultTime.getTempo());
+                break;
+            case "4/4":
+                options.time = new TimeSignature(4, 4, options.defaultTime.getQuarter(),
+                        options.defaultTime.getTempo());
+                break;
         }
         options.combineInterval = Integer.parseInt(combineInterval.getValue());
         options.shade1Color = shade1Color.getColor();

@@ -523,20 +523,20 @@ public class Staff {
 
     @Override
     public String toString() {
-        String result = "Staff clef=" + clefsym.toString() + "\n";
-        result += "  Keys:\n";
+        StringBuilder result = new StringBuilder("Staff clef=" + clefsym.toString() + "\n");
+        result.append("  Keys:\n");
         for (AccidSymbol a : keys) {
-            result += "    " + a.toString() + "\n";
+            result.append("    ").append(a.toString()).append("\n");
         }
-        result += "  Symbols:\n";
+        result.append("  Symbols:\n");
         for (MusicSymbol s : keys) {
-            result += "    " + s.toString() + "\n";
+            result.append("    ").append(s.toString()).append("\n");
         }
         for (MusicSymbol m : symbols) {
-            result += "    " + m.toString() + "\n";
+            result.append("    ").append(m.toString()).append("\n");
         }
-        result += "End Staff\n";
-        return result;
+        result.append("End Staff\n");
+        return result.toString();
     }
 
 }
