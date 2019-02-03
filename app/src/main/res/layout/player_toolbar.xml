@@ -58,6 +58,11 @@
         android:layout_weight="1" />
 
     <ImageButton
+        android:id="@+id/btn_piano"
+        style="@style/ToolbarButtonStyle"
+        android:src="@drawable/ic_piano" />
+
+    <ImageButton
         android:id="@+id/btn_settings"
         style="@style/ToolbarButtonStyle"
         android:src="@drawable/ic_settings" />

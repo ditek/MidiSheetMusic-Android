@@ -17,7 +17,6 @@ import java.net.*;
 import android.app.*;
 import android.net.Uri;
 import android.os.*;
-import android.util.*;
 import android.widget.*;
 import android.view.*;
 import android.graphics.*;
@@ -119,19 +118,17 @@ public class SheetMusicActivity extends Activity {
         if (sheet != null) {
             layout.removeView(sheet);
         }
-        if (!options.showPiano) {
-            piano.setVisibility(View.GONE);
-        }
-        else {
-            piano.setVisibility(View.VISIBLE);
-        }
+
+        piano.setVisibility(options.showPiano ? View.VISIBLE : View.GONE);
         sheet = new SheetMusic(this);
         sheet.init(midifile, options);
         sheet.setPlayer(player);
         layout.addView(sheet);
         piano.SetMidiFile(midifile, options, player);
         piano.SetShadeColors(options.shade1Color, options.shade2Color);
+
         player.SetMidiFile(midifile, options, sheet);
+        player.updateToolbarButtons();
         layout.requestLayout();
         sheet.callOnDraw();
     }

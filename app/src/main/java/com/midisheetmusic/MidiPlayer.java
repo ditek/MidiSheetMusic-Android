@@ -57,7 +57,8 @@ public class MidiPlayer extends LinearLayout {
     private ImageButton playButton;      /** The play/pause button */
     private ImageButton stopButton;      /** The stop button */
     private ImageButton fastFwdButton;   /** The fast forward button */
-    private ImageView settingsButton;  /** The fast forward button */
+    private ImageButton settingsButton;  /** The fast forward button */
+    private ImageButton pianoButton;
     private TextView speedText;          /** The "Speed %" label */
     private SeekBar speedBar;    /** The seekbar for controlling the playback speed */
 
@@ -124,35 +125,17 @@ public class MidiPlayer extends LinearLayout {
         stopButton = findViewById(R.id.btn_replay);
         playButton = findViewById(R.id.btn_play);
         fastFwdButton = findViewById(R.id.btn_forward);
+        pianoButton = findViewById(R.id.btn_piano);
         settingsButton = findViewById(R.id.btn_settings);
         speedText = findViewById(R.id.txt_speed);
         speedBar = findViewById(R.id.speed_bar);
 
-        rewindButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Rewind();
-            }
-        });
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Stop();
-            }
-        });
-        playButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Play();
-            }
-        });
-        fastFwdButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                FastForward();
-            }
-        });
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                activity.openOptionsMenu();
-            }
-        });
+        rewindButton.setOnClickListener(v -> Rewind());
+        stopButton.setOnClickListener(v -> Stop());
+        playButton.setOnClickListener(v -> Play());
+        fastFwdButton.setOnClickListener(v -> FastForward());
+        pianoButton.setOnClickListener(v -> togglePiano());
+        settingsButton.setOnClickListener(v -> activity.openOptionsMenu());
 
         speedBar.getProgressDrawable().setColorFilter(Color.parseColor("#00BB87"), PorterDuff.Mode.SRC_IN);
         speedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -169,6 +152,18 @@ public class MidiPlayer extends LinearLayout {
          * the timer yet (enabled = false).
          */
         timer = new Handler();
+    }
+
+    /** Update the status of the toolbar buttons (show, hide, opacity, etc.) */
+    public void updateToolbarButtons(){
+        pianoButton.setAlpha(options.showPiano ? (float) 1.0 : (float) 0.5);
+    }
+
+    /** Show/hide the piano */
+    private void togglePiano() {
+        options.showPiano = !options.showPiano;
+        piano.setVisibility(options.showPiano ? View.VISIBLE : View.GONE);
+        updateToolbarButtons();
     }
 
     /** Get the preferred width/height given the screen width/height */
