@@ -96,9 +96,10 @@ public class SheetMusicActivity extends Activity {
             options.merge(savedOptions);
         }
         createView();
+        player.setSheetUpdateRequestListener(() -> createSheetMusic(options));
         createSheetMusic(options);
     }
-    
+
     /* Create the MidiPlayer and Piano views */
     void createView() {
         layout = new LinearLayout(this);

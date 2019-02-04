@@ -58,9 +58,15 @@ public class MidiPlayer extends LinearLayout {
     private ImageButton stopButton;      /** The stop button */
     private ImageButton fastFwdButton;   /** The fast forward button */
     private ImageButton settingsButton;  /** The fast forward button */
+    private Button leftHandButton;
+    private Button rightHandButton;
     private ImageButton pianoButton;
     private TextView speedText;          /** The "Speed %" label */
     private SeekBar speedBar;    /** The seekbar for controlling the playback speed */
+
+    /** The index corresponding to left/right hand in the track list */
+    private static final int LEFT_TRACK = 1;
+    private static final int RIGHT_TRACK = 0;
 
     int playstate;               /** The playing state of the Midi Player */
     final int stopped   = 1;     /** Currently stopped */
@@ -83,6 +89,13 @@ public class MidiPlayer extends LinearLayout {
     double currentPulseTime;    /** Time (in pulses) music is currently at */
     double prevPulseTime;       /** Time (in pulses) music was last at */
     Activity activity;          /** The parent activity. */
+
+    /** A listener that allows us to send a request to update the sheet when needed */
+    private SheetUpdateRequestListener mSheetUpdateRequestListener;
+
+    public void setSheetUpdateRequestListener(SheetUpdateRequestListener listener) {
+        mSheetUpdateRequestListener = listener;
+    }
 
     /** Create a new MidiPlayer, displaying the play/stop buttons, and the
      *  speed bar.  The midifile and sheetmusic are initially null.
@@ -125,6 +138,8 @@ public class MidiPlayer extends LinearLayout {
         stopButton = findViewById(R.id.btn_replay);
         playButton = findViewById(R.id.btn_play);
         fastFwdButton = findViewById(R.id.btn_forward);
+        leftHandButton = findViewById(R.id.btn_left);
+        rightHandButton = findViewById(R.id.btn_right);
         pianoButton = findViewById(R.id.btn_piano);
         settingsButton = findViewById(R.id.btn_settings);
         speedText = findViewById(R.id.txt_speed);
@@ -134,13 +149,15 @@ public class MidiPlayer extends LinearLayout {
         stopButton.setOnClickListener(v -> Stop());
         playButton.setOnClickListener(v -> Play());
         fastFwdButton.setOnClickListener(v -> FastForward());
+        leftHandButton.setOnClickListener(v -> toggleTrack(LEFT_TRACK));
+        rightHandButton.setOnClickListener(v -> toggleTrack(RIGHT_TRACK));
         pianoButton.setOnClickListener(v -> togglePiano());
         settingsButton.setOnClickListener(v -> activity.openOptionsMenu());
 
         speedBar.getProgressDrawable().setColorFilter(Color.parseColor("#00BB87"), PorterDuff.Mode.SRC_IN);
         speedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
-                speedText.setText("   Speed: " + String.format(Locale.US, "%3d", progress) + "%   ");
+                speedText.setText(String.format(Locale.US, "%3d", progress) + "%");
             }
             public void onStartTrackingTouch(SeekBar bar) {
             }
@@ -154,9 +171,16 @@ public class MidiPlayer extends LinearLayout {
         timer = new Handler();
     }
 
-    /** Update the status of the toolbar buttons (show, hide, opacity, etc.) */
-    public void updateToolbarButtons(){
-        pianoButton.setAlpha(options.showPiano ? (float) 1.0 : (float) 0.5);
+    /** Show/hide treble and bass clefs */
+    private void toggleTrack(int track) {
+        if (track < options.tracks.length) {
+            options.tracks[track] = !options.tracks[track];
+            options.mute[track] = !options.tracks[track];
+            if (mSheetUpdateRequestListener != null) {
+                mSheetUpdateRequestListener.onSheetUpdateRequest();
+            }
+            updateToolbarButtons();
+        }
     }
 
     /** Show/hide the piano */
@@ -164,6 +188,24 @@ public class MidiPlayer extends LinearLayout {
         options.showPiano = !options.showPiano;
         piano.setVisibility(options.showPiano ? View.VISIBLE : View.GONE);
         updateToolbarButtons();
+    }
+
+    /** Update the status of the toolbar buttons (show, hide, opacity, etc.) */
+    public void updateToolbarButtons(){
+        pianoButton.setAlpha(options.showPiano ? (float) 1.0 : (float) 0.5);
+
+        float leftAlpha = (float) 0.5;
+        float rightAlpha = (float) 0.5;
+        if (LEFT_TRACK < options.tracks.length) {
+            leftAlpha = options.tracks[LEFT_TRACK] ? (float) 1.0 : (float) 0.5;
+        }
+        if (RIGHT_TRACK < options.tracks.length) {
+            rightAlpha = options.tracks[RIGHT_TRACK] ? (float) 1.0 : (float) 0.5;
+        }
+        leftHandButton.setVisibility(LEFT_TRACK < options.tracks.length ? View.VISIBLE : View.GONE);
+        rightHandButton.setVisibility(RIGHT_TRACK < options.tracks.length ? View.VISIBLE : View.GONE);
+        leftHandButton.setAlpha(leftAlpha);
+        rightHandButton.setAlpha(rightAlpha);
     }
 
     /** Get the preferred width/height given the screen width/height */

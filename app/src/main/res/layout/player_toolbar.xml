@@ -7,7 +7,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="@dimen/toolbar_height"
     android:layout_marginStart="8dp"
     android:layout_marginTop="4dp"
     android:layout_marginEnd="8dp"
@@ -37,16 +37,15 @@
     <TextView
         android:id="@+id/txt_speed"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:gravity="center"
-        android:text="   Speed: 100%   "
-        tools:text="   Speed: 100%   " />
+        android:layout_height="@dimen/toolbar_height"
+        android:padding="8dp"
+        android:text="100%"
+        tools:text="100%" />
 
     <SeekBar
         android:id="@+id/speed_bar"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/toolbar_height"
         android:max="150"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
@@ -56,6 +55,20 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btn_left"
+        style="@style/ToolbarButtonStyle"
+        android:text="L"
+        android:textColor="@color/IconColor"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btn_right"
+        style="@style/ToolbarButtonStyle"
+        android:text="R"
+        android:textColor="@color/IconColor"
+        android:textSize="16sp" />
 
     <ImageButton
         android:id="@+id/btn_piano"
