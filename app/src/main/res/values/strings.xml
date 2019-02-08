@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MidiSheetMusic</string>
+    <string name="app_name">Enhanced MidiSheetMusic</string>
     <string name="choose_song">Choose Song</string>
     <string name="song_settings_str">Song Settings</string>
     <string name="save_images_str">Save As Images</string>
