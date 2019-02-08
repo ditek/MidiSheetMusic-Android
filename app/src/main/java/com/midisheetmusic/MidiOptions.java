@@ -18,8 +18,8 @@ import android.util.Log;
 import org.json.*;
 import android.graphics.*;
 
-/** @class MidiOptions
- * The MidiOptions class contains the available options for
+/**
+ * Contains the available options for
  * modifying the sheet music and sound.  These options are collected
  * from the SettingsActivity, and are passed to the SheetMusic and
  * MidiPlayer classes.
@@ -62,6 +62,8 @@ public class MidiOptions implements Serializable {
     public int     playMeasuresInLoopEnd;   /** End measure to play in loop */
     public int     lastMeasure;             /** The last measure in the song */
 
+    public boolean useColors;
+    public int[] noteColors;
 
     public MidiOptions() {
     }
@@ -99,7 +101,21 @@ public class MidiOptions implements Serializable {
         combineInterval = 40;
         shade1Color = Color.rgb(210, 205, 220);
         shade2Color = Color.rgb(150, 200, 220);
-        
+
+        useColors = false;
+        noteColors = new int[12];
+        noteColors[0] = Color.rgb(180, 0, 0);
+        noteColors[1] = Color.rgb(230, 0, 0);
+        noteColors[2] = Color.rgb(220, 128, 0);
+        noteColors[3] = Color.rgb(130, 130, 0);
+        noteColors[4] = Color.rgb(187, 187, 0);
+        noteColors[5] = Color.rgb(0, 100, 0);
+        noteColors[6] = Color.rgb(0, 140, 0);
+        noteColors[7] = Color.rgb(0, 180, 180);
+        noteColors[8] = Color.rgb(0, 0, 120);
+        noteColors[9] = Color.rgb(0, 0, 180);
+        noteColors[10] = Color.rgb(88, 0, 147);
+        noteColors[11] = Color.rgb(129, 0, 215);
 
         tempo = midifile.getTime().getTempo();
         pauseTime = 0;
@@ -125,6 +141,10 @@ public class MidiOptions implements Serializable {
             for (int value : instruments) {
                 jsonInstruments.put(value);
             }
+            JSONArray jsonColors = new JSONArray();
+            for (int value : noteColors) {
+                jsonColors.put(value);
+            }
             if (time != null) {
                 JSONObject jsonTime = new JSONObject();
                 jsonTime.put("numerator", time.getNumerator());
@@ -149,6 +169,8 @@ public class MidiOptions implements Serializable {
             json.put("combineInterval", combineInterval);
             json.put("shade1Color", shade1Color);
             json.put("shade2Color", shade2Color);
+            json.put("useColors", useColors);
+            json.put("noteColors", jsonColors);
             json.put("showMeasures", showMeasures);
             json.put("playMeasuresInLoop", playMeasuresInLoop);
             json.put("playMeasuresInLoopStart", playMeasuresInLoopStart);
@@ -188,7 +210,16 @@ public class MidiOptions implements Serializable {
             options.instruments = new int[jsonInstruments.length()];
             for (int i = 0; i < options.instruments.length; i++) {
                 options.instruments[i] = jsonInstruments.getInt(i);
-            } 
+            }
+
+            if (json.has("noteColors"))
+            {
+                JSONArray jsonColors = json.getJSONArray("noteColors");
+                options.noteColors = new int[jsonColors.length()];
+                for (int i = 0; i < options.noteColors.length; i++) {
+                    options.noteColors[i] = jsonColors.getInt(i);
+                }
+            }
 
             if (json.has("time")) {
                 JSONObject jsonTime = json.getJSONObject("time");
@@ -210,6 +241,9 @@ public class MidiOptions implements Serializable {
             options.combineInterval = json.getInt("combineInterval");
             options.shade1Color = json.getInt("shade1Color");
             options.shade2Color = json.getInt("shade2Color");
+            if (json.has("useColors")) {
+                options.useColors = json.getBoolean("useColors");
+            }
             options.showMeasures = json.getBoolean("showMeasures");
             options.playMeasuresInLoop = json.getBoolean("playMeasuresInLoop");
             options.playMeasuresInLoopStart = json.getInt("playMeasuresInLoopStart");
@@ -233,6 +267,12 @@ public class MidiOptions implements Serializable {
         if (saved.instruments.length == instruments.length) {
             System.arraycopy(saved.instruments, 0, instruments, 0, instruments.length);
         }
+        if (saved.mute.length == mute.length) {
+            System.arraycopy(saved.mute, 0, mute, 0, mute.length);
+        }
+        if (saved.useColors && saved.noteColors != null) {
+            noteColors = saved.noteColors;
+        }
         if (saved.time != null) {
             time = new TimeSignature(saved.time.getNumerator(), saved.time.getDenominator(), 
                     saved.time.getQuarter(), saved.time.getTempo());
@@ -249,6 +289,7 @@ public class MidiOptions implements Serializable {
         combineInterval = saved.combineInterval;
         shade1Color = saved.shade1Color;
         shade2Color = saved.shade2Color;
+        useColors = saved.useColors;
         showMeasures = saved.showMeasures;
         playMeasuresInLoop = saved.playMeasuresInLoop;
         playMeasuresInLoopStart = saved.playMeasuresInLoopStart;
@@ -287,6 +328,9 @@ public class MidiOptions implements Serializable {
         System.arraycopy(mute, 0, options.mute, 0, mute.length);
         options.instruments = new int[instruments.length];
         System.arraycopy(instruments, 0, options.instruments, 0, instruments.length);
+        options.noteColors = new int[noteColors.length];
+        System.arraycopy(noteColors, 0, options.noteColors, 0, noteColors.length);
+
         options.defaultTime = defaultTime;
         options.time = time;
         options.useDefaultInstruments = useDefaultInstruments;
@@ -300,6 +344,7 @@ public class MidiOptions implements Serializable {
         options.combineInterval = combineInterval;
         options.shade1Color = shade1Color;
         options.shade2Color = shade2Color;
+        options.useColors = useColors;
         options.showMeasures = showMeasures;
         options.playMeasuresInLoop = playMeasuresInLoop;
         options.playMeasuresInLoopStart = playMeasuresInLoopStart;

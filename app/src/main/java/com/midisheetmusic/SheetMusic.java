@@ -14,32 +14,26 @@ package com.midisheetmusic;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.io.*;
 import android.app.*;
 import android.content.*;
 import android.graphics.*;
-import android.os.*;
-import android.util.Log;
 import android.view.*;
-import android.view.animation.AnimationUtils;
 
-/** @class BoxedInt **/
 class BoxedInt {
     public int value;
 }
 
-/** @class SheetMusic
- *
+/**
  * The SheetMusic Control is the main class for displaying the sheet music.
  * The SheetMusic class has the following public methods:
- *
- * SheetMusic()
+ * <ul/>
+ *  <li/> SheetMusic():
  *   Create a new SheetMusic control from the given midi file and options.
  * 
- * onDraw()
+ *  <li/> onDraw():
  *   Method called to draw the SheetMusic
  *
- * shadeNotes()
+ *  <li/> shadeNotes():
  *   Shade all the notes played at a given pulse time.
  */
 public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, ScrollAnimationListener {
@@ -69,6 +63,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
     private float    zoom;            /** The zoom level to draw at (1.0 == 100%) */
     private boolean  scrollVert;      /** Whether to scroll vertically or horizontally */
     private int      showNoteLetters; /** Display the note letters */
+    private boolean  useColors;
     private int[]    NoteColors;      /** The note colors to use */
     private int      shade1;          /** The color for shading */
     private int      shade2;          /** The color for shading left-hand piano */
@@ -122,7 +117,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         zoom = 1.0f;
 
         filename = file.getFileName();
-        SetColors(null, options.shade1Color, options.shade2Color);
+        SetColors(options.noteColors, options.useColors, options.shade1Color, options.shade2Color);
         paint = new Paint();
         paint.setTextSize(12.0f);
         Typeface typeface = Typeface.create(paint.getTypeface(), Typeface.NORMAL);
@@ -848,23 +843,24 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
     }
 
 
-    /** Change the note colors for the sheet music, and redraw. 
-     *  This is not currently used.
-     */
-    public void SetColors(int[] newcolors, int newshade1, int newshade2) {
+    /** Change the note colors for the sheet music, and redraw. */
+    public void SetColors(int[] newcolors, boolean shouldUseColors, int newshade1, int newshade2) {
+        useColors = shouldUseColors;
         if (NoteColors == null) {
             NoteColors = new int[12];
             for (int i = 0; i < 12; i++) {
                 NoteColors[i] = Color.BLACK;
             }
         }
-        if (newcolors != null) {
-            for (int i = 0; i < 12; i++) {
-                NoteColors[i] = newcolors[i];
-            }
+        if (shouldUseColors && newcolors != null) {
+            System.arraycopy(newcolors, 0, NoteColors, 0, newcolors.length);
         }
         shade1 = newshade1;
         shade2 = newshade2;
+    }
+
+    public static int getTextColor() {
+        return Color.rgb(70, 70, 70);
     }
 
     /** Get the color for a given note number. Not currently used. */

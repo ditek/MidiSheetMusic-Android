@@ -311,6 +311,9 @@ public class SheetMusicActivity extends Activity {
         editor.putInt("shade1Color", options.shade1Color);
         editor.putInt("shade2Color", options.shade2Color);
         editor.putBoolean("showPiano", options.showPiano);
+        for (int i = 0; i < options.noteColors.length; i++) {
+            editor.putInt("noteColor" + i, options.noteColors[i]);
+        }
         String json = options.toJson();
         if (json != null) {
             editor.putString("" + midiCRC, json);

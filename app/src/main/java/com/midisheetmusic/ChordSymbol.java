@@ -619,6 +619,7 @@ public class ChordSymbol implements MusicSymbol {
     public void DrawNoteLetters(Canvas canvas, Paint paint, int ytop, WhiteNote topstaff) {
         boolean overlap = NotesOverlap(notedata, 0, notedata.length);
         paint.setStrokeWidth(1);
+        paint.setColor(SheetMusic.getTextColor());
 
         for (NoteData note : notedata) {
             if (!note.leftside) {

@@ -17,8 +17,6 @@ import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.preference.*;
-import android.graphics.*;
-import android.graphics.drawable.ColorDrawable;
 
 
 /**
@@ -65,7 +63,10 @@ public class SettingsActivity extends PreferenceActivity
     private ListPreference key;                   /** Key Signature to use */
     private ListPreference time;                  /** Time Signature to use */
     private ListPreference combineInterval;       /** Interval (msec) to combine notes */
-    
+
+    private ColorPreference[] noteColors;
+    private CheckBoxPreference useColors;
+
     private ColorPreference shade1Color;          /** Right-hand color */
     private ColorPreference shade2Color;          /** Left-hand color */
 
@@ -82,8 +83,8 @@ public class SettingsActivity extends PreferenceActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("MidiSheetMusic: Settings");
-        options = (MidiOptions) this.getIntent().getSerializableExtra(settingsID);
-        defaultOptions = (MidiOptions) this.getIntent().getSerializableExtra(defaultSettingsID);
+        options = (MidiOptions) getIntent().getSerializableExtra(settingsID);
+        defaultOptions = (MidiOptions) getIntent().getSerializableExtra(defaultSettingsID);
         createView();
     }
 
@@ -314,6 +315,14 @@ public class SettingsActivity extends PreferenceActivity
 
     /* Create the "Left-hand color" and "Right-hand color" preferences */
     private void createColorPrefs(PreferenceScreen root) {
+        PreferenceCategory localPreferenceCategory = new PreferenceCategory(this);
+        localPreferenceCategory.setTitle("Select Colors");
+        root.addPreference(localPreferenceCategory);
+        useColors = new CheckBoxPreference(this);
+        useColors.setTitle("Use Note Colors");
+        useColors.setChecked(options.useColors);
+        root.addPreference(useColors);
+
         shade1Color = new ColorPreference(this);
         shade1Color.setColor(options.shade1Color);
         shade1Color.setTitle(R.string.right_hand_color);
@@ -323,6 +332,15 @@ public class SettingsActivity extends PreferenceActivity
         shade2Color.setColor(options.shade2Color);
         shade2Color.setTitle(R.string.left_hand_color);
         root.addPreference(shade2Color);
+
+        noteColors = new ColorPreference[options.noteColors.length];
+        for (int i = 0; i < 12; i++) {
+            noteColors[i] = new ColorPreference(this);
+            noteColors[i].setColor(options.noteColors[i]);
+            noteColors[i].setTitle(new String[]
+                    {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"}[i]);
+            root.addPreference(noteColors[i]);
+        }
     }
 
 
@@ -386,6 +404,9 @@ public class SettingsActivity extends PreferenceActivity
         for (int i = 0; i < options.mute.length; i++) {
             options.mute[i] = muteTracks[i].isChecked();
         }
+        for (int i = 0; i < options.noteColors.length; i++) {
+            options.noteColors[i] = noteColors[i].getColor();
+        }
         for (int i = 0; i < options.tracks.length; i++) {
             ListPreference entry = selectInstruments[i];
             options.instruments[i] = entry.findIndexOfValue(entry.getValue());
@@ -417,6 +438,7 @@ public class SettingsActivity extends PreferenceActivity
         options.combineInterval = Integer.parseInt(combineInterval.getValue());
         options.shade1Color = shade1Color.getColor();
         options.shade2Color = shade2Color.getColor();
+        options.useColors = useColors.isChecked();
         options.showMeasures = showMeasures.isChecked();
         options.playMeasuresInLoop = playMeasuresInLoop.isChecked();
         options.playMeasuresInLoopStart = Integer.parseInt(loopStart.getValue()) - 1;
