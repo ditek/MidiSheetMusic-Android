@@ -14,18 +14,17 @@ package com.midisheetmusic;
 
 import java.util.*;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.*;
-import android.util.Log;
 import android.view.*;
 import android.content.*;
 import android.content.res.*;
 import android.graphics.*;
 
-/** @class IconArrayAdapter
+/**
  *  The ListAdapter for displaying the list of songs,
  *  and for displaying the list of files in a directory.
- *
+ *  <p/>
  *  Similar to the array adapter, but adds an icon
  *  to the left side of each item displayed.
  *  Midi files show a NotePair icon.
