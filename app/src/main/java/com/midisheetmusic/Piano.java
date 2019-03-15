@@ -42,6 +42,9 @@ public class Piano extends SurfaceView implements SurfaceHolder.Callback {
     private static int margin;         /** The top/left margin to the piano (0) */
     private static int BlackBorder;    /** The width of the black border around the keys */
 
+    /** The width of the device screen */
+    private static int ScreenWidth;
+
     private static int[] blackKeyOffsets;   /** The x pixles of the black keys */
 
     /* The colors for drawing black/gray lines */
@@ -112,9 +115,8 @@ public class Piano extends SurfaceView implements SurfaceHolder.Callback {
     /** Set the measured width and height */
     @Override
     protected void onMeasure(int widthspec, int heightspec) {
-        int screenwidth = MeasureSpec.getSize(widthspec);
-        int screenheight = MeasureSpec.getSize(heightspec);
-        WhiteKeyWidth = (int)(screenwidth / (2.0 + KeysPerOctave * MaxOctave));
+        ScreenWidth = MeasureSpec.getSize(widthspec);
+        WhiteKeyWidth = (int)(ScreenWidth / (2.0 + KeysPerOctave * MaxOctave));
         if (WhiteKeyWidth % 2 != 0)
             WhiteKeyWidth--;
 
@@ -139,10 +141,10 @@ public class Piano extends SurfaceView implements SurfaceHolder.Callback {
         };
 
 //        int width = margin*2 + BlackBorder*2 + WhiteKeyWidth * KeysPerOctave * MaxOctave;
-        int width = screenwidth;
+        int width = ScreenWidth;
         int height = margin*2 + BlackBorder*3 + WhiteKeyHeight;
         setMeasuredDimension(width, height);
-        bufferBitmap = Bitmap.createBitmap(screenwidth, height, Bitmap.Config.ARGB_8888);
+        bufferBitmap = Bitmap.createBitmap(ScreenWidth, height, Bitmap.Config.ARGB_8888);
         bufferCanvas = new Canvas(bufferBitmap);
         this.invalidate();
         draw();
@@ -373,8 +375,15 @@ public class Piano extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         paint.setAntiAlias(false);
-        bufferCanvas.translate(margin + BlackBorder, margin + BlackBorder);
         paint.setStyle(Paint.Style.FILL);
+
+        // Draw the black frame of the piano
+        int height = margin*2 + BlackBorder*3 + WhiteKeyHeight;
+        paint.setColor(gray1);
+        bufferCanvas.drawRect(0, 0, ScreenWidth , height, paint);
+
+        bufferCanvas.translate(margin + BlackBorder, margin + BlackBorder);
+
         paint.setColor(Color.WHITE);
         bufferCanvas.drawRect(0, 0, WhiteKeyWidth * KeysPerOctave * MaxOctave ,
                         WhiteKeyHeight, paint);
