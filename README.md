@@ -3,8 +3,10 @@ An app for visualizing MIDI files with extra features to make learning new piece
 
 <div style="text-align: center">
 
-<img src="images/screenshot_sheet.png" width="500" hspace="20"><img src="images/screenshot_song_list.png" width="500" hspace="20">
-<br><br>
+<img src="images/screenshot_sheet.png" width="500" hspace="20">
+<br>
+<img src="images/screenshot_song_list.png" width="500" hspace="20">
+<br>
 <img src="images/screenshot_settings1.png" height="500" hspace="20"><img src="images/screenshot_settings2.png" height="500" hspace="20">
 
 </div>
