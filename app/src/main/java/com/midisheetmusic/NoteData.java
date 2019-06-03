@@ -13,6 +13,9 @@
 package com.midisheetmusic;
 
 
+import com.midisheetmusic.sheets.Accid;
+import com.midisheetmusic.sheets.WhiteNote;
+
 /** @class NoteData
  *  Contains fields for displaying a single note in a chord.
  */

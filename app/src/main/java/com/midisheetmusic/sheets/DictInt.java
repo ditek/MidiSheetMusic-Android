@@ -11,7 +11,7 @@
  */
 
 
-package com.midisheetmusic;
+package com.midisheetmusic.sheets;
 
 
 /**@class DictInt

@@ -23,6 +23,8 @@ import android.content.*;
 import android.content.res.*;
 import androidx.core.content.ContextCompat;
 
+import com.midisheetmusic.sheets.ClefSymbol;
+
 /**
  * This is the launch activity for MidiSheetMusic.
  * It simply displays the splash screen, and a button to choose a song.

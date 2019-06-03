@@ -64,6 +64,7 @@ public class MidiOptions implements Serializable {
 
     public boolean useColors;
     public int[] noteColors;
+    public int midiShift;
 
     public MidiOptions() {
     }
@@ -95,6 +96,7 @@ public class MidiOptions implements Serializable {
         showLyrics = true;
         shifttime = 0;
         transpose = 0;
+        midiShift = 0;
         time = null;
         defaultTime = midifile.getTime();
         key = -1;
@@ -165,6 +167,7 @@ public class MidiOptions implements Serializable {
             json.put("twoStaffs", twoStaffs);
             json.put("showNoteLetters", showNoteLetters);
             json.put("transpose", transpose);
+            json.put("midiShift", midiShift);
             json.put("key", key);
             json.put("combineInterval", combineInterval);
             json.put("shade1Color", shade1Color);
@@ -237,6 +240,7 @@ public class MidiOptions implements Serializable {
             options.twoStaffs = json.getBoolean("twoStaffs");
             options.showNoteLetters = json.getInt("showNoteLetters");
             options.transpose = json.getInt("transpose");
+            options.midiShift = json.getInt("midiShift");
             options.key = json.getInt("key");
             options.combineInterval = json.getInt("combineInterval");
             options.shade1Color = json.getInt("shade1Color");
@@ -285,6 +289,7 @@ public class MidiOptions implements Serializable {
         twoStaffs = saved.twoStaffs;
         showNoteLetters = saved.showNoteLetters;
         transpose = saved.transpose;
+        midiShift = saved.midiShift;
         key = saved.key;
         combineInterval = saved.combineInterval;
         shade1Color = saved.shade1Color;
@@ -310,6 +315,7 @@ public class MidiOptions implements Serializable {
         result.append(" scrollVert ").append(scrollVert);
         result.append(" twoStaffs ").append(twoStaffs);
         result.append(" transpose").append(transpose);
+        result.append(" midiShift").append(midiShift);
         result.append(" key ").append(key);
         result.append(" combine ").append(combineInterval);
         result.append(" tempo ").append(tempo);
@@ -340,6 +346,7 @@ public class MidiOptions implements Serializable {
         options.twoStaffs = twoStaffs;
         options.showNoteLetters = showNoteLetters;
         options.transpose = transpose;
+        options.midiShift = midiShift;
         options.key = key;
         options.combineInterval = combineInterval;
         options.shade1Color = shade1Color;

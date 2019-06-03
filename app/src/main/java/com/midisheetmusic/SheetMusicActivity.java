@@ -23,7 +23,12 @@ import android.graphics.*;
 import android.content.*;
 import android.content.res.*;
 import android.media.*;
+
+import com.midisheetmusic.sheets.ClefSymbol;
+
 import java.util.zip.CRC32;
+
+import jp.kshoji.driver.midi.activity.AbstractSingleMidiActivity;
 
 /**
  * SheetMusicActivity is the main activity. The main components are:
@@ -32,7 +37,7 @@ import java.util.zip.CRC32;
  *  <li> Piano : For highlighting the piano notes during playback.
  *  <li> SheetMusic : For highlighting the sheet music notes during playback.
  */
-public class SheetMusicActivity extends Activity {
+public class SheetMusicActivity extends MidiHandlingActivity {
 
     public static final String MidiTitleID = "MidiTitleID";
     public static final int settingsRequestCode = 1;
@@ -83,7 +88,7 @@ public class SheetMusicActivity extends Activity {
         }
 
         // Initialize the settings (MidiOptions).
-        // If previous settings have been saved, used those
+        // If previous settings have been saved, use those
         options = new MidiOptions(midifile);
         CRC32 crc = new CRC32();
         crc.update(data); 
@@ -372,6 +377,16 @@ public class SheetMusicActivity extends Activity {
                         // Hide the nav bar and status bar
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN);
+    }
+
+    @Override
+    void OnMidiDeviceStatus(boolean connected) {
+        player.OnMidiDeviceStatus(connected);
+    }
+
+    @Override
+    void OnMidiNote(int note, boolean pressed) {
+        player.OnMidiNote(note, pressed);
     }
 }
 

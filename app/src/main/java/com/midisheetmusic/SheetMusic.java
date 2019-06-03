@@ -19,6 +19,19 @@ import android.content.*;
 import android.graphics.*;
 import android.view.*;
 
+import com.midisheetmusic.sheets.AccidSymbol;
+import com.midisheetmusic.sheets.BarSymbol;
+import com.midisheetmusic.sheets.BlankSymbol;
+import com.midisheetmusic.sheets.ChordSymbol;
+import com.midisheetmusic.sheets.Clef;
+import com.midisheetmusic.sheets.ClefMeasures;
+import com.midisheetmusic.sheets.ClefSymbol;
+import com.midisheetmusic.sheets.LyricSymbol;
+import com.midisheetmusic.sheets.MusicSymbol;
+import com.midisheetmusic.sheets.RestSymbol;
+import com.midisheetmusic.sheets.Staff;
+import com.midisheetmusic.sheets.SymbolWidths;
+
 class BoxedInt {
     public int value;
 }
@@ -148,7 +161,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
          * Clef and key signature symbols.  Those can only be calculated 
          * when we create the staffs.
          */
-        ArrayList<ArrayList<MusicSymbol>> allsymbols = 
+        ArrayList<ArrayList<MusicSymbol>> allsymbols =
           new ArrayList<ArrayList<MusicSymbol> >(numtracks);
 
         for (int tracknum = 0; tracknum < numtracks; tracknum++) {
@@ -1377,7 +1390,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 // If we touch while music is playing, stop the midi player 
-                if (player != null && player.getVisibility() == View.GONE) {
+                if (player != null && player.getVisibility() == View.GONE && !player.isInMidiMode()) {
                     player.Pause();
                     scrollAnimation.stopMotion();
                 }
@@ -1427,6 +1440,14 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
     /** Surface has been destroyed */
     public void surfaceDestroyed(SurfaceHolder holder) {
         surfaceReady = false;
+    }
+
+    public MusicSymbol getCurrentNote(int currentTime) {
+        for (int i = 0; i < staffs.size(); ++i) {
+            MusicSymbol note = staffs.get(i).getCurrentNote(currentTime);
+            if (note != null) return note;
+        }
+        return null;
     }
 
     @Override

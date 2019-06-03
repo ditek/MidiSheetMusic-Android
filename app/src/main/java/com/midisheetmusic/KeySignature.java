@@ -13,6 +13,11 @@
 package com.midisheetmusic;
 
 
+import com.midisheetmusic.sheets.Accid;
+import com.midisheetmusic.sheets.AccidSymbol;
+import com.midisheetmusic.sheets.Clef;
+import com.midisheetmusic.sheets.WhiteNote;
+
 /** @class KeySignature
  * The KeySignature class represents a key signature, like G Major
  * or B-flat Major.  For sheet music, we only care about the number

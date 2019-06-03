@@ -11,7 +11,9 @@
  */
 
 
-package com.midisheetmusic;
+package com.midisheetmusic.sheets;
+
+import com.midisheetmusic.NoteScale;
 
 import java.util.*;
 

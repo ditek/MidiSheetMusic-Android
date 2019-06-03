@@ -399,6 +399,20 @@ public class Piano extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    public void ShadeOneNote(int noteNumber, int color) {
+        SurfaceHolder holder = getHolder();
+        Canvas canvas = holder.lockCanvas();
+        if (canvas == null) {
+            return;
+        }
+
+        bufferCanvas.translate(margin + BlackBorder, margin + BlackBorder);
+        ShadeOneNote(bufferCanvas, noteNumber, color);
+        bufferCanvas.translate(-(margin + BlackBorder), -(margin + BlackBorder));
+        canvas.drawBitmap(bufferBitmap, 0, 0, paint);
+        holder.unlockCanvasAndPost(canvas);
+    }
+
     /* Shade the given note with the given brush.
      * We only draw notes from notenumber 24 to 96.
      * (Middle-C is 60).
@@ -708,6 +722,28 @@ public class Piano extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
         return true;
+    }
+
+    public void UnShadeOneNote(int notenumber) {
+        SurfaceHolder holder = getHolder();
+        Canvas canvas = holder.lockCanvas();
+        if (canvas == null) {
+            return;
+        }
+
+        bufferCanvas.translate(margin + BlackBorder, margin + BlackBorder);
+        int num = notenumber % 12;
+        if (num == 1 || num == 3 || num == 6 || num == 8 || num == 10) {
+            ShadeOneNote(bufferCanvas, notenumber, gray1);
+        }
+        else {
+            ShadeOneNote(bufferCanvas, notenumber, Color.WHITE);
+        }
+
+        bufferCanvas.translate(-(margin + BlackBorder), -(margin + BlackBorder));
+        canvas.drawBitmap(bufferBitmap, 0, 0, paint);
+        holder.unlockCanvasAndPost(canvas);
+
     }
 }
 

@@ -10,53 +10,59 @@
  *  GNU General Public License for more details.
  */
 
-
-package com.midisheetmusic;
+package com.midisheetmusic.sheets;
 
 import android.graphics.*;
 
-/** @class MusicSymbol
- * The MusicSymbol class represents music symbols that can be displayed
- * on a staff.  This includes:
- *  - Accidental symbols: sharp, flat, natural
- *  - Chord symbols: single notes or chords
- *  - Rest symbols: whole, half, quarter, eighth
- *  - Bar symbols, the vertical bars which delimit measures.
- *  - Treble and Bass clef symbols
- *  - Blank symbols, used for aligning notes in different staffs
- */
 
-public interface MusicSymbol {
+/** @class BlankSymbol 
+ * The Blank symbol is a music symbol that doesn't draw anything.  This
+ * symbol is used for alignment purposes, to align notes in different 
+ * staffs which occur at the same time.
+ */
+public class BlankSymbol implements MusicSymbol {
+    private int starttime; 
+    private int width;
+
+    /** Create a new BlankSymbol with the given starttime and width */
+    public BlankSymbol(int starttime, int width) {
+        this.starttime = starttime;
+        this.width = width;
+    }
 
     /** Get the time (in pulses) this symbol occurs at.
      * This is used to determine the measure this symbol belongs to.
      */
-    public int getStartTime();
+    public int getStartTime() { return starttime; }
 
     /** Get the minimum width (in pixels) needed to draw this symbol */
-    public int getMinWidth();
+    public int getMinWidth() { return 0; }
 
     /** Get/Set the width (in pixels) of this symbol. The width is set
      * in SheetMusic.AlignSymbols() to vertically align symbols.
      */
-    public int getWidth();
-    public void setWidth(int value);
+    public int getWidth() { return width; }
+    public void setWidth(int value) { width = value; }
 
     /** Get the number of pixels this symbol extends above the staff. Used
      *  to determine the minimum height needed for the staff (Staff.FindBounds).
      */
-    public int getAboveStaff();
+    public int getAboveStaff() { return 0; }
 
     /** Get the number of pixels this symbol extends below the staff. Used
      *  to determine the minimum height needed for the staff (Staff.FindBounds).
      */
-    public int getBelowStaff();
+    public int getBelowStaff() { return 0; }
 
-    /** Draw the symbol.
+    /** Draw nothing.
      * @param ytop The ylocation (in pixels) where the top of the staff starts.
      */
-    public void Draw(Canvas canvas, Paint paint, int ytop);
+    public void Draw(Canvas canvas, Paint paint, int ytop) {}
 
+    public String toString() {
+        return String.format("BlankSymbol starttime=%1$s width=%2$s", 
+                             starttime, width);
+    }
 }
 
 

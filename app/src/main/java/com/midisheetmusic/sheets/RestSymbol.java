@@ -10,9 +10,12 @@
  *  GNU General Public License for more details.
  */
 
-package com.midisheetmusic;
+package com.midisheetmusic.sheets;
 
 import android.graphics.*;
+
+import com.midisheetmusic.NoteDuration;
+import com.midisheetmusic.SheetMusic;
 
 
 /* @class RestSymbol
