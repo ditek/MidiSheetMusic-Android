@@ -45,7 +45,7 @@ public class SheetMusicActivity extends MidiHandlingActivity {
     private MidiPlayer player;   /* The play/stop/rewind toolbar */
     private Piano piano;         /* The piano at the top */
     private SheetMusic sheet;    /* The sheet music */
-    private LinearLayout layout; /* THe layout */
+    private LinearLayout layout; /* The layout */
     private MidiFile midifile;   /* The midi file to play */
     private MidiOptions options; /* The options for sheet music and sound */
     private long midiCRC;      /* CRC of the midi bytes */
@@ -211,8 +211,8 @@ public class SheetMusicActivity extends MidiHandlingActivity {
     /* Show the "Save As Images" dialog */
     private void showSaveImagesDialog() {
          LayoutInflater inflator = LayoutInflater.from(this);
-         final View dialogView= inflator.inflate(R.layout.save_images_dialog, null);
-         final EditText filenameView = (EditText)dialogView.findViewById(R.id.save_images_filename);
+         final View dialogView= inflator.inflate(R.layout.save_images_dialog, layout, false);
+         final EditText filenameView = dialogView.findViewById(R.id.save_images_filename);
          filenameView.setText(midifile.getFileName().replace("_", " ") );
          AlertDialog.Builder builder = new AlertDialog.Builder(this);
          builder.setTitle(R.string.save_images_str);

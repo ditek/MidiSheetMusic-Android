@@ -188,7 +188,7 @@ class PairInt {
  *     RoundDurations()
  *
  * - ChangeSound()
- *   Apply the menu options to the MIDI music data, and save the modified midi data 
+ *   Apply the menu options to the MIDI music data, and save the modified midi data
  *   to a file, for playback. 
  *   
  */

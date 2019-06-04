@@ -156,7 +156,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         int lastStart = file.EndTime() + options.shifttime;
 
         /* Create all the music symbols (notes, rests, vertical bars, and
-         * clef changes).  The symbols variable contains a list of music 
+         * clef changes).  The symbols variable contains a list of music
          * symbols for each track.  The list does not include the left-side 
          * Clef and key signature symbols.  Those can only be calculated 
          * when we create the staffs.
@@ -939,7 +939,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
      *  new notes to shade/unshade) onto the bitmap, and then draw the bitmap.
      *
      *  We include the MidiPlayer height (since we hide the MidiPlayer
-     *  once the music starts playing). Also, we make the bitmap twice as 
+     *  once the music starts playing). Also, we make the bitmap twice as
      *  large as the scroll viewable area, so that we don't need to
      *  refresh the bufferCanvas on every scroll change.
      */

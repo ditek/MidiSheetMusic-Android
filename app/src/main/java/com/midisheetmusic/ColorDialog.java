@@ -140,6 +140,7 @@ class ColorView extends View {
      */
     @Override
     protected void onDraw(Canvas canvas) {
+        // TODO: Avoid object allocations during draw to enhance performance
         canvas.drawRoundRect(new RectF(center/10, center/10, center/4, center/4), 5, 5, colorPreview);
  
         canvas.translate(center, center);
