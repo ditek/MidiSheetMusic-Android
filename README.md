@@ -1,3 +1,5 @@
+[![Build status](https://build.appcenter.ms/v0.1/apps/3e640f40-a600-4159-a972-a1aae90d52a3/branches/master/badge)](https://appcenter.ms)
+
 # MidiSheetMusic-android
 An app for visualizing MIDI files with extra features to make learning new pieces easier.
 
@@ -19,3 +21,6 @@ So far, the app has been updated to work with the latest version of Android, num
 The next big feature in the works is adding external device support. That would allow a digital piano or keyboard to be connected to the phone/table and the app would give proper real-time feedback. I plan to publish the app to the Play Store after that. And, of course, it will still be free.
 
 Please feel free to open a ticket for reporting a bug or requesting a feature.
+
+## Contributions
+- Thanks to [ankineri](https://github.com/ankineri) for implementing MIDI keyboard support.
