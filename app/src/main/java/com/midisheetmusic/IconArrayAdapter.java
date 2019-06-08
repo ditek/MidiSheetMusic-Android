@@ -58,10 +58,11 @@ class IconArrayAdapter<T> extends ArrayAdapter<T> {
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
+            // TODO: Make linter happy (Avoid passing null as the view root)
             convertView = inflater.inflate(R.layout.choose_song_item, null);
          }
-         TextView text = (TextView)convertView.findViewById(R.id.choose_song_name);
-         ImageView image = (ImageView)convertView.findViewById(R.id.choose_song_icon);
+         TextView text = convertView.findViewById(R.id.choose_song_name);
+         ImageView image = convertView.findViewById(R.id.choose_song_icon);
          text.setHighlightColor(Color.WHITE);
          FileUri file = (FileUri) this.getItem(position);
          if (file != null) {

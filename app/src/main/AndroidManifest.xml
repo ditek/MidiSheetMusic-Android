@@ -22,7 +22,16 @@
         <activity android:name=".FileBrowserActivity" />
         <activity android:name=".AllSongsActivity" />
         <activity android:name=".RecentSongsActivity" />
-        <activity android:name=".SettingsActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:theme="@style/Theme.AppCompat"
+            android:label="@string/title_activity_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.SETTINGS" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".HelpActivity" />
         <activity
             android:name=".SheetMusicActivity"

@@ -12,17 +12,16 @@
 
 package com.midisheetmusic;
 
-import android.preference.*;
+import androidx.preference.*;
 import android.view.*;
 import android.content.*;
 
-/** @class ColorPreference
- *  The ColorPreference is used in a PreferenceScreen to let
+/**
+ *  Used in a PreferenceScreen to let
  *  the user choose a color for an option.
- *
+ *  <p/>
  *  This Preference displays text, plus an additional color box
  */
-
 public class ColorPreference extends Preference 
         implements ColorChangedListener {
 
@@ -44,12 +43,10 @@ public class ColorPreference extends Preference
     }
     public int getColor() { return color; }
 
-
     @Override
-    protected void onBindView(View view) {
-        super.onBindView(view);
-
-        colorview = (View)view.findViewById(R.id.color_preference_widget);
+    public void onBindViewHolder(PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        colorview = holder.findViewById(R.id.color_preference_widget);
         if (color != 0) {
             colorview.setBackgroundColor(color);
         }

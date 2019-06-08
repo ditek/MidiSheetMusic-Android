@@ -31,4 +31,5 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'jp.kshoji:midi-driver:0.1.5:@aar'
+    implementation 'androidx.preference:preference:1.1.0-alpha05'
 }

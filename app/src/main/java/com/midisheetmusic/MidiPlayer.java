@@ -633,7 +633,7 @@ public class MidiPlayer extends LinearLayout {
 
 
     /** The callback for the timer. If the midi is still playing, 
-     *  update the currentPulseTime and shade the sheet music.  
+     *  update the currentPulseTime and shade the sheet music.
      *  If a stop or pause has been initiated (by someone clicking
      *  the stop or pause button), then stop the timer.
      */
