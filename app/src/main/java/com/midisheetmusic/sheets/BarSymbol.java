@@ -11,9 +11,11 @@
  */
 
 
-package com.midisheetmusic;
+package com.midisheetmusic.sheets;
 
 import android.graphics.*;
+
+import com.midisheetmusic.SheetMusic;
 
 
 /** @class BarSymbol

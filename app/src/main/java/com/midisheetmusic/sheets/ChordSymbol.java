@@ -10,10 +10,19 @@
  *  GNU General Public License for more details.
  */
 
-package com.midisheetmusic;
+package com.midisheetmusic.sheets;
 
 import java.util.*;
 import android.graphics.*;
+
+import com.midisheetmusic.KeySignature;
+import com.midisheetmusic.MidiNote;
+import com.midisheetmusic.MidiOptions;
+import com.midisheetmusic.NoteData;
+import com.midisheetmusic.NoteDuration;
+import com.midisheetmusic.NoteScale;
+import com.midisheetmusic.SheetMusic;
+import com.midisheetmusic.TimeSignature;
 
 
 /** @class ChordSymbol
@@ -42,7 +51,7 @@ public class ChordSymbol implements MusicSymbol {
      * each note.  Use the time signature to calculate the duration
      * of the notes. Use the clef when drawing the chord.
      */
-    public ChordSymbol(ArrayList<MidiNote> midinotes, KeySignature key, 
+    public ChordSymbol(ArrayList<MidiNote> midinotes, KeySignature key,
                        TimeSignature time, Clef c, SheetMusic sheet) {
 
         int len = midinotes.size();
@@ -987,6 +996,9 @@ public class ChordSymbol implements MusicSymbol {
         return result.toString();
     }
 
+    public NoteData[] getNotedata() {
+        return notedata;
+    }
 }
 
 

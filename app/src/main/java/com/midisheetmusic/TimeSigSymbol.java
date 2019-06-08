@@ -16,6 +16,8 @@ import android.graphics.*;
 import android.content.*;
 import android.content.res.*;
 
+import com.midisheetmusic.sheets.MusicSymbol;
+
 
 /** @class TimeSigSymbol
  * A TimeSigSymbol represents the time signature at the beginning

@@ -23,6 +23,9 @@ import android.os.*;
 import android.media.*;
 import android.util.AttributeSet;
 
+import com.midisheetmusic.sheets.ChordSymbol;
+import com.midisheetmusic.sheets.MusicSymbol;
+
 /**
  * The MidiPlayer is the panel at the top used to play the sound
  * of the midi file. It consists of:
@@ -58,6 +61,7 @@ public class MidiPlayer extends LinearLayout {
     private ImageButton stopButton;      /** The stop button */
     private ImageButton fastFwdButton;   /** The fast forward button */
     private ImageButton settingsButton;  /** The fast forward button */
+    private Button midiButton;
     private Button leftHandButton;
     private Button rightHandButton;
     private ImageButton pianoButton;
@@ -74,6 +78,7 @@ public class MidiPlayer extends LinearLayout {
     final int paused    = 3;     /** Currently paused */
     final int initStop  = 4;     /** Transitioning from playing to stop */
     final int initPause = 5;     /** Transitioning from playing to pause */
+    final int midi      = 6;
 
     final String tempSoundFile = "playing.mid"; /** The filename to play sound from */
 
@@ -92,6 +97,7 @@ public class MidiPlayer extends LinearLayout {
 
     /** A listener that allows us to send a request to update the sheet when needed */
     private SheetUpdateRequestListener mSheetUpdateRequestListener;
+
 
     public void setSheetUpdateRequestListener(SheetUpdateRequestListener listener) {
         mSheetUpdateRequestListener = listener;
@@ -130,7 +136,31 @@ public class MidiPlayer extends LinearLayout {
         init();
     }
 
-    /** Create the rewind, play, stop, and fast forward buttons */
+    void OnMidiDeviceStatus(boolean connected) {
+        midiButton.setEnabled(connected);
+        midiButton.setTextColor(connected ? Color.BLUE : Color.RED);
+    }
+    int prevWrongMidi = 0;
+    void OnMidiNote(int note, boolean pressed) {
+        if (!pressed) return;
+        MusicSymbol nextNote = this.sheet.getCurrentNote((int)currentPulseTime);
+        int midiNote = ((ChordSymbol)nextNote).getNotedata()[0].number;
+        note += options.midiShift;
+        if (midiNote != note) {
+            piano.UnShadeOneNote(prevWrongMidi);
+            piano.ShadeOneNote(note, Color.RED);
+            prevWrongMidi = note;
+        } else {
+            prevPulseTime = currentPulseTime;
+            currentPulseTime = sheet.getCurrentNote(nextNote.getStartTime() + 1).getStartTime();
+            piano.UnShadeOneNote(prevWrongMidi);
+        }
+        sheet.ShadeNotes((int)currentPulseTime, (int)prevPulseTime, SheetMusic.ImmediateScroll);
+        piano.ShadeNotes((int)currentPulseTime, (int)prevPulseTime);
+
+    }
+
+        /** Create the rewind, play, stop, and fast forward buttons */
     void init() {
         inflate(activity, R.layout.player_toolbar, this);
 
@@ -140,6 +170,7 @@ public class MidiPlayer extends LinearLayout {
         fastFwdButton = findViewById(R.id.btn_forward);
         leftHandButton = findViewById(R.id.btn_left);
         rightHandButton = findViewById(R.id.btn_right);
+        midiButton = findViewById(R.id.btn_midi);
         pianoButton = findViewById(R.id.btn_piano);
         settingsButton = findViewById(R.id.btn_settings);
         speedText = findViewById(R.id.txt_speed);
@@ -149,10 +180,12 @@ public class MidiPlayer extends LinearLayout {
         stopButton.setOnClickListener(v -> Stop());
         playButton.setOnClickListener(v -> Play());
         fastFwdButton.setOnClickListener(v -> FastForward());
+        midiButton.setOnClickListener(v -> toggleMidi());
         leftHandButton.setOnClickListener(v -> toggleTrack(LEFT_TRACK));
         rightHandButton.setOnClickListener(v -> toggleTrack(RIGHT_TRACK));
         pianoButton.setOnClickListener(v -> togglePiano());
         settingsButton.setOnClickListener(v -> activity.openOptionsMenu());
+
 
         speedBar.getProgressDrawable().setColorFilter(Color.parseColor("#00BB87"), PorterDuff.Mode.SRC_IN);
         speedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -170,6 +203,26 @@ public class MidiPlayer extends LinearLayout {
          */
         timer = new Handler();
     }
+
+    private void toggleMidi() {
+        sheet.ShadeNotes(-10, (int)prevPulseTime, SheetMusic.DontScroll);
+        sheet.ShadeNotes(-10, (int)currentPulseTime, SheetMusic.DontScroll);
+        piano.ShadeNotes(-10, (int)prevPulseTime);
+        piano.ShadeNotes(-10, (int)currentPulseTime);
+        piano.UnShadeOneNote(prevWrongMidi);
+        if (playstate != midi) {
+            playstate = midi;
+            currentPulseTime = 0;
+            prevPulseTime = 0;
+        } else {
+            playstate = paused;
+        }
+        this.setVisibility(View.GONE);
+        timer.removeCallbacks(TimerCallback);
+        timer.postDelayed(ReShade, 500);
+    }
+
+
 
     /** Show/hide treble and bass clefs */
     private void toggleTrack(int track) {
@@ -450,6 +503,9 @@ public class MidiPlayer extends LinearLayout {
         if (playstate == playing) {
             playstate = initPause;
         }
+        if (playstate == midi) {
+            playstate = paused;
+        }
     }
 
 
@@ -555,10 +611,12 @@ public class MidiPlayer extends LinearLayout {
         if (midifile == null || sheet == null) {
             return;
         }
-        if (playstate != paused && playstate != stopped) {
+        if (playstate != paused && playstate != stopped && playstate != midi) {
             return;
         }
-        playstate = paused;
+        if (playstate != midi) {
+            playstate = paused;
+        }
 
         /* Remove any highlighted notes */
         sheet.ShadeNotes(-10, (int)currentPulseTime, SheetMusic.DontScroll);
@@ -644,6 +702,9 @@ public class MidiPlayer extends LinearLayout {
         timer.postDelayed(DoPlay, 300);
     }
 
+    public boolean isInMidiMode() {
+        return playstate == midi;
+    }
 }
 
 

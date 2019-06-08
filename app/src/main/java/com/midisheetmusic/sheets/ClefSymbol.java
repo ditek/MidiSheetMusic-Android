@@ -10,11 +10,14 @@
  *  GNU General Public License for more details.
  */
 
-package com.midisheetmusic;
+package com.midisheetmusic.sheets;
 
 import android.graphics.*;
 import android.content.*;
 import android.content.res.*;
+
+import com.midisheetmusic.R;
+import com.midisheetmusic.SheetMusic;
 
 
 /** @class ClefSymbol 

@@ -10,10 +10,14 @@
  *  GNU General Public License for more details.
  */
 
-package com.midisheetmusic;
+package com.midisheetmusic.sheets;
 
 import java.util.*;
 import android.graphics.*;
+
+import com.midisheetmusic.KeySignature;
+import com.midisheetmusic.MidiOptions;
+import com.midisheetmusic.SheetMusic;
 
 
 /* @class Staff
@@ -56,7 +60,7 @@ public class Staff {
      * with the staffs above and below. The MidiOptions are used
      * to check whether to display measure numbers or not.
      */
-    public Staff(ArrayList<MusicSymbol> symbols, KeySignature key, 
+    public Staff(ArrayList<MusicSymbol> symbols, KeySignature key,
                  MidiOptions options, int tracknum, int totaltracks)  {
 
         keysigWidth = SheetMusic.KeySignatureWidth(key);
@@ -370,6 +374,17 @@ public class Staff {
 
     }
 
+    public MusicSymbol getCurrentNote(int currentPulseTime) {
+        for (int i = 0; i < symbols.size(); ++i) {
+            MusicSymbol cur = symbols.get(i);
+            if (cur instanceof ChordSymbol) {
+                if (cur.getStartTime() >= currentPulseTime) {
+                    return cur;
+                }
+            }
+        }
+        return null;
+    }
 
     /** Shade all the chords played in the given time.
      *  Un-shade any chords shaded in the previous pulse time.

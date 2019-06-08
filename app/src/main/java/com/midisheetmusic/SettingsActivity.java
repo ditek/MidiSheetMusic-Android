@@ -60,6 +60,7 @@ public class SettingsActivity extends PreferenceActivity
     private CheckBoxPreference twoStaffs;         /** Combine tracks into two staffs */
     private ListPreference showNoteLetters;       /** Show the note letters */
     private ListPreference transpose;             /** Transpose notes */
+    private ListPreference midiShift;             /** Transpose notes */
     private ListPreference key;                   /** Key Signature to use */
     private ListPreference time;                  /** Time Signature to use */
     private ListPreference combineInterval;       /** Interval (msec) to combine notes */
@@ -108,6 +109,7 @@ public class SettingsActivity extends PreferenceActivity
         }
         createShowLetterPrefs(root);
         createTransposePrefs(root);
+        createMidiShiftPrefs(root);
         createKeySignaturePrefs(root);
         createTimeSignaturePrefs(root);
         createCombineIntervalPrefs(root);
@@ -262,6 +264,21 @@ public class SettingsActivity extends PreferenceActivity
         transpose.setValueIndex(transposeIndex);
         transpose.setSummary(transpose.getEntry());
         root.addPreference(transpose);
+    }
+
+    /** Create the "Transpose Notes" preference.
+     *  The values range from 12, 11, 10, .. -10, -11, -12
+     */
+    private void createMidiShiftPrefs(PreferenceScreen root) {
+        int transposeIndex = 12 - options.midiShift;
+        midiShift = new ListPreference(this);
+        midiShift.setOnPreferenceChangeListener(this);
+        midiShift.setTitle(R.string.midiShift);
+        midiShift.setEntries(R.array.transpose_entries);
+        midiShift.setEntryValues(R.array.transpose_values);
+        midiShift.setValueIndex(transposeIndex);
+        midiShift.setSummary(midiShift.getEntry());
+        root.addPreference(midiShift);
     }
 
     /** Create the "Key Signature" preference */
@@ -421,6 +438,7 @@ public class SettingsActivity extends PreferenceActivity
 
         options.showNoteLetters = Integer.parseInt(showNoteLetters.getValue());
         options.transpose = Integer.parseInt(transpose.getValue());
+        options.midiShift = Integer.parseInt(midiShift.getValue());
         options.key = Integer.parseInt(key.getValue());
         switch (time.getValue()) {
             case "Default":

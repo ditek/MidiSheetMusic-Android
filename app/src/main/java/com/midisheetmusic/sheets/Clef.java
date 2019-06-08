@@ -11,11 +11,10 @@
  */
 
 
-package com.midisheetmusic;
+package com.midisheetmusic.sheets;
 
-/** Accidentals */
-public enum Accid {
-    None, Sharp, Flat, Natural
-}
+
+/** The possible clefs, Treble or Bass */
+public enum Clef { Treble, Bass }
 
 

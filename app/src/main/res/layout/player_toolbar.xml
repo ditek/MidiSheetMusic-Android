@@ -51,6 +51,14 @@
         android:paddingBottom="8dp"
         android:progress="100" />
 
+    <Button
+        android:id="@+id/btn_midi"
+        style="@style/DisabledToolbarButton"
+        android:text="MIDI"
+        android:enabled="false"
+        android:layout_width="80dp"
+        android:textSize="16sp" />
+
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"

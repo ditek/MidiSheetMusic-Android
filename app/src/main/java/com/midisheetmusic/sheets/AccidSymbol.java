@@ -11,10 +11,12 @@
  */
 
 
-package com.midisheetmusic;
+package com.midisheetmusic.sheets;
 
 
 import android.graphics.*;
+
+import com.midisheetmusic.SheetMusic;
 
 
 /** @class AccidSymbol
@@ -48,7 +50,7 @@ public class AccidSymbol implements MusicSymbol {
     public int getStartTime() { return -1; }  
 
     /** Get the minimum width (in pixels) needed to draw this symbol */
-    public int getMinWidth() { return 3*SheetMusic.NoteHeight/2; }
+    public int getMinWidth() { return 3* SheetMusic.NoteHeight/2; }
 
     /** Get/Set the width (in pixels) of this symbol. The width is set
      * in SheetMusic.AlignSymbols() to vertically align symbols.
