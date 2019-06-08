@@ -36,7 +36,8 @@
     <string name="scan_button_title">Scan SD Card for MIDI files</string>
     <string name="scan_files_str">Scan for MIDI Files</string>
     <string name="browse_files_str">Browse for MIDI Files</string>
-    <string name="msg_permission_denied">Storage access denied. Can\'t load MIDI files.</string>
+    <string name="msg_permission_denied">Storage permission is needed to load MIDI files</string>
+    <string name="msg_permission_denied_retry">Try again</string>
     <string name="err_file_not_found">Not found: Item doesn\'t exist!</string>
     <string name="title_activity_settings">Song Settings</string>
 

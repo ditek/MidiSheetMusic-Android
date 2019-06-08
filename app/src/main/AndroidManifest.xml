@@ -5,16 +5,17 @@
     android:versionName="2.6">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
-        android:icon="@drawable/icon"
+        android:icon="@drawable/music_48"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MidiSheetMusicActivity"
-            android:configChanges="orientation"
-            android:label="@string/app_name">
+            android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -24,8 +25,8 @@
         <activity android:name=".RecentSongsActivity" />
         <activity
             android:name=".SettingsActivity"
-            android:theme="@style/Theme.AppCompat"
-            android:label="@string/title_activity_settings">
+            android:label="@string/title_activity_settings"
+            android:theme="@style/Theme.AppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.SETTINGS" />
 
@@ -40,7 +41,9 @@
             android:theme="@style/PlayerTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data
                     android:host="*"
                     android:mimeType="*/*"
@@ -49,4 +52,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>
