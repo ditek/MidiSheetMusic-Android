@@ -1,0 +1,57 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+  <path
+      android:pathData="M0,0h108.001v108.001h-108.001z"
+      android:strokeWidth="1.3730005"
+      android:strokeColor="#00000000"
+      android:fillAlpha="1">
+    <aapt:attr name="android:fillColor">
+      <gradient 
+          android:startY="2.040863E-4"
+          android:startX="0"
+          android:endY="108.00076"
+          android:endX="108.000565"
+          android:type="linear">
+        <item android:offset="0" android:color="#FF2B879E"/>
+        <item android:offset="1" android:color="#FF26778B"/>
+      </gradient>
+    </aapt:attr>
+  </path>
+  <group>
+    <clip-path android:pathData="M-0,0L108,0L108,108L-0,108Z M 0,0"/>
+  </group>
+  <group>
+    <clip-path android:pathData="M-0,0L108,0L108,108L-0,108Z M 0,0"/>
+    <group>
+      <clip-path android:pathData="M-0.071,-0.071L108.071,-0.071L108.071,108.071L-0.071,108.071Z M 0,0"/>
+      <group>
+        <clip-path android:pathData="M-0.035,-0.035L108.035,-0.035L108.035,108.035L-0.035,108.035Z M 0,0"/>
+      </group>
+      <group>
+        <clip-path android:pathData="M-0.035,-0.035L108.035,-0.035L108.035,108.035L-0.035,108.035Z M 0,0"/>
+      </group>
+    </group>
+    <group>
+      <clip-path android:pathData="M28,28L80,28L80,80L28,80Z M 0,0"/>
+    </group>
+    <group>
+      <clip-path android:pathData="M36,36L72,36L72,72L36,72Z M 0,0"/>
+    </group>
+    <group>
+      <clip-path android:pathData="M27.9,35.9L80.1,35.9L80.1,72.1L27.9,72.1Z M 0,0"/>
+    </group>
+    <group>
+      <clip-path android:pathData="M35.9,27.9L72.1,27.9L72.1,80.1L35.9,80.1Z M 0,0"/>
+    </group>
+    <group>
+      <clip-path android:pathData="M31.9,31.9L76.1,31.9L76.1,76.1L31.9,76.1Z M 0,0"/>
+    </group>
+    <group>
+      <clip-path android:pathData="M18,18L90,18L90,90L18,90Z M 0,0"/>
+    </group>
+  </group>
+</vector>

@@ -4,7 +4,6 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/music_48"
-            android:tint="?attr/colorAccent"/>
+            android:src="@drawable/ic_launcher_round"/>
     </item>
 </layer-list>
