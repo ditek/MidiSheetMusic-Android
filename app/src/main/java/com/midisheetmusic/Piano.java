@@ -352,21 +352,22 @@ public class Piano extends SurfaceView implements SurfaceHolder.Callback {
 
     /** Obtain the drawing canvas and call onDraw() */
     void draw() {
-        if (!surfaceReady) {
-            return;
-        }
-        SurfaceHolder holder = getHolder();
-        Canvas canvas = holder.lockCanvas();
-        if (canvas == null) {
-            return;
-        }
-        onDraw(canvas);
-        holder.unlockCanvasAndPost(canvas);
+        new Thread(() -> {
+            if (!surfaceReady) {
+                return;
+            }
+            SurfaceHolder holder = getHolder();
+            Canvas canvas = holder.lockCanvas();
+            if (canvas == null) {
+                return;
+            }
+            doDraw(canvas);
+            holder.unlockCanvasAndPost(canvas);
+        }).start();
     }
 
     /** Draw the Piano. */
-    @Override
-    protected void onDraw(Canvas canvas) {
+    void doDraw(Canvas canvas) {
         if (!surfaceReady || bufferBitmap == null) {
             return;
         }
@@ -704,8 +705,9 @@ public class Piano extends SurfaceView implements SurfaceHolder.Callback {
     /** Surface is ready for shading the notes */
     public void surfaceCreated(SurfaceHolder holder) {
         surfaceReady = true;
-        // setWillNotDraw(false);
-        draw();         
+        // Disabling this allows the DrawerLayout to draw over the this view
+        setWillNotDraw(false);
+        draw();
     }
 
     /** Surface has been destroyed */

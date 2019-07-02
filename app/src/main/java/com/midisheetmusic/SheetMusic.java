@@ -247,7 +247,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         viewheight = newheight;
 
         if (bufferCanvas != null) {
-            callOnDraw();
+            draw();
             return;
         }
 
@@ -265,7 +265,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         if (bufferCanvas == null) {
             createBufferCanvas();
         }
-        callOnDraw();
+        draw();
     }
     
 
@@ -966,22 +966,23 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
 
 
     /** Obtain the drawing canvas and call onDraw() */
-    public void callOnDraw() {
-        if (!surfaceReady) {
-            return;
-        }
-        SurfaceHolder holder = getHolder();
-        Canvas canvas = holder.lockCanvas();
-        if (canvas == null) {
-            return;
-        }
-        onDraw(canvas);
-        holder.unlockCanvasAndPost(canvas);
+    void draw() {
+        new Thread(() -> {
+            if (!surfaceReady) {
+                return;
+            }
+            SurfaceHolder holder = getHolder();
+            Canvas canvas = holder.lockCanvas();
+            if (canvas == null) {
+                return;
+            }
+            doDraw(canvas);
+            holder.unlockCanvasAndPost(canvas);
+        }).start();
     }
 
     /** Draw the SheetMusic. */
-    @Override
-    protected void onDraw(Canvas canvas) {
+    void doDraw(Canvas canvas) {
         if (bufferBitmap == null) {
             createBufferCanvas();
         }
@@ -1413,7 +1414,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         scrollX += deltaX;
         scrollY += deltaY;
         checkScrollBounds();
-        callOnDraw();
+        draw();
     }
 
     /** When the scroll is tapped, highlight the position tapped */
@@ -1429,12 +1430,14 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
     
     public void
     surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        callOnDraw();
+        draw();
     }
 
     /** Surface is ready for shading the notes */
     public void surfaceCreated(SurfaceHolder holder) {
         surfaceReady = true;
+        // Disabling this allows the DrawerLayout to draw over the this view
+        setWillNotDraw(false);
     }
 
     /** Surface has been destroyed */

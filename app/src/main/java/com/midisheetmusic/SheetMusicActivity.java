@@ -132,10 +132,6 @@ public class SheetMusicActivity extends MidiHandlingActivity
     /* Create the MidiPlayer and Piano views */
     void createViews() {
         layout = findViewById(R.id.sheet_content);
-        // This is a workaround to get the NavigationView to draw over the SurfaceViews
-        // (Piano and SheetMusic). I think it works because the 1px gap allows the
-        // drawer to get on top of the SurfaceViews.
-        layout.setPadding(0, 0, 1, 0);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         // Lock the drawer so swiping doesn't open it
@@ -175,7 +171,7 @@ public class SheetMusicActivity extends MidiHandlingActivity
         player.SetMidiFile(midifile, options, sheet);
         player.updateToolbarButtons();
         layout.requestLayout();
-        sheet.callOnDraw();
+        sheet.draw();
     }
 
 
