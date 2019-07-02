@@ -23,6 +23,8 @@ import android.os.*;
 import android.media.*;
 import android.util.AttributeSet;
 
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.midisheetmusic.sheets.ChordSymbol;
 import com.midisheetmusic.sheets.MusicSymbol;
 
@@ -67,6 +69,7 @@ public class MidiPlayer extends LinearLayout {
     private ImageButton pianoButton;
     private TextView speedText;          /** The "Speed %" label */
     private SeekBar speedBar;    /** The seekbar for controlling the playback speed */
+    private DrawerLayout drawerLayout;
 
     /** The index corresponding to left/right hand in the track list */
     private static final int LEFT_TRACK = 1;
@@ -184,8 +187,7 @@ public class MidiPlayer extends LinearLayout {
         leftHandButton.setOnClickListener(v -> toggleTrack(LEFT_TRACK));
         rightHandButton.setOnClickListener(v -> toggleTrack(RIGHT_TRACK));
         pianoButton.setOnClickListener(v -> togglePiano());
-        settingsButton.setOnClickListener(v -> activity.openOptionsMenu());
-
+        settingsButton.setOnClickListener(v -> drawerLayout.openDrawer(Gravity.RIGHT));
 
         speedBar.getProgressDrawable().setColorFilter(Color.parseColor("#00BB87"), PorterDuff.Mode.SRC_IN);
         speedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -704,6 +706,10 @@ public class MidiPlayer extends LinearLayout {
 
     public boolean isInMidiMode() {
         return playstate == midi;
+    }
+
+    public void setDrawerLayout(DrawerLayout drawerLayout) {
+        this.drawerLayout = drawerLayout;
     }
 }
 

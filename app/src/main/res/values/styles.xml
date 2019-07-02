@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="@android:style/Theme.Material.NoActionBar"/>
-    <style name="PlayerTheme" parent="@android:style/Theme.Material.NoActionBar.Fullscreen"/>
+    <style name="Theme.AppCompat.NoActionBar.Fullscreen" parent="@style/Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="AppTheme" parent="@style/Theme.AppCompat.NoActionBar"/>
+    <style name="PlayerTheme" parent="@style/Theme.AppCompat.NoActionBar.Fullscreen"/>
+
     <style name="ToolbarButtonStyle" parent="@android:style/Widget.Material.Button.Borderless">
         <item name="android:layout_width">40dp</item>
         <item name="android:layout_height">40dp</item>

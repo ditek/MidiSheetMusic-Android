@@ -32,6 +32,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.navigation.NavigationView;
 import com.midisheetmusic.sheets.ClefSymbol;
 
 import java.io.File;
@@ -49,7 +53,8 @@ import java.util.zip.CRC32;
  *  <li> Piano : For highlighting the piano notes during playback.
  *  <li> SheetMusic : For highlighting the sheet music notes during playback.
  */
-public class SheetMusicActivity extends MidiHandlingActivity {
+public class SheetMusicActivity extends MidiHandlingActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String MidiTitleID = "MidiTitleID";
     public static final int settingsRequestCode = 1;
@@ -62,6 +67,9 @@ public class SheetMusicActivity extends MidiHandlingActivity {
     private MidiOptions options; /* The options for sheet music and sound */
     private long midiCRC;      /* CRC of the midi bytes */
 
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+
      /** Create this SheetMusicActivity.  
       * The Intent should have two parameters:
       * - data: The uri of the midi file to open.
@@ -73,6 +81,8 @@ public class SheetMusicActivity extends MidiHandlingActivity {
 
         // Hide the navigation bar before the views are laid out
         hideSystemUI();
+
+        setContentView(R.layout.sheet_music_layout);
 
         ClefSymbol.LoadImages(this);
         TimeSigSymbol.LoadImages(this);
@@ -103,7 +113,7 @@ public class SheetMusicActivity extends MidiHandlingActivity {
         // If previous settings have been saved, use those
         options = new MidiOptions(midifile);
         CRC32 crc = new CRC32();
-        crc.update(data); 
+        crc.update(data);
         midiCRC = crc.getValue();
         SharedPreferences settings = getPreferences(0);
         options.scrollVert = settings.getBoolean("scrollVert", false);
@@ -115,22 +125,36 @@ public class SheetMusicActivity extends MidiHandlingActivity {
         if (savedOptions != null) {
             options.merge(savedOptions);
         }
-        createView();
-        player.setSheetUpdateRequestListener(() -> createSheetMusic(options));
-        createSheetMusic(options);
+
+        createViews();
     }
 
     /* Create the MidiPlayer and Piano views */
-    void createView() {
-        layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
+    void createViews() {
+        layout = findViewById(R.id.sheet_content);
+        // This is a workaround to get the NavigationView to draw over the SurfaceViews
+        // (Piano and SheetMusic). I think it works because the 1px gap allows the
+        // drawer to get on top of the SurfaceViews.
+        layout.setPadding(0, 0, 1, 0);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        // Lock the drawer so swiping doesn't open it
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
         player = new MidiPlayer(this);
-        piano = new Piano(this);
+        player.setDrawerLayout(drawerLayout);
         layout.addView(player);
+
+        piano = new Piano(this);
         layout.addView(piano);
-        setContentView(layout);
         player.SetPiano(piano);
         layout.requestLayout();
+
+        player.setSheetUpdateRequestListener(() -> createSheetMusic(options));
+        createSheetMusic(options);
     }
 
     /** Create the SheetMusic view with the given options */
@@ -179,23 +203,24 @@ public class SheetMusicActivity extends MidiHandlingActivity {
      *  - Help : Display the HTML help screen
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-          case R.id.choose_song:
-            chooseSong();
-            return true;
-          case R.id.song_settings:
-            changeSettings();
-            return true;
-          case R.id.save_images:
-            showSaveImagesDialog();
-            return true;
-          case R.id.help:
-            showHelp();
-            return true;
-          default:
-            return super.onOptionsItemSelected(item);
+            case R.id.choose_song:
+                chooseSong();
+                break;
+            case R.id.song_settings:
+                changeSettings();
+                break;
+            case R.id.save_images:
+                showSaveImagesDialog();
+                break;
+            case R.id.help:
+                showHelp();
+                break;
         }
+//        menuItem.setChecked(true);
+        drawerLayout.closeDrawers();
+        return true;
     }
 
     /** To choose a new song, simply finish this activity.
