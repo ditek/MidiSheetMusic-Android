@@ -313,6 +313,29 @@ public class SheetMusicActivity extends MidiHandlingActivity
         startActivity(intent);
     }
 
+    /** Save the options in the SharedPreferences */
+    private void saveOptions() {
+        SharedPreferences.Editor editor = getPreferences(0).edit();
+        editor.putBoolean("scrollVert", options.scrollVert);
+        editor.putInt("shade1Color", options.shade1Color);
+        editor.putInt("shade2Color", options.shade2Color);
+        editor.putBoolean("showPiano", options.showPiano);
+        for (int i = 0; i < options.noteColors.length; i++) {
+            editor.putInt("noteColor" + i, options.noteColors[i]);
+        }
+        String json = options.toJson();
+        if (json != null) {
+            editor.putString("" + midiCRC, json);
+        }
+        editor.apply();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        saveOptions();
+    }
+
     /** This is the callback when the SettingsActivity is finished.
      *  Get the modified MidiOptions (passed as a parameter in the Intent).
      *  Save the MidiOptions.  The key is the CRC checksum of the midi data,
@@ -334,20 +357,8 @@ public class SheetMusicActivity extends MidiHandlingActivity
                 options.useDefaultInstruments = false;
             }
         }
-        // Save the options. 
-        SharedPreferences.Editor editor = getPreferences(0).edit();
-        editor.putBoolean("scrollVert", options.scrollVert);
-        editor.putInt("shade1Color", options.shade1Color);
-        editor.putInt("shade2Color", options.shade2Color);
-        editor.putBoolean("showPiano", options.showPiano);
-        for (int i = 0; i < options.noteColors.length; i++) {
-            editor.putInt("noteColor" + i, options.noteColors[i]);
-        }
-        String json = options.toJson();
-        if (json != null) {
-            editor.putString("" + midiCRC, json);
-        }
-        editor.apply();
+
+        saveOptions();
 
         // Recreate the sheet music with the new options
         createSheetMusic(options);
@@ -375,6 +386,16 @@ public class SheetMusicActivity extends MidiHandlingActivity
         super.onPause();
     }
 
+    @Override
+    void OnMidiDeviceStatus(boolean connected) {
+        player.OnMidiDeviceStatus(connected);
+    }
+
+    @Override
+    void OnMidiNote(int note, boolean pressed) {
+        player.OnMidiNote(note, pressed);
+    }
+
     /************************** Hide navigation buttons **************************/
 
     @Override
@@ -398,16 +419,6 @@ public class SheetMusicActivity extends MidiHandlingActivity
                         // Hide the nav bar and status bar
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN);
-    }
-
-    @Override
-    void OnMidiDeviceStatus(boolean connected) {
-        player.OnMidiDeviceStatus(connected);
-    }
-
-    @Override
-    void OnMidiNote(int note, boolean pressed) {
-        player.OnMidiNote(note, pressed);
     }
 }
 
