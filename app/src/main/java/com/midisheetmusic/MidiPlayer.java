@@ -58,6 +58,7 @@ import com.midisheetmusic.sheets.MusicSymbol;
  * and determines which notes to shade.
  */
 public class MidiPlayer extends LinearLayout {
+    private ImageButton backButton;    /** The back button */
     private ImageButton rewindButton;    /** The rewind button */
     private ImageButton playButton;      /** The play/pause button */
     private ImageButton stopButton;      /** The stop button */
@@ -91,7 +92,7 @@ public class MidiPlayer extends LinearLayout {
     double pulsesPerMsec;       /** The number of pulses per millisec */
     SheetMusic sheet;           /** The sheet music to shade while playing */
     Piano piano;                /** The piano to shade while playing */
-    Handler timer;              /** Timer used to update the sheet music while playing */
+    Handler timer;             /** Timer used to update the sheet music while playing */
     long startTime;             /** Absolute time when music started playing (msec) */
     double startPulseTime;      /** Time (in pulses) when music started playing */
     double currentPulseTime;    /** Time (in pulses) music is currently at */
@@ -167,7 +168,8 @@ public class MidiPlayer extends LinearLayout {
     void init() {
         inflate(activity, R.layout.player_toolbar, this);
 
-        rewindButton = findViewById(R.id.btn_back);
+        backButton = findViewById(R.id.btn_back);
+        rewindButton = findViewById(R.id.btn_rewind);
         stopButton = findViewById(R.id.btn_replay);
         playButton = findViewById(R.id.btn_play);
         fastFwdButton = findViewById(R.id.btn_forward);
@@ -179,6 +181,7 @@ public class MidiPlayer extends LinearLayout {
         speedText = findViewById(R.id.txt_speed);
         speedBar = findViewById(R.id.speed_bar);
 
+        backButton.setOnClickListener(v -> activity.onBackPressed());
         rewindButton.setOnClickListener(v -> Rewind());
         stopButton.setOnClickListener(v -> Stop());
         playButton.setOnClickListener(v -> Play());

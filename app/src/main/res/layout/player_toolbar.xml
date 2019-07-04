@@ -16,23 +16,33 @@
     <ImageButton
         android:id="@+id/btn_back"
         style="@style/ToolbarButtonStyle"
-        android:src="@drawable/ic_back" />
+        android:src="@drawable/ic_back"
+        android:contentDescription="@string/back" />
 
     <ImageButton
         android:id="@+id/btn_replay"
         style="@style/ToolbarButtonStyle"
-        android:src="@drawable/ic_replay" />
+        android:src="@drawable/ic_replay"
+        android:contentDescription="@string/replay" />
 
     <ImageButton
         android:id="@+id/btn_play"
         style="@style/ToolbarButtonStyle"
         android:scaleY="1.5"
-        android:src="@drawable/ic_play" />
+        android:src="@drawable/ic_play"
+        android:contentDescription="@string/play" />
+
+    <ImageButton
+        android:id="@+id/btn_rewind"
+        style="@style/ToolbarButtonStyle"
+        android:src="@drawable/ic_rewind"
+        android:contentDescription="@string/rewind" />
 
     <ImageButton
         android:id="@+id/btn_forward"
         style="@style/ToolbarButtonStyle"
-        android:src="@drawable/ic_forward" />
+        android:src="@drawable/ic_forward"
+        android:contentDescription="@string/forward" />
 
     <TextView
         android:id="@+id/txt_speed"
@@ -81,11 +91,13 @@
     <ImageButton
         android:id="@+id/btn_piano"
         style="@style/ToolbarButtonStyle"
-        android:src="@drawable/ic_piano" />
+        android:src="@drawable/ic_piano"
+        android:contentDescription="@string/show_hide_piano" />
 
     <ImageButton
         android:id="@+id/btn_settings"
         style="@style/ToolbarButtonStyle"
-        android:src="@drawable/ic_settings" />
+        android:src="@drawable/ic_settings"
+        android:contentDescription="@string/settings" />
 </LinearLayout>
 <!--</merge>-->
