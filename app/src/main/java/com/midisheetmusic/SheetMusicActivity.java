@@ -201,17 +201,11 @@ public class SheetMusicActivity extends MidiHandlingActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.choose_song:
-                chooseSong();
-                break;
             case R.id.song_settings:
                 changeSettings();
                 break;
             case R.id.save_images:
                 showSaveImagesDialog();
-                break;
-            case R.id.help:
-                showHelp();
                 break;
         }
 //        menuItem.setChecked(true);
@@ -219,12 +213,6 @@ public class SheetMusicActivity extends MidiHandlingActivity
         return true;
     }
 
-    /** To choose a new song, simply finish this activity.
-     *  The previous activity is always the ChooseSongActivity.
-     */
-    private void chooseSong() {
-        this.finish();
-    }
 
     /** To change the sheet music options, start the SettingsActivity.
      *  Pass the current MidiOptions as a parameter to the Intent.
