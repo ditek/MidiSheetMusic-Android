@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.AppCompat.NoActionBar.Fullscreen" parent="@style/Theme.AppCompat.NoActionBar">
+    <style name="Theme.AppCompat.NoActionBar.Fullscreen" parent="@style/MaterialDrawerTheme">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="colorAccent">@color/md_teal_300</item>
     </style>
 
     <style name="AppTheme" parent="@style/Theme.AppCompat.NoActionBar"/>

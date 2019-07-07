@@ -12,21 +12,32 @@
 
 package com.midisheetmusic;
 
-import java.util.*;
-import java.io.*;
-import android.app.*;
-import android.content.*;
-import android.graphics.*;
-import android.view.*;
-import android.widget.*;
-import android.os.*;
-import android.media.*;
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.media.MediaPlayer;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.AttributeSet;
-
-import androidx.drawerlayout.widget.DrawerLayout;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.midisheetmusic.sheets.ChordSymbol;
 import com.midisheetmusic.sheets.MusicSymbol;
+import com.mikepenz.materialdrawer.Drawer;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Locale;
 
 /**
  * The MidiPlayer is the panel at the top used to play the sound
@@ -58,19 +69,15 @@ import com.midisheetmusic.sheets.MusicSymbol;
  * and determines which notes to shade.
  */
 public class MidiPlayer extends LinearLayout {
-    private ImageButton backButton;    /** The back button */
-    private ImageButton rewindButton;    /** The rewind button */
-    private ImageButton playButton;      /** The play/pause button */
-    private ImageButton stopButton;      /** The stop button */
-    private ImageButton fastFwdButton;   /** The fast forward button */
-    private ImageButton settingsButton;  /** The fast forward button */
     private Button midiButton;
     private Button leftHandButton;
     private Button rightHandButton;
     private ImageButton pianoButton;
-    private TextView speedText;          /** The "Speed %" label */
-    private SeekBar speedBar;    /** The seekbar for controlling the playback speed */
-    private DrawerLayout drawerLayout;
+    /** The "Speed %" label */
+    private TextView speedText;
+    /** The seekbar for controlling playback speed */
+    private SeekBar speedBar;
+    private Drawer drawer;
 
     /** The index corresponding to left/right hand in the track list */
     private static final int LEFT_TRACK = 1;
@@ -168,16 +175,16 @@ public class MidiPlayer extends LinearLayout {
     void init() {
         inflate(activity, R.layout.player_toolbar, this);
 
-        backButton = findViewById(R.id.btn_back);
-        rewindButton = findViewById(R.id.btn_rewind);
-        stopButton = findViewById(R.id.btn_replay);
-        playButton = findViewById(R.id.btn_play);
-        fastFwdButton = findViewById(R.id.btn_forward);
+        ImageButton backButton = findViewById(R.id.btn_back);
+        ImageButton rewindButton = findViewById(R.id.btn_rewind);
+        ImageButton stopButton = findViewById(R.id.btn_replay);
+        ImageButton playButton = findViewById(R.id.btn_play);
+        ImageButton fastFwdButton = findViewById(R.id.btn_forward);
+        ImageButton settingsButton = findViewById(R.id.btn_settings);
         leftHandButton = findViewById(R.id.btn_left);
         rightHandButton = findViewById(R.id.btn_right);
         midiButton = findViewById(R.id.btn_midi);
         pianoButton = findViewById(R.id.btn_piano);
-        settingsButton = findViewById(R.id.btn_settings);
         speedText = findViewById(R.id.txt_speed);
         speedBar = findViewById(R.id.speed_bar);
 
@@ -186,11 +193,11 @@ public class MidiPlayer extends LinearLayout {
         stopButton.setOnClickListener(v -> Stop());
         playButton.setOnClickListener(v -> Play());
         fastFwdButton.setOnClickListener(v -> FastForward());
+        settingsButton.setOnClickListener(v -> drawer.openDrawer());
         midiButton.setOnClickListener(v -> toggleMidi());
         leftHandButton.setOnClickListener(v -> toggleTrack(LEFT_TRACK));
         rightHandButton.setOnClickListener(v -> toggleTrack(RIGHT_TRACK));
         pianoButton.setOnClickListener(v -> togglePiano());
-        settingsButton.setOnClickListener(v -> drawerLayout.openDrawer(Gravity.RIGHT));
 
         speedBar.getProgressDrawable().setColorFilter(Color.parseColor("#00BB87"), PorterDuff.Mode.SRC_IN);
         speedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -711,8 +718,8 @@ public class MidiPlayer extends LinearLayout {
         return playstate == midi;
     }
 
-    public void setDrawerLayout(DrawerLayout drawerLayout) {
-        this.drawerLayout = drawerLayout;
+    public void setDrawer(Drawer drawer) {
+        this.drawer = drawer;
     }
 }
 
