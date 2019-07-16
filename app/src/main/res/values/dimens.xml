@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="toolbar_height">40dp</dimen>
+
+    <!-- Definition for drawer items -->
+    <dimen name="drawer_item">48dp</dimen>
+    <dimen name="drawer_item_icon">56dp</dimen>
+    <dimen name="drawer_item_icon_padding_vertical">12dp</dimen>
+    <dimen name="drawer_item_icon_padding_horizontal">32dp</dimen>
+    <dimen name="drawer_item_text">14sp</dimen>
+    <dimen name="drawer_item_description">14sp</dimen>
+    <dimen name="drawer_item_secondary_description">12sp</dimen>
 </resources>

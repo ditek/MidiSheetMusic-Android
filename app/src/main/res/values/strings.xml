@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Enhanced MidiSheetMusic</string>
-    <string name="song_settings_str">Song Settings</string>
+    <string name="song_settings_str">More Settings</string>
     <string name="save_images_str">Save As Images</string>
     <string name="save_images_descr_str">Save the sheet music as images, in the directory /Pictures/MidiSheetMusic, with the following filename</string>
     <string name="help_str">Help</string>

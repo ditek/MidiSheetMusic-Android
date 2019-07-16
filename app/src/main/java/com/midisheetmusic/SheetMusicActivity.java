@@ -31,9 +31,14 @@ import android.widget.Toast;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.midisheetmusic.drawerItems.ExpandableSwitchDrawerItem;
 import com.midisheetmusic.sheets.ClefSymbol;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.StringHolder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondarySwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.io.File;
@@ -55,7 +60,10 @@ public class SheetMusicActivity extends MidiHandlingActivity {
 
     public static final String MidiTitleID = "MidiTitleID";
     public static final int settingsRequestCode = 1;
-    
+    public static final int ID_LOOP_ENABLE = 10;
+    public static final int ID_LOOP_START = 11;
+    public static final int ID_LOOP_END = 12;
+
     private MidiPlayer player;   /* The play/stop/rewind toolbar */
     private Piano piano;         /* The piano at the top */
     private SheetMusic sheet;    /* The sheet music */
@@ -128,13 +136,50 @@ public class SheetMusicActivity extends MidiHandlingActivity {
     void createViews() {
         layout = findViewById(R.id.sheet_content);
 
+        SecondarySwitchDrawerItem showMeasures = new SecondarySwitchDrawerItem()
+                .withName(R.string.show_measures)
+                .withLevel(2)
+                .withChecked(options.showMeasures)
+                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+                    options.showMeasures = isChecked;
+                    createSheetMusic(options);
+                });
+
+        SecondaryDrawerItem loopStart = new SecondaryDrawerItem()
+                .withIdentifier(ID_LOOP_START)
+                .withBadge(Integer.toString(options.playMeasuresInLoopStart + 1))
+                .withName(R.string.play_measures_in_loop_start)
+                .withLevel(2);
+
+        SecondaryDrawerItem loopEnd = new SecondaryDrawerItem()
+                .withIdentifier(ID_LOOP_END)
+                .withBadge(Integer.toString(options.playMeasuresInLoopEnd + 1))
+                .withName(R.string.play_measures_in_loop_end)
+                .withLevel(2);
+
+
+        ExpandableSwitchDrawerItem loopSettings = new ExpandableSwitchDrawerItem()
+                .withIdentifier(ID_LOOP_ENABLE)
+                .withName("Loop on Measures")
+                .withChecked(options.playMeasuresInLoop)
+                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+                    options.playMeasuresInLoop = isChecked;
+                })
+                .withSubItems(showMeasures, loopStart, loopEnd);
+
         // Drawer
         drawer = new DrawerBuilder()
                 .withActivity(this)
+                .withInnerShadow(true)
+                .addDrawerItems(
+                        loopSettings,
+                        new DividerDrawerItem()
+                )
                 .inflateMenu(R.menu.sheet_menu)
                 .withOnDrawerItemClickListener((view, i, item) -> drawerItemClickListener(item))
                 .withDrawerGravity(Gravity.RIGHT)
                 .build();
+
         // Make sure that the view extends over the navigation buttons area
         drawer.getDrawerLayout().setFitsSystemWindows(false);
         // Lock the drawer so swiping doesn't open it
@@ -181,18 +226,65 @@ public class SheetMusicActivity extends MidiHandlingActivity {
         super.onConfigurationChanged(newConfig);
     }
 
+
+    /** Create a string list of the numbers between listStart and listEnd (inclusive) */
+    private String[] makeStringList(int listStart, int listEnd) {
+        String[] list = new String[listEnd];
+        for (int i = 0; i < list.length; i++) {
+            list[i] = Integer.toString(i + listStart);
+        }
+        return list;
+    }
+
+
     /** Handle clicks on the drawer menu */
     public boolean drawerItemClickListener(IDrawerItem item) {
         switch ((int)item.getIdentifier()) {
             case R.id.song_settings:
                 changeSettings();
+                drawer.closeDrawer();
                 break;
             case R.id.save_images:
                 showSaveImagesDialog();
+                drawer.closeDrawer();
+                break;
+            case ID_LOOP_START:
+                // Note that we display the measure numbers starting at 1,
+                // but the actual playMeasuresInLoopStart field starts at 0.
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.play_measures_in_loop_start);
+                String[] items = makeStringList(1, options.lastMeasure + 1);
+                builder.setItems(items, (dialog, i) -> {
+                    options.playMeasuresInLoopStart = Integer.parseInt(items[i]) - 1;
+                    // Make sure End is not smaller than Start
+                    if (options.playMeasuresInLoopStart > options.playMeasuresInLoopEnd) {
+                        options.playMeasuresInLoopEnd = options.playMeasuresInLoopStart;
+                        drawer.updateBadge(ID_LOOP_END, new StringHolder(items[i]));
+                    }
+                    ((SecondaryDrawerItem) item).withBadge(items[i]);
+                    drawer.updateItem(item);
+                });
+                builder.create().show();
+                break;
+            case ID_LOOP_END:
+                // Note that we display the measure numbers starting at 1,
+                // but the actual playMeasuresInLoopEnd field starts at 0.
+                builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.play_measures_in_loop_end);
+                items = makeStringList(1, options.lastMeasure + 1);
+                builder.setItems(items, (dialog, i) -> {
+                    options.playMeasuresInLoopEnd = Integer.parseInt(items[i]) - 1;
+                    // Make sure End is not smaller than Start
+                    if (options.playMeasuresInLoopStart > options.playMeasuresInLoopEnd) {
+                        options.playMeasuresInLoopStart = options.playMeasuresInLoopEnd;
+                        drawer.updateBadge(ID_LOOP_START, new StringHolder(items[i]));
+                    }
+                    ((SecondaryDrawerItem) item).withBadge(items[i]);
+                    drawer.updateItem(item);
+                });
+                builder.create().show();
                 break;
         }
-        item.setSelected(false);
-        drawer.closeDrawer();
         return true;
     }
 

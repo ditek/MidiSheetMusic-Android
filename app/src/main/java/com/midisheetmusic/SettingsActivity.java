@@ -119,7 +119,6 @@ public class SettingsActivity extends AppCompatActivity {
         private Preference setAllToPiano;             /** Set all instruments to piano */
         private SwitchPreferenceCompat scrollVertically;  /** Scroll vertically/horizontally */
         private SwitchPreferenceCompat showPiano;         /** Show the piano */
-        private SwitchPreferenceCompat showMeasures;      /** Show the measure numbers */
         private SwitchPreferenceCompat showLyrics;        /** Show the lyrics */
         private SwitchPreferenceCompat twoStaffs;         /** Combine tracks into two staffs */
         private ListPreference showNoteLetters;       /** Show the note letters */
@@ -134,11 +133,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         private ColorPreference shade1Color;          /** Right-hand color */
         private ColorPreference shade2Color;          /** Left-hand color */
-
-        /** Play the measures from start to end in a loop */
-        private SwitchPreferenceCompat playMeasuresInLoop;
-        private ListPreference loopStart;
-        private ListPreference loopEnd;
 
         private Context context;
 
@@ -178,7 +172,6 @@ public class SettingsActivity extends AppCompatActivity {
             createTimeSignaturePrefs(root);
             createCombineIntervalPrefs(root);
             createColorPrefs(root);
-            createPlayMeasuresInLoopPrefs(root);
             setPreferenceScreen(root);
         }
 
@@ -408,10 +401,6 @@ public class SettingsActivity extends AppCompatActivity {
             PreferenceCategory localPreferenceCategory = new PreferenceCategory(context);
             localPreferenceCategory.setTitle("Select Colors");
             root.addPreference(localPreferenceCategory);
-            useColors = new SwitchPreferenceCompat(context);
-            useColors.setTitle("Use Note Colors");
-            useColors.setChecked(options.useColors);
-            root.addPreference(useColors);
 
             shade1Color = new ColorPreference(context);
             shade1Color.setColor(options.shade1Color);
@@ -423,61 +412,26 @@ public class SettingsActivity extends AppCompatActivity {
             shade2Color.setTitle(R.string.left_hand_color);
             root.addPreference(shade2Color);
 
+            useColors = new SwitchPreferenceCompat(context);
+            useColors.setTitle("Use Note Colors");
+            useColors.setChecked(options.useColors);
+            useColors.setOnPreferenceChangeListener((preference, isChecked) -> {
+                for (ColorPreference noteColorPref : noteColors) {
+                    noteColorPref.setVisible((boolean)isChecked);
+                }
+                return true;
+            });
+            root.addPreference(useColors);
+
             noteColors = new ColorPreference[options.noteColors.length];
             for (int i = 0; i < 12; i++) {
                 noteColors[i] = new ColorPreference(context);
                 noteColors[i].setColor(options.noteColors[i]);
                 noteColors[i].setTitle(new String[]
                         {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"}[i]);
+                noteColors[i].setVisible(options.useColors);
                 root.addPreference(noteColors[i]);
             }
-        }
-
-
-        /** Create the "Play Measures in a Loop" preference.
-         *
-         *  Note that we display the measure numbers starting at 1,
-         *  but the actual playMeasuresInLoopStart field starts at 0.
-         */
-        private void createPlayMeasuresInLoopPrefs(PreferenceScreen root) {
-            String[] values = new String[options.lastMeasure + 1];
-            for (int measure = 0; measure < values.length; measure++) {
-                values[measure] = "" + (measure+1);
-            }
-
-            PreferenceCategory playLoopTitle = new PreferenceCategory(context);
-            playLoopTitle.setTitle(R.string.play_measures_in_loop_title);
-            root.addPreference(playLoopTitle);
-
-            showMeasures = new SwitchPreferenceCompat(context);
-            showMeasures.setTitle(R.string.show_measures);
-            showMeasures.setChecked(options.showMeasures);
-            root.addPreference(showMeasures);
-
-            playMeasuresInLoop = new SwitchPreferenceCompat(context);
-            playMeasuresInLoop.setTitle(R.string.play_measures_in_loop);
-            playMeasuresInLoop.setChecked(options.playMeasuresInLoop);
-            root.addPreference(playMeasuresInLoop);
-
-            loopStart = new ListPreference(context);
-            loopStart.setKey("loop_start");
-            loopStart.setOnPreferenceChangeListener(this);
-            loopStart.setTitle(R.string.play_measures_in_loop_start);
-            loopStart.setEntries(values);
-            loopStart.setEntryValues(values);
-            loopStart.setValueIndex(options.playMeasuresInLoopStart);
-            loopStart.setSummary(loopStart.getEntry() );
-            root.addPreference(loopStart);
-
-            loopEnd = new ListPreference(context);
-            loopEnd.setKey("loop_end");
-            loopEnd.setOnPreferenceChangeListener(this);
-            loopEnd.setTitle(R.string.play_measures_in_loop_end);
-            loopEnd.setEntries(values);
-            loopEnd.setEntryValues(values);
-            loopEnd.setValueIndex(options.playMeasuresInLoopEnd);
-            loopEnd.setSummary(loopEnd.getEntry() );
-            root.addPreference(loopEnd);
         }
 
         /** Create the "Restore Default Settings" preference */
@@ -532,10 +486,6 @@ public class SettingsActivity extends AppCompatActivity {
             options.shade1Color = shade1Color.getColor();
             options.shade2Color = shade2Color.getColor();
             options.useColors = useColors.isChecked();
-            options.showMeasures = showMeasures.isChecked();
-            options.playMeasuresInLoop = playMeasuresInLoop.isChecked();
-            options.playMeasuresInLoopStart = Integer.parseInt(loopStart.getValue()) - 1;
-            options.playMeasuresInLoopEnd = Integer.parseInt(loopEnd.getValue()) - 1;
         }
 
         @Override

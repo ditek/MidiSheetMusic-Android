@@ -5,7 +5,10 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="colorAccent">@color/md_teal_300</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="material_drawer_selected_text">@color/primary</item>
     </style>
 
     <style name="AppTheme" parent="@style/Theme.AppCompat.NoActionBar"/>

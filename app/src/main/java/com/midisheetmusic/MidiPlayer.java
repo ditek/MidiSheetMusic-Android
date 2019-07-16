@@ -193,7 +193,10 @@ public class MidiPlayer extends LinearLayout {
         stopButton.setOnClickListener(v -> Stop());
         playButton.setOnClickListener(v -> Play());
         fastFwdButton.setOnClickListener(v -> FastForward());
-        settingsButton.setOnClickListener(v -> drawer.openDrawer());
+        settingsButton.setOnClickListener(v -> {
+            drawer.deselect();
+            drawer.openDrawer();
+        });
         midiButton.setOnClickListener(v -> toggleMidi());
         leftHandButton.setOnClickListener(v -> toggleTrack(LEFT_TRACK));
         rightHandButton.setOnClickListener(v -> toggleTrack(RIGHT_TRACK));
