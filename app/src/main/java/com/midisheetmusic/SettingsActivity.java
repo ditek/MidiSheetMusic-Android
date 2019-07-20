@@ -117,7 +117,6 @@ public class SettingsActivity extends AppCompatActivity {
         private SwitchPreferenceCompat[] muteTracks;      /** Which tracks to mute */
         private ListPreference[] selectInstruments;   /** Instruments to use per track */
         private Preference setAllToPiano;             /** Set all instruments to piano */
-        private SwitchPreferenceCompat scrollVertically;  /** Scroll vertically/horizontally */
         private SwitchPreferenceCompat showPiano;         /** Show the piano */
         private SwitchPreferenceCompat showLyrics;        /** Show the lyrics */
         private SwitchPreferenceCompat twoStaffs;         /** Combine tracks into two staffs */
@@ -138,7 +137,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-//            setPreferencesFromResource(R.xml.settings_xml, rootKey);
             if (getArguments() != null) {
                 options = (MidiOptions) getArguments().getSerializable(SettingsActivity.settingsID);
                 defaultOptions = (MidiOptions) getArguments().getSerializable(SettingsActivity.defaultSettingsID);
@@ -159,7 +157,6 @@ public class SettingsActivity extends AppCompatActivity {
             sheetTitle.setTitle(R.string.sheet_prefs_title);
             root.addPreference(sheetTitle);
 
-            createScrollPrefs(root);
             createShowPianoPrefs(root);
             createShowLyricsPrefs(root);
             if (options.tracks.length != 2) {
@@ -255,14 +252,6 @@ public class SettingsActivity extends AppCompatActivity {
             setAllToPiano.setTitle(R.string.set_all_to_piano);
             setAllToPiano.setOnPreferenceClickListener(this);
             root.addPreference(setAllToPiano);
-        }
-
-        /** Create the "Scroll Vertically" preference */
-        private void createScrollPrefs(PreferenceScreen root) {
-            scrollVertically = new SwitchPreferenceCompat(context);
-            scrollVertically.setTitle(R.string.scroll_vertically);
-            scrollVertically.setChecked(options.scrollVert);
-            root.addPreference(scrollVertically);
         }
 
         /** Create the "Show Piano" preference */
@@ -457,7 +446,6 @@ public class SettingsActivity extends AppCompatActivity {
                 ListPreference entry = selectInstruments[i];
                 options.instruments[i] = entry.findIndexOfValue(entry.getValue());
             }
-            options.scrollVert = scrollVertically.isChecked();
             options.showPiano = showPiano.isChecked();
             options.showLyrics = showLyrics.isChecked();
             if (twoStaffs != null)

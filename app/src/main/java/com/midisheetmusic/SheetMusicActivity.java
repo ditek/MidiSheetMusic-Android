@@ -39,6 +39,7 @@ import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondarySwitchDrawerItem;
+import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.io.File;
@@ -136,6 +137,14 @@ public class SheetMusicActivity extends MidiHandlingActivity {
     void createViews() {
         layout = findViewById(R.id.sheet_content);
 
+        SwitchDrawerItem scrollVertically = new SwitchDrawerItem()
+                .withName(R.string.scroll_vertically)
+                .withChecked(options.scrollVert)
+                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+                    options.scrollVert = isChecked;
+                    createSheetMusic(options);
+                });
+
         SecondarySwitchDrawerItem showMeasures = new SecondarySwitchDrawerItem()
                 .withName(R.string.show_measures)
                 .withLevel(2)
@@ -157,7 +166,6 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                 .withName(R.string.play_measures_in_loop_end)
                 .withLevel(2);
 
-
         ExpandableSwitchDrawerItem loopSettings = new ExpandableSwitchDrawerItem()
                 .withIdentifier(ID_LOOP_ENABLE)
                 .withName("Loop on Measures")
@@ -172,6 +180,7 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                 .withActivity(this)
                 .withInnerShadow(true)
                 .addDrawerItems(
+                        scrollVertically,
                         loopSettings,
                         new DividerDrawerItem()
                 )
