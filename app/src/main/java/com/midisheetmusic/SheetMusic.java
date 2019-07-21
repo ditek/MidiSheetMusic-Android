@@ -256,11 +256,9 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
             zoom = (float)((newwidth - 2) * 1.0 / PageWidth);
         }
         else {
-            zoom = (float)( (newheight + playerHeight) * 1.0 / sheetheight);
-            if (zoom < 0.9)
-                zoom = 0.9f;
-            if (zoom > 1.1)
-                zoom = 1.1f;
+            // Zoom to fit the height assuming the piano is visible
+            Point pianoSize = Piano.getPreferredSize(newwidth, newheight);
+            zoom = (float)((screenheight - pianoSize.y - playerHeight) * 1.0 / sheetheight);
         }
         if (bufferCanvas == null) {
             createBufferCanvas();
@@ -1412,7 +1410,10 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
     /** Update the scroll position. Callback by ScrollAnimation */
     public void scrollUpdate(int deltaX, int deltaY) {
         scrollX += deltaX;
-        scrollY += deltaY;
+        // Only scroll vertically in vertical mode
+        if(scrollVert) {
+            scrollY += deltaY;
+        }
         checkScrollBounds();
         draw();
     }
