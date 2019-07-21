@@ -402,7 +402,7 @@ public class SettingsActivity extends AppCompatActivity {
             root.addPreference(shade2Color);
 
             useColors = new SwitchPreferenceCompat(context);
-            useColors.setTitle("Use Note Colors");
+            useColors.setTitle(R.string.use_note_colors);
             useColors.setChecked(options.useColors);
             useColors.setOnPreferenceChangeListener((preference, isChecked) -> {
                 for (ColorPreference noteColorPref : noteColors) {

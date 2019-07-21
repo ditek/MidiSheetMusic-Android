@@ -145,6 +145,14 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                     createSheetMusic(options);
                 });
 
+        SwitchDrawerItem useColors = new SwitchDrawerItem()
+                .withName(R.string.use_note_colors)
+                .withChecked(options.useColors)
+                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+                    options.useColors = isChecked;
+                    createSheetMusic(options);
+                });
+
         SecondarySwitchDrawerItem showMeasures = new SecondarySwitchDrawerItem()
                 .withName(R.string.show_measures)
                 .withLevel(2)
@@ -181,6 +189,7 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                 .withInnerShadow(true)
                 .addDrawerItems(
                         scrollVertically,
+                        useColors,
                         loopSettings,
                         new DividerDrawerItem()
                 )
