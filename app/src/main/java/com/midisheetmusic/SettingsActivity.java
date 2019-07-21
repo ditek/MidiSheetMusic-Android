@@ -117,7 +117,6 @@ public class SettingsActivity extends AppCompatActivity {
         private SwitchPreferenceCompat[] muteTracks;      /** Which tracks to mute */
         private ListPreference[] selectInstruments;   /** Instruments to use per track */
         private Preference setAllToPiano;             /** Set all instruments to piano */
-        private SwitchPreferenceCompat showPiano;         /** Show the piano */
         private SwitchPreferenceCompat showLyrics;        /** Show the lyrics */
         private SwitchPreferenceCompat twoStaffs;         /** Combine tracks into two staffs */
         private ListPreference showNoteLetters;       /** Show the note letters */
@@ -157,7 +156,6 @@ public class SettingsActivity extends AppCompatActivity {
             sheetTitle.setTitle(R.string.sheet_prefs_title);
             root.addPreference(sheetTitle);
 
-            createShowPianoPrefs(root);
             createShowLyricsPrefs(root);
             if (options.tracks.length != 2) {
                 createTwoStaffsPrefs(root);
@@ -252,14 +250,6 @@ public class SettingsActivity extends AppCompatActivity {
             setAllToPiano.setTitle(R.string.set_all_to_piano);
             setAllToPiano.setOnPreferenceClickListener(this);
             root.addPreference(setAllToPiano);
-        }
-
-        /** Create the "Show Piano" preference */
-        private void createShowPianoPrefs(PreferenceScreen root) {
-            showPiano = new SwitchPreferenceCompat(context);
-            showPiano.setTitle(R.string.show_piano);
-            showPiano.setChecked(options.showPiano);
-            root.addPreference(showPiano);
         }
 
         /** Create the "Show Lyrics" preference */
@@ -446,7 +436,6 @@ public class SettingsActivity extends AppCompatActivity {
                 ListPreference entry = selectInstruments[i];
                 options.instruments[i] = entry.findIndexOfValue(entry.getValue());
             }
-            options.showPiano = showPiano.isChecked();
             options.showLyrics = showLyrics.isChecked();
             if (twoStaffs != null)
                 options.twoStaffs = twoStaffs.isChecked();
