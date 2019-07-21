@@ -138,7 +138,6 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         paint.setColor(Color.BLACK);
         
         ArrayList<MidiTrack> tracks = file.ChangeMidiNotes(options);
-        // SetNoteSize(options.largeNoteSize);
         scrollVert = options.scrollVert;
         showNoteLetters = options.showNoteLetters;
         TimeSignature time = file.getTime(); 

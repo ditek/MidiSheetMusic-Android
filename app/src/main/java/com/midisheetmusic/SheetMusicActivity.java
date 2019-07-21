@@ -176,7 +176,7 @@ public class SheetMusicActivity extends MidiHandlingActivity {
 
         ExpandableSwitchDrawerItem loopSettings = new ExpandableSwitchDrawerItem()
                 .withIdentifier(ID_LOOP_ENABLE)
-                .withName("Loop on Measures")
+                .withName(R.string.loop_on_measures)
                 .withChecked(options.playMeasuresInLoop)
                 .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
                     options.playMeasuresInLoop = isChecked;
