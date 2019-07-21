@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
 repositories {
     maven {
         url 'https://github.com/joytunes/USB-MIDI-Driver/raw/master/MIDIDriver/snapshots'
@@ -25,12 +28,23 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
+
+    packagingOptions {
+        exclude 'META-INF/library-core_release.kotlin_module'
+    }
 }
 
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'jp.kshoji:midi-driver:0.1.5:@aar'
-    implementation 'androidx.preference:preference:1.1.0-beta01'
+    implementation 'androidx.preference:preference:1.1.0-rc01'
     implementation 'com.android.support:design:28.0.0'
+
+    // For the navigation drawer
+    implementation "com.mikepenz:materialdrawer:7.0.0-rc01"
+    implementation "androidx.recyclerview:recyclerview:1.0.0"
+    implementation "androidx.annotation:annotation:1.1.0"
+    implementation "com.google.android.material:material:1.0.0"
+    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
 }

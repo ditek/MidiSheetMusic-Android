@@ -13,7 +13,6 @@
 package com.midisheetmusic;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -23,20 +22,25 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.material.navigation.NavigationView;
+import com.midisheetmusic.drawerItems.ExpandableSwitchDrawerItem;
 import com.midisheetmusic.sheets.ClefSymbol;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.StringHolder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondarySwitchDrawerItem;
+import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,24 +57,24 @@ import java.util.zip.CRC32;
  *  <li> Piano : For highlighting the piano notes during playback.
  *  <li> SheetMusic : For highlighting the sheet music notes during playback.
  */
-public class SheetMusicActivity extends MidiHandlingActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class SheetMusicActivity extends MidiHandlingActivity {
 
     public static final String MidiTitleID = "MidiTitleID";
     public static final int settingsRequestCode = 1;
-    
+    public static final int ID_LOOP_ENABLE = 10;
+    public static final int ID_LOOP_START = 11;
+    public static final int ID_LOOP_END = 12;
+
     private MidiPlayer player;   /* The play/stop/rewind toolbar */
     private Piano piano;         /* The piano at the top */
     private SheetMusic sheet;    /* The sheet music */
     private LinearLayout layout; /* The layout */
     private MidiFile midifile;   /* The midi file to play */
     private MidiOptions options; /* The options for sheet music and sound */
-    private long midiCRC;      /* CRC of the midi bytes */
+    private long midiCRC;        /* CRC of the midi bytes */
+    private Drawer drawer;
 
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-
-     /** Create this SheetMusicActivity.  
+     /** Create this SheetMusicActivity.
       * The Intent should have two parameters:
       * - data: The uri of the midi file to open.
       * - MidiTitleID: The title of the song (String)
@@ -133,15 +137,74 @@ public class SheetMusicActivity extends MidiHandlingActivity
     void createViews() {
         layout = findViewById(R.id.sheet_content);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        // Lock the drawer so swiping doesn't open it
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        SwitchDrawerItem scrollVertically = new SwitchDrawerItem()
+                .withName(R.string.scroll_vertically)
+                .withChecked(options.scrollVert)
+                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+                    options.scrollVert = isChecked;
+                    createSheetMusic(options);
+                });
 
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        SwitchDrawerItem useColors = new SwitchDrawerItem()
+                .withName(R.string.use_note_colors)
+                .withChecked(options.useColors)
+                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+                    options.useColors = isChecked;
+                    createSheetMusic(options);
+                });
+
+        SecondarySwitchDrawerItem showMeasures = new SecondarySwitchDrawerItem()
+                .withName(R.string.show_measures)
+                .withLevel(2)
+                .withChecked(options.showMeasures)
+                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+                    options.showMeasures = isChecked;
+                    createSheetMusic(options);
+                });
+
+        SecondaryDrawerItem loopStart = new SecondaryDrawerItem()
+                .withIdentifier(ID_LOOP_START)
+                .withBadge(Integer.toString(options.playMeasuresInLoopStart + 1))
+                .withName(R.string.play_measures_in_loop_start)
+                .withLevel(2);
+
+        SecondaryDrawerItem loopEnd = new SecondaryDrawerItem()
+                .withIdentifier(ID_LOOP_END)
+                .withBadge(Integer.toString(options.playMeasuresInLoopEnd + 1))
+                .withName(R.string.play_measures_in_loop_end)
+                .withLevel(2);
+
+        ExpandableSwitchDrawerItem loopSettings = new ExpandableSwitchDrawerItem()
+                .withIdentifier(ID_LOOP_ENABLE)
+                .withName("Loop on Measures")
+                .withChecked(options.playMeasuresInLoop)
+                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+                    options.playMeasuresInLoop = isChecked;
+                })
+                .withSubItems(showMeasures, loopStart, loopEnd);
+
+        // Drawer
+        drawer = new DrawerBuilder()
+                .withActivity(this)
+                .withInnerShadow(true)
+                .addDrawerItems(
+                        scrollVertically,
+                        useColors,
+                        loopSettings,
+                        new DividerDrawerItem()
+                )
+                .inflateMenu(R.menu.sheet_menu)
+                .withOnDrawerItemClickListener((view, i, item) -> drawerItemClickListener(item))
+                .withDrawerGravity(Gravity.RIGHT)
+                .build();
+
+        // Make sure that the view extends over the navigation buttons area
+        drawer.getDrawerLayout().setFitsSystemWindows(false);
+        // Lock the drawer so swiping doesn't open it
+        drawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         player = new MidiPlayer(this);
-        player.setDrawerLayout(drawerLayout);
+        player.setDrawer(drawer);
         layout.addView(player);
 
         piano = new Piano(this);
@@ -181,35 +244,65 @@ public class SheetMusicActivity extends MidiHandlingActivity
         super.onConfigurationChanged(newConfig);
     }
 
-    /** When the menu button is pressed, initialize the menus. */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (player != null) {
-            player.Pause();
+
+    /** Create a string list of the numbers between listStart and listEnd (inclusive) */
+    private String[] makeStringList(int listStart, int listEnd) {
+        String[] list = new String[listEnd];
+        for (int i = 0; i < list.length; i++) {
+            list[i] = Integer.toString(i + listStart);
         }
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.sheet_menu, menu);
-        return true;
+        return list;
     }
 
-    /** Callback when a menu item is selected.
-     *  - Choose Song : Choose a new song
-     *  - Song Settings : Adjust the sheet music and sound options
-     *  - Save As Images: Save the sheet music as PNG images
-     *  - Help : Display the HTML help screen
-     */
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
+
+    /** Handle clicks on the drawer menu */
+    public boolean drawerItemClickListener(IDrawerItem item) {
+        switch ((int)item.getIdentifier()) {
             case R.id.song_settings:
                 changeSettings();
+                drawer.closeDrawer();
                 break;
             case R.id.save_images:
                 showSaveImagesDialog();
+                drawer.closeDrawer();
+                break;
+            case ID_LOOP_START:
+                // Note that we display the measure numbers starting at 1,
+                // but the actual playMeasuresInLoopStart field starts at 0.
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.play_measures_in_loop_start);
+                String[] items = makeStringList(1, options.lastMeasure + 1);
+                builder.setItems(items, (dialog, i) -> {
+                    options.playMeasuresInLoopStart = Integer.parseInt(items[i]) - 1;
+                    // Make sure End is not smaller than Start
+                    if (options.playMeasuresInLoopStart > options.playMeasuresInLoopEnd) {
+                        options.playMeasuresInLoopEnd = options.playMeasuresInLoopStart;
+                        drawer.updateBadge(ID_LOOP_END, new StringHolder(items[i]));
+                    }
+                    ((SecondaryDrawerItem) item).withBadge(items[i]);
+                    drawer.updateItem(item);
+                });
+                builder.create().show();
+                break;
+            case ID_LOOP_END:
+                // Note that we display the measure numbers starting at 1,
+                // but the actual playMeasuresInLoopEnd field starts at 0.
+                builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.play_measures_in_loop_end);
+                items = makeStringList(1, options.lastMeasure + 1);
+                builder.setItems(items, (dialog, i) -> {
+                    options.playMeasuresInLoopEnd = Integer.parseInt(items[i]) - 1;
+                    // Make sure End is not smaller than Start
+                    if (options.playMeasuresInLoopStart > options.playMeasuresInLoopEnd) {
+                        options.playMeasuresInLoopStart = options.playMeasuresInLoopEnd;
+                        drawer.updateBadge(ID_LOOP_START, new StringHolder(items[i]));
+                    }
+                    ((SecondaryDrawerItem) item).withBadge(items[i]);
+                    drawer.updateItem(item);
+                });
+                builder.create().show();
                 break;
         }
-//        menuItem.setChecked(true);
-        drawerLayout.closeDrawers();
         return true;
     }
 
@@ -238,14 +331,10 @@ public class SheetMusicActivity extends MidiHandlingActivity
          AlertDialog.Builder builder = new AlertDialog.Builder(this);
          builder.setTitle(R.string.save_images_str);
          builder.setView(dialogView);
-         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-             public void onClick(DialogInterface builder, int whichButton) {
-                 saveAsImages(filenameView.getText().toString());
-             }
-         });
-         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-             public void onClick(DialogInterface builder, int whichButton) {
-             }
+         builder.setPositiveButton("OK",
+                 (builder1, whichButton) -> saveAsImages(filenameView.getText().toString()));
+         builder.setNegativeButton("Cancel",
+                 (builder12, whichButton) -> {
          });
          AlertDialog dialog = builder.create();
          dialog.show();
@@ -286,10 +375,7 @@ public class SheetMusicActivity extends MidiHandlingActivity
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Error saving image to file " + Environment.DIRECTORY_PICTURES + "/MidiSheetMusic/" + filename  + ".png");
             builder.setCancelable(false);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                }
-            });
+            builder.setPositiveButton("OK", (dialog, id) -> { });
             AlertDialog alert = builder.create();
             alert.show();
         }
@@ -297,10 +383,7 @@ public class SheetMusicActivity extends MidiHandlingActivity
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Ran out of memory while saving image to file " + Environment.DIRECTORY_PICTURES + "/MidiSheetMusic/" + filename  + ".png");
             builder.setCancelable(false);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                }
-            });
+            builder.setPositiveButton("OK", (dialog, id) -> {});
             AlertDialog alert = builder.create();
             alert.show();
         }

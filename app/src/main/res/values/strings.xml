@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Enhanced MidiSheetMusic</string>
-    <string name="song_settings_str">Song Settings</string>
+    <string name="song_settings_str">More Settings</string>
     <string name="save_images_str">Save As Images</string>
     <string name="save_images_descr_str">Save the sheet music as images, in the directory /Pictures/MidiSheetMusic, with the following filename</string>
     <string name="help_str">Help</string>
@@ -32,6 +32,7 @@
     <string name="play_measures_in_loop">Play Measures in a Loop</string>
     <string name="play_measures_in_loop_start">Start Measure</string>
     <string name="play_measures_in_loop_end">End Measure</string>
+    <string name="loop_on_measures">Loop on Measures</string>
     <string name="scan_button_title">Scan SD Card for MIDI files</string>
     <string name="scan_files_str">Scan for MIDI Files</string>
     <string name="browse_files_str">Browse for MIDI Files</string>
@@ -46,5 +47,6 @@
     <string name="forward">Forward</string>
     <string name="show_hide_piano">Show/Hide Piano</string>
     <string name="settings">Settings</string>
+    <string name="use_note_colors">Use Note Colors</string>
 
 </resources>

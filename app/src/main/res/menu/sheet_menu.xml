@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/song_settings"
-          android:icon="@android:drawable/ic_menu_preferences"
-          android:title="@string/song_settings_str" />
-    <item android:id="@+id/save_images"
-          android:icon="@android:drawable/ic_menu_save"
-          android:title="@string/save_images_str" />
+    <item
+        android:id="@+id/song_settings"
+        android:title="@string/song_settings_str" />
+    <item
+        android:id="@+id/save_images"
+        android:title="@string/save_images_str" />
 </menu>
 
