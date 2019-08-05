@@ -25,6 +25,7 @@ import android.os.Environment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -87,6 +88,9 @@ public class SheetMusicActivity extends MidiHandlingActivity {
         hideSystemUI();
 
         setContentView(R.layout.sheet_music_layout);
+
+        // Keep screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         ClefSymbol.LoadImages(this);
         TimeSigSymbol.LoadImages(this);
