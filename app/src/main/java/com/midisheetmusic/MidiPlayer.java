@@ -132,9 +132,6 @@ public class MidiPlayer extends LinearLayout {
 
         player = new MediaPlayer();
         setBackgroundColor(Color.BLACK);
-
-        // Keep screen on
-        this.activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     public MidiPlayer(Context context, AttributeSet attrs) {
@@ -456,8 +453,6 @@ public class MidiPlayer extends LinearLayout {
 
     Runnable DoPlay = new Runnable() {
       public void run() {
-        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
         /* The startPulseTime is the pulse time of the midi file when
          * we first start playing the music.  It's used during shading.
          */
@@ -510,8 +505,6 @@ public class MidiPlayer extends LinearLayout {
         this.requestLayout();
         this.invalidate();
 
-        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        
         if (midifile == null || sheet == null || numberTracks() == 0) {
             return;
         }
