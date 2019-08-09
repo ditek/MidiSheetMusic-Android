@@ -508,10 +508,14 @@ public class MidiPlayer extends LinearLayout {
         if (midifile == null || sheet == null || numberTracks() == 0) {
             return;
         }
+
+        // Cancel pending play events
+        timer.removeCallbacks(DoPlay);
+
         if (playstate == playing) {
             playstate = initPause;
         }
-        if (playstate == midi) {
+        else if (playstate == midi) {
             playstate = paused;
         }
     }
