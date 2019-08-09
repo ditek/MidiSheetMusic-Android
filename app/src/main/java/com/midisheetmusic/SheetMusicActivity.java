@@ -286,7 +286,9 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                     ((SecondaryDrawerItem) item).withBadge(items[i]);
                     drawer.updateItem(item);
                 });
-                builder.create().show();
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                alertDialog.getListView().setSelection(options.playMeasuresInLoopStart);
                 break;
             case ID_LOOP_END:
                 // Note that we display the measure numbers starting at 1,
@@ -304,7 +306,9 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                     ((SecondaryDrawerItem) item).withBadge(items[i]);
                     drawer.updateItem(item);
                 });
-                builder.create().show();
+                alertDialog = builder.create();
+                alertDialog.show();
+                alertDialog.getListView().setSelection(options.playMeasuresInLoopEnd);
                 break;
         }
         return true;
