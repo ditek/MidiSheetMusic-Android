@@ -22,7 +22,6 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -93,18 +92,30 @@ public class MidiPlayer extends LinearLayout {
 
     final String tempSoundFile = "playing.mid"; /** The filename to play sound from */
 
-    MediaPlayer player;         /** For playing the audio */
-    MidiFile midifile;          /** The midi file to play */
-    MidiOptions options;        /** The sound options for playing the midi file */
-    double pulsesPerMsec;       /** The number of pulses per millisec */
-    SheetMusic sheet;           /** The sheet music to shade while playing */
-    Piano piano;                /** The piano to shade while playing */
-    Handler timer;             /** Timer used to update the sheet music while playing */
-    long startTime;             /** Absolute time when music started playing (msec) */
-    double startPulseTime;      /** Time (in pulses) when music started playing */
-    double currentPulseTime;    /** Time (in pulses) music is currently at */
-    double prevPulseTime;       /** Time (in pulses) music was last at */
-    Activity activity;          /** The parent activity. */
+    /** For playing the audio */
+    MediaPlayer player;
+    /** The midi file to play */
+    MidiFile midifile;
+    /** The sound options for playing the midi file */
+    MidiOptions options;
+    /** The sheet music to shade while playing */
+    SheetMusic sheet;
+    /** The piano to shade while playing */
+    Piano piano;
+    /** Timer used to update the sheet music while playing */
+    Handler timer;
+    /** Absolute time when music started playing (msec) */
+    long startTime;
+    /** The number of pulses per millisec */
+    double pulsesPerMsec;
+    /** Time (in pulses) when music started playing */
+    double startPulseTime;
+    /** Time (in pulses) music is currently at */
+    double currentPulseTime;
+    /** Time (in pulses) music was last at */
+    double prevPulseTime;
+    /** The parent activity. */
+    Activity activity;
 
     /** A listener that allows us to send a request to update the sheet when needed */
     private SheetUpdateRequestListener mSheetUpdateRequestListener;
@@ -168,13 +179,13 @@ public class MidiPlayer extends LinearLayout {
 
     }
 
-        /** Create the rewind, play, stop, and fast forward buttons */
+    /** Create the rewind, play, stop, and fast forward buttons */
     void init() {
         inflate(activity, R.layout.player_toolbar, this);
 
         ImageButton backButton = findViewById(R.id.btn_back);
         ImageButton rewindButton = findViewById(R.id.btn_rewind);
-        ImageButton stopButton = findViewById(R.id.btn_replay);
+        ImageButton resetButton = findViewById(R.id.btn_replay);
         ImageButton playButton = findViewById(R.id.btn_play);
         ImageButton fastFwdButton = findViewById(R.id.btn_forward);
         ImageButton settingsButton = findViewById(R.id.btn_settings);
@@ -187,7 +198,7 @@ public class MidiPlayer extends LinearLayout {
 
         backButton.setOnClickListener(v -> activity.onBackPressed());
         rewindButton.setOnClickListener(v -> Rewind());
-        stopButton.setOnClickListener(v -> Stop());
+        resetButton.setOnClickListener(v -> Reset());
         playButton.setOnClickListener(v -> Play());
         fastFwdButton.setOnClickListener(v -> FastForward());
         settingsButton.setOnClickListener(v -> {
@@ -233,7 +244,6 @@ public class MidiPlayer extends LinearLayout {
         timer.removeCallbacks(TimerCallback);
         timer.postDelayed(ReShade, 500);
     }
-
 
 
     /** Show/hide treble and bass clefs */
@@ -317,10 +327,11 @@ public class MidiPlayer extends LinearLayout {
             timer.postDelayed(ReShade, 500);
         }
         else {
-            Stop();
+            Reset();
             midifile = file;
             options = opt;
             sheet = s;
+            ScrollToStart();
         }
     }
 
@@ -447,6 +458,7 @@ public class MidiPlayer extends LinearLayout {
         // Hide the midi player, wait a little for the view
         // to refresh, and then start playing
         this.setVisibility(View.GONE);
+        RemoveShading();
         timer.removeCallbacks(TimerCallback);
         timer.postDelayed(DoPlay, 1000);
     }
@@ -521,17 +533,20 @@ public class MidiPlayer extends LinearLayout {
     }
 
 
-    /** The callback for the Stop button.
+    /** The callback for the Reset button.
      *  If playing, initiate a stop and wait for the timer to finish.
      *  Then do the actual stop.
      */
-    void Stop() {
-        this.setVisibility(View.VISIBLE);
-        if (midifile == null || sheet == null || playstate == stopped) {
+    void Reset() {
+        if (midifile == null || sheet == null) {
             return;
         }
 
-        if (playstate == initPause || playstate == initStop || playstate == playing) {
+        if (playstate == stopped) {
+            RemoveShading();
+            ScrollToStart();
+        }
+        else if (playstate == initPause || playstate == initStop || playstate == playing) {
             /* Wait for timer to finish */
             playstate = initStop;
             DoStop();
@@ -547,38 +562,56 @@ public class MidiPlayer extends LinearLayout {
     void DoStop() { 
         playstate = stopped;
         timer.removeCallbacks(TimerCallback);
-        // Scroll to the beginning
-        sheet.ShadeNotes(0, 0, SheetMusic.ImmediateScroll);
-        // Remove shading
-        sheet.ShadeNotes(-10, (int)prevPulseTime, SheetMusic.DontScroll);
-        sheet.ShadeNotes(-10, (int)currentPulseTime, SheetMusic.DontScroll);
-        piano.ShadeNotes(-10, (int)prevPulseTime);
-        piano.ShadeNotes(-10, (int)currentPulseTime);
-        startPulseTime = 0;
-        currentPulseTime = 0;
-        prevPulseTime = 0;
+        RemoveShading();
+        ScrollToStart();
         setVisibility(View.VISIBLE);
         StopSound();
     }
 
+    void RemoveShading() {
+        sheet.ShadeNotes(-10, (int)prevPulseTime, SheetMusic.DontScroll);
+        sheet.ShadeNotes(-10, (int)currentPulseTime, SheetMusic.DontScroll);
+        piano.ShadeNotes(-10, (int)prevPulseTime);
+        piano.ShadeNotes(-10, (int)currentPulseTime);
+    }
+
+    /**
+     * Scroll to the beginning of the sheet or to options.playMeasuresInLoopStart if enabled
+     */
+    void ScrollToStart() {
+        startPulseTime = options.playMeasuresInLoop ?
+                options.playMeasuresInLoopStart * midifile.getTime().getMeasure(): 0;
+        currentPulseTime = startPulseTime;
+        prevPulseTime = -10;
+        sheet.ShadeNotes((int)currentPulseTime, (int)prevPulseTime, SheetMusic.ImmediateScroll);
+        piano.ShadeNotes((int)currentPulseTime, (int)prevPulseTime);
+    }
+
     /** Rewind the midi music back one measure.
-     *  The music must be in the paused state.
+     *  The music must be in the paused/stopped state.
      *  When we resume in playPause, we start at the currentPulseTime.
      *  So to rewind, just decrease the currentPulseTime,
      *  and re-shade the sheet music.
      */
     void Rewind() {
-        if (midifile == null || sheet == null || playstate != paused) {
+        if (midifile == null || sheet == null) {
+            return;
+        }
+        if (playstate != paused && playstate != stopped) {
             return;
         }
 
         /* Remove any highlighted notes */
         sheet.ShadeNotes(-10, (int)currentPulseTime, SheetMusic.DontScroll);
         piano.ShadeNotes(-10, (int)currentPulseTime);
-   
+
         prevPulseTime = currentPulseTime; 
         currentPulseTime -= midifile.getTime().getMeasure();
-        if (currentPulseTime < options.shifttime) {
+        if (currentPulseTime < 0) {
+            currentPulseTime = 0;
+            prevPulseTime = -10;
+        }
+        else if (currentPulseTime < options.shifttime) {
             currentPulseTime = options.shifttime;
         }
         sheet.ShadeNotes((int)currentPulseTime, (int)prevPulseTime, SheetMusic.ImmediateScroll);
