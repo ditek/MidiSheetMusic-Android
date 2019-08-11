@@ -93,12 +93,10 @@ abstract class AbstractExpandableSwitchDrawerItem<Item : AbstractExpandableSwitc
         override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*>): Boolean {
             if (drawerItem is AbstractDrawerItem<*, *> && drawerItem.isEnabled) {
                 view?.let {
-                    if (drawerItem.subItems != null) {
-                        if (drawerItem.isExpanded) {
-                            ViewCompat.animate(view.findViewById(R.id.material_drawer_arrow)).rotation(this@AbstractExpandableSwitchDrawerItem.arrowRotationAngleEnd.toFloat()).start()
-                        } else {
-                            ViewCompat.animate(view.findViewById(R.id.material_drawer_arrow)).rotation(this@AbstractExpandableSwitchDrawerItem.arrowRotationAngleStart.toFloat()).start()
-                        }
+                    if (drawerItem.isExpanded) {
+                        ViewCompat.animate(view.findViewById(R.id.material_drawer_arrow)).rotation(this@AbstractExpandableSwitchDrawerItem.arrowRotationAngleEnd.toFloat()).start()
+                    } else {
+                        ViewCompat.animate(view.findViewById(R.id.material_drawer_arrow)).rotation(this@AbstractExpandableSwitchDrawerItem.arrowRotationAngleStart.toFloat()).start()
                     }
                 }
             }

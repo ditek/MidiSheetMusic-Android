@@ -13,12 +13,9 @@ import jp.kshoji.driver.midi.device.MidiOutputDevice;
 
 public abstract class MidiHandlingActivity extends AbstractSingleMidiActivity {
     void log(String s) {
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(MidiHandlingActivity.this, s, Toast.LENGTH_SHORT).show();
-            }
-        });
+        this.runOnUiThread(() ->
+                Toast.makeText(MidiHandlingActivity.this, s, Toast.LENGTH_SHORT).show()
+        );
     }
 
     abstract void OnMidiDeviceStatus(boolean connected);

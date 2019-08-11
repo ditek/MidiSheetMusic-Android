@@ -159,11 +159,13 @@ public class MidiPlayer extends LinearLayout {
         midiButton.setEnabled(connected);
         midiButton.setTextColor(connected ? Color.BLUE : Color.RED);
     }
+
     int prevWrongMidi = 0;
+
     void OnMidiNote(int note, boolean pressed) {
         if (!pressed) return;
-        MusicSymbol nextNote = this.sheet.getCurrentNote((int)currentPulseTime);
-        int midiNote = ((ChordSymbol)nextNote).getNotedata()[0].number;
+        MusicSymbol nextNote = this.sheet.getCurrentNote((int) currentPulseTime);
+        int midiNote = ((ChordSymbol) nextNote).getNotedata()[0].number;
         note += options.midiShift;
         if (midiNote != note) {
             piano.UnShadeOneNote(prevWrongMidi);
@@ -174,9 +176,8 @@ public class MidiPlayer extends LinearLayout {
             currentPulseTime = sheet.getCurrentNote(nextNote.getStartTime() + 1).getStartTime();
             piano.UnShadeOneNote(prevWrongMidi);
         }
-        sheet.ShadeNotes((int)currentPulseTime, (int)prevPulseTime, SheetMusic.ImmediateScroll);
-        piano.ShadeNotes((int)currentPulseTime, (int)prevPulseTime);
-
+        sheet.ShadeNotes((int) currentPulseTime, (int) prevPulseTime, SheetMusic.ImmediateScroll);
+        piano.ShadeNotes((int) currentPulseTime, (int) prevPulseTime);
     }
 
     /** Create the rewind, play, stop, and fast forward buttons */
