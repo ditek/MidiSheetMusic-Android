@@ -214,6 +214,11 @@ public class MidiPlayer extends LinearLayout {
         speedBar.getProgressDrawable().setColorFilter(Color.parseColor("#00BB87"), PorterDuff.Mode.SRC_IN);
         speedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
+                // If speed bar is between 97 and 103 approximate it to 100
+                if(97 < progress && progress < 103) {
+                    progress = 100;
+                    bar.setProgress(progress);
+                }
                 speedText.setText(String.format(Locale.US, "%3d", progress) + "%");
             }
             public void onStartTrackingTouch(SeekBar bar) {
