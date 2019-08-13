@@ -48,6 +48,7 @@
         android:id="@+id/txt_speed"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/toolbar_height"
+        android:fontFamily="monospace"
         android:padding="8dp"
         android:text="100%"
         tools:text="100%" />
