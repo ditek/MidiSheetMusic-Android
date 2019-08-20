@@ -8,7 +8,7 @@
     <string name="sheet_prefs_title">Sheet Music Preferences</string>
     <string name="restore_defaults">Restore Default Settings</string>
     <string name="select_tracks_to_display">Select Tracks to Display</string>
-    <string name="select_tracks_to_mute">Select Tracks to Mute</string>
+    <string name="select_tracks_to_play">Select Tracks to Play</string>
     <string name="select_instruments_per_track">Select Instruments For Each Track</string>
     <string name="set_all_to_piano">Set All Instruments to Piano</string>
     <string name="scroll_vertically">Scroll Vertically</string>

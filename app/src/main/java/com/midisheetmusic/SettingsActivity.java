@@ -16,7 +16,6 @@ package com.midisheetmusic;
 import android.app.*;
 import android.content.*;
 import android.os.*;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
@@ -114,7 +113,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         private Preference restoreDefaults;           /** Restore default settings */
         private SwitchPreferenceCompat[] selectTracks;    /** Which tracks to display */
-        private SwitchPreferenceCompat[] muteTracks;      /** Which tracks to mute */
+        private SwitchPreferenceCompat[] playTracks;      /** Which tracks to play */
         private ListPreference[] selectInstruments;   /** Instruments to use per track */
         private Preference setAllToPiano;             /** Set all instruments to piano */
         private SwitchPreferenceCompat showLyrics;        /** Show the lyrics */
@@ -148,8 +147,8 @@ public class SettingsActivity extends AppCompatActivity {
         private void createView() {
             PreferenceScreen root = getPreferenceManager().createPreferenceScreen(context);
             createRestoreDefaultPrefs(root);
-            createTrackPrefs(root);
-            createMutePrefs(root);
+            createDisplayTrackPrefs(root);
+            createPlayTrackPrefs(root);
             createInstrumentPrefs(root);
 
             PreferenceCategory sheetTitle = new PreferenceCategory(context);
@@ -199,10 +198,10 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         /** Create the "Select Tracks to Display" checkboxes. */
-        private void createTrackPrefs(PreferenceScreen root) {
-            PreferenceCategory selectTracksTitle = new PreferenceCategory(context);
-            selectTracksTitle.setTitle(R.string.select_tracks_to_display);
-            root.addPreference(selectTracksTitle);
+        private void createDisplayTrackPrefs(PreferenceScreen root) {
+            PreferenceCategory displayTracksTitle = new PreferenceCategory(context);
+            displayTracksTitle.setTitle(R.string.select_tracks_to_display);
+            root.addPreference(displayTracksTitle);
             selectTracks = new SwitchPreferenceCompat[options.tracks.length];
             for (int i = 0; i < options.tracks.length; i++) {
                 selectTracks[i] = new SwitchPreferenceCompat(context);
@@ -212,17 +211,17 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
 
-        /** Create the "Select Tracks to Mute" checkboxes. */
-        private void createMutePrefs(PreferenceScreen root) {
-            PreferenceCategory muteTracksTitle = new PreferenceCategory(context);
-            muteTracksTitle.setTitle(R.string.select_tracks_to_mute);
-            root.addPreference(muteTracksTitle);
-            muteTracks = new SwitchPreferenceCompat[options.mute.length];
+        /** Create the "Select Tracks to Play" checkboxes. */
+        private void createPlayTrackPrefs(PreferenceScreen root) {
+            PreferenceCategory playTracksTitle = new PreferenceCategory(context);
+            playTracksTitle.setTitle(R.string.select_tracks_to_play);
+            root.addPreference(playTracksTitle);
+            playTracks = new SwitchPreferenceCompat[options.mute.length];
             for (int i = 0; i < options.mute.length; i++) {
-                muteTracks[i] = new SwitchPreferenceCompat(context);
-                muteTracks[i].setTitle("Track " + i);
-                muteTracks[i].setChecked(options.mute[i]);
-                root.addPreference(muteTracks[i]);
+                playTracks[i] = new SwitchPreferenceCompat(context);
+                playTracks[i].setTitle("Track " + i);
+                playTracks[i].setChecked(!options.mute[i]);
+                root.addPreference(playTracks[i]);
             }
         }
 
@@ -427,7 +426,7 @@ public class SettingsActivity extends AppCompatActivity {
                 options.tracks[i] = selectTracks[i].isChecked();
             }
             for (int i = 0; i < options.mute.length; i++) {
-                options.mute[i] = muteTracks[i].isChecked();
+                options.mute[i] = !playTracks[i].isChecked();
             }
             for (int i = 0; i < options.noteColors.length; i++) {
                 options.noteColors[i] = noteColors[i].getColor();
