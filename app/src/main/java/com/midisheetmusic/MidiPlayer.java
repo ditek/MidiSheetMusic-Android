@@ -211,6 +211,19 @@ public class MidiPlayer extends LinearLayout {
         rightHandButton.setOnClickListener(v -> toggleTrack(RIGHT_TRACK));
         pianoButton.setOnClickListener(v -> togglePiano());
 
+        // Resize the speedBar so all toolbar icons fit on the screen
+        speedBar.post(
+                () -> {
+                    int iconsWidth = backButton.getWidth() + resetButton.getWidth() + playButton.getWidth() +
+                            rewindButton.getWidth() + fastFwdButton.getWidth() + midiButton.getWidth() +
+                            leftHandButton.getWidth() + rightHandButton.getWidth() + pianoButton.getWidth() +
+                            settingsButton.getWidth();
+                    int screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
+                    speedBar.setLayoutParams(
+                            new LayoutParams(screenwidth - iconsWidth - 16, speedBar.getHeight()));
+                }
+        );
+
         speedBar.getProgressDrawable().setColorFilter(Color.parseColor("#00BB87"), PorterDuff.Mode.SRC_IN);
         speedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
