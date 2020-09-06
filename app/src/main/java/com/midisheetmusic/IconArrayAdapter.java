@@ -68,7 +68,7 @@ class IconArrayAdapter<T> extends ArrayAdapter<T> {
          if (file != null) {
              if (file.isDirectory()) {
                  image.setImageBitmap(directoryIcon);
-                 text.setText(file.getUri().getPath());
+                 text.setText(file.toString());
              } else {
                  image.setImageBitmap(midiIcon);
                  text.setText(file.toString());

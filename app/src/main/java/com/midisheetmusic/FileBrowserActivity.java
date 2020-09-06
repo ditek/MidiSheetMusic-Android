@@ -83,13 +83,15 @@ public class FileBrowserActivity extends ListActivity {
         ArrayList<FileUri> filelist = new ArrayList<>();
         ArrayList<FileUri> sortedDirs = new ArrayList<>();
         ArrayList<FileUri> sortedFiles = new ArrayList<>();
-        if (!newdirectory.equals(rootdir)) {
+        File dir = new File(directory);
+        // If we're not at the root directory, add parent directory to the list
+        if (dir.compareTo(new File(rootdir)) != 0) {
             String parentDirectory = new File(directory).getParent() + "/";
             Uri uri = Uri.parse("file://" + parentDirectory);
-            sortedDirs.add(new FileUri(uri, parentDirectory));
+            sortedDirs.add(new FileUri(uri, "../"));
         }
         try {
-            File dir = new File(directory);
+            Log.e(LOG_TAG, "is root?: " + dir.compareTo(new File(rootdir)));
             File[] files = dir.listFiles();
             if (files != null) {
                 for (File file : files) {
@@ -99,7 +101,7 @@ public class FileBrowserActivity extends ListActivity {
                     String filename = file.getName();
                     if (file.isDirectory()) {
                         Uri uri = Uri.parse("file://" + file.getAbsolutePath() + "/");
-                        FileUri fileuri = new FileUri(uri, uri.getPath());
+                        FileUri fileuri = new FileUri(uri, file.getName());
                         sortedDirs.add(fileuri);
                     }
                     else if (filename.endsWith(".mid") || filename.endsWith(".MID") ||
@@ -149,7 +151,7 @@ public class FileBrowserActivity extends ListActivity {
     }
 
     public void onHomeClick(View view) {
-        loadDirectory(Environment.getExternalStorageDirectory().getAbsolutePath());
+        loadDirectory(rootdir);
     }
 }
 
