@@ -292,8 +292,8 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
                                    ClefMeasures clefs) {
 
         int i = 0;
-        ArrayList<ChordSymbol> chords = new ArrayList<ChordSymbol>();
-        ArrayList<MidiNote> notegroup = new ArrayList<MidiNote>(12);
+        ArrayList<ChordSymbol> chords = new ArrayList<>();
+        ArrayList<MidiNote> notegroup = new ArrayList<>(12);
         int len = midinotes.size(); 
 
         while (i < len) {
@@ -464,7 +464,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
                                      ClefMeasures clefs,
                                      TimeSignature time) {
 
-        ArrayList<MusicSymbol> result = new ArrayList<MusicSymbol>( symbols.size() );
+        ArrayList<MusicSymbol> result = new ArrayList<>(symbols.size());
         Clef prevclef = clefs.GetClef(0);
         for (MusicSymbol symbol : symbols) {
             /* A BarSymbol indicates a new measure */
@@ -724,7 +724,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
                          int track, int totaltracks) {
         int keysigWidth = KeySignatureWidth(key);
         int startindex = 0;
-        ArrayList<Staff> thestaffs = new ArrayList<Staff>(symbols.size() / 50);
+        ArrayList<Staff> thestaffs = new ArrayList<>(symbols.size() / 50);
 
         while (startindex < symbols.size()) {
             /* startindex is the index of the first symbol in the staff.
@@ -783,7 +783,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
                 width = SheetMusic.PageWidth;
             }
             // int range = endindex + 1 - startindex;
-            ArrayList<MusicSymbol> staffSymbols = new ArrayList<MusicSymbol>();
+            ArrayList<MusicSymbol> staffSymbols = new ArrayList<>();
             for (int i = startindex; i <= endindex; i++) {
                 staffSymbols.add(symbols.get(i));
             }
@@ -817,8 +817,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
     CreateStaffs(ArrayList<ArrayList<MusicSymbol>> allsymbols, KeySignature key, 
                  MidiOptions options, int measurelen) {
 
-        ArrayList<ArrayList<Staff>> trackstaffs = 
-          new ArrayList<ArrayList<Staff>>( allsymbols.size() );
+        ArrayList<ArrayList<Staff>> trackstaffs = new ArrayList<>(allsymbols.size());
         int totaltracks = allsymbols.size();
 
         for (int track = 0; track < totaltracks; track++) {
@@ -841,7 +840,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
                 maxstaffs = trackstaffs.get(i).size();
             }
         }
-        ArrayList<Staff> result = new ArrayList<Staff>(maxstaffs * trackstaffs.size());
+        ArrayList<Staff> result = new ArrayList<>(maxstaffs * trackstaffs.size());
         for (int i = 0; i < maxstaffs; i++) {
             for (ArrayList<Staff> list : trackstaffs) {
                 if (i < list.size()) {
@@ -894,9 +893,9 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
     private static ArrayList<ArrayList<LyricSymbol>> 
     GetLyrics(ArrayList<MidiTrack> tracks) {
        boolean hasLyrics = false;
-        ArrayList<ArrayList<LyricSymbol>> result = new ArrayList<ArrayList<LyricSymbol>>();
+        ArrayList<ArrayList<LyricSymbol>> result = new ArrayList<>();
         for (int tracknum = 0; tracknum < tracks.size(); tracknum++) {
-            ArrayList<LyricSymbol> lyrics = new ArrayList<LyricSymbol>();
+            ArrayList<LyricSymbol> lyrics = new ArrayList<>();
             result.add(lyrics);
             MidiTrack track = tracks.get(tracknum);
             if (track.getLyrics() == null) {
@@ -1309,7 +1308,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
       */
     void ScrollToShadedNotes(int x_shade, int y_shade, boolean scrollGradually) {
         if (scrollVert) {
-            int scrollDist = (int)(y_shade - scrollY);
+            int scrollDist = y_shade - scrollY;
 
             if (scrollGradually) {
                 if (scrollDist > (zoom * StaffHeight * 8))

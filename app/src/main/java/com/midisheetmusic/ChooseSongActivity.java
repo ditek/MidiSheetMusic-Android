@@ -12,14 +12,20 @@
 
 package com.midisheetmusic;
 
-import android.app.*;
-import android.os.*;
-import android.widget.*;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.TabActivity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.util.Log;
-import android.content.*;
-import org.json.*;
-import android.graphics.*;
-import android.graphics.drawable.*;
+import android.widget.TabHost;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * ChooseSongActivity is a tabbed view for choosing a song to play.
@@ -31,6 +37,7 @@ import android.graphics.drawable.*;
  */
 public class ChooseSongActivity extends TabActivity {
 
+    private final String LOG_TAG = ChooseSongActivity.class.getSimpleName();
     static ChooseSongActivity globalActivity;
 
     @Override
@@ -38,7 +45,7 @@ public class ChooseSongActivity extends TabActivity {
         globalActivity = this;
         super.onCreate(state);
 
-       
+
         Bitmap allFilesIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.allfilesicon);
         Bitmap recentFilesIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.recentfilesicon);
         Bitmap browseFilesIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.browsefilesicon);
@@ -81,9 +88,7 @@ public class ChooseSongActivity extends TabActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setMessage(message);
         builder.setCancelable(false);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-           public void onClick(DialogInterface dialog, int id) {
-           }
+        builder.setPositiveButton("OK", (dialog, id) -> {
         });
         AlertDialog alert = builder.create();
         alert.show();
@@ -96,7 +101,7 @@ public class ChooseSongActivity extends TabActivity {
         try {
             SharedPreferences settings = getSharedPreferences("midisheetmusic.recentFiles", 0);
             SharedPreferences.Editor editor = settings.edit();
-            JSONArray prevRecentFiles = null;
+            JSONArray prevRecentFiles;
             String recentFilesString = settings.getString("recentFiles", null);
             if (recentFilesString != null) {
                 prevRecentFiles = new JSONArray(recentFilesString);
@@ -111,7 +116,7 @@ public class ChooseSongActivity extends TabActivity {
                 if (i >= 10) {
                     break; // only store 10 most recent files
                 }
-                JSONObject file = prevRecentFiles.getJSONObject(i); 
+                JSONObject file = prevRecentFiles.getJSONObject(i);
                 if (!FileUri.equalJson(recentFileJson, file)) {
                     recentFiles.put(file);
                 }
@@ -120,6 +125,7 @@ public class ChooseSongActivity extends TabActivity {
             editor.apply();
         }
         catch (Exception e) {
+            Log.e(LOG_TAG, Thread.currentThread().getStackTrace()[2].getMethodName(), e);
         }
     }
 }
