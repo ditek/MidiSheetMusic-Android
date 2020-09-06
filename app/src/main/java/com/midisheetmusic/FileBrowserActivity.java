@@ -12,19 +12,24 @@
 
 package com.midisheetmusic;
 
-import java.io.*;
-import java.util.*;
-import android.app.*;
+import android.app.ListActivity;
+import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.*;
-import android.widget.*;
+import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
-import android.view.*;
-import android.content.*;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 
 public class FileBrowserActivity extends ListActivity {
+    private final String LOG_TAG = FileBrowserActivity.class.getSimpleName();
     private String directory;            /* Current directory being displayed */
     private TextView directoryView;      /* TextView showing directory name */
     private String rootdir;              /* The top level root directory */
@@ -41,7 +46,7 @@ public class FileBrowserActivity extends ListActivity {
     public void onResume() {
         super.onResume();
         rootdir = Environment.getExternalStorageDirectory().getAbsolutePath();
-        directoryView = (TextView) findViewById(R.id.directory);
+        directoryView = findViewById(R.id.directory);
         SharedPreferences settings = getPreferences(0);
         String lastBrowsedDirectory = settings.getString("lastBrowsedDirectory", null);
         if (lastBrowsedDirectory == null) {
@@ -59,10 +64,15 @@ public class FileBrowserActivity extends ListActivity {
                 directory = new File(directory).getParent();
             }
             catch (Exception e) {
+                Log.e(LOG_TAG, Thread.currentThread().getStackTrace()[2].getMethodName(), e);
             }
         }
         else {
             directory = newdirectory;
+        }
+        // Do not navigate to root directory
+        if (directory.equals("/") || directory.equals("//")) {
+            return;
         }
         SharedPreferences.Editor editor = getPreferences(0).edit();
         editor.putString("lastBrowsedDirectory", directory);
@@ -101,8 +111,8 @@ public class FileBrowserActivity extends ListActivity {
                     }
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
+            Log.e(LOG_TAG, Thread.currentThread().getStackTrace()[2].getMethodName(), e);
         }
 
         if (sortedDirs.size() > 0) {
@@ -136,6 +146,10 @@ public class FileBrowserActivity extends ListActivity {
         else {
             ChooseSongActivity.openFile(file);
         }
+    }
+
+    public void onHomeClick(View view) {
+        loadDirectory(Environment.getExternalStorageDirectory().getAbsolutePath());
     }
 }
 
