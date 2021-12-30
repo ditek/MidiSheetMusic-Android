@@ -127,6 +127,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         private ColorPreference[] noteColors;
         private SwitchPreferenceCompat useColors;
+        private SwitchPreferenceCompat useDashColors;   /* CHU if Red as Dash is used */
+        private SwitchPreferenceCompat useFullHeight;   /** Drawing on full height option */
 
         private ColorPreference shade1Color;          /** Right-hand color */
         private ColorPreference shade2Color;          /** Left-hand color */
@@ -257,6 +259,17 @@ public class SettingsActivity extends AppCompatActivity {
             showLyrics.setTitle(R.string.show_lyrics);
             showLyrics.setChecked(options.showLyrics);
             root.addPreference(showLyrics);
+
+            useFullHeight = new SwitchPreferenceCompat(context);
+            useFullHeight.setTitle(R.string.use_full_height);
+            useFullHeight.setChecked(options.useFullHeight);
+
+            useFullHeight.setOnPreferenceChangeListener((preference, isChecked) -> {
+                options.useFullHeight = (boolean) isChecked;
+
+                return true;
+            });
+            root.addPreference(useFullHeight);
         }
 
         /** Create the "Show Note Letters" preference */
@@ -390,10 +403,34 @@ public class SettingsActivity extends AppCompatActivity {
             shade2Color.setTitle(R.string.left_hand_color);
             root.addPreference(shade2Color);
 
+            // CHU Start
+
+
+            useDashColors = new SwitchPreferenceCompat(context);
+            useDashColors.setTitle(R.string.use_dash_colors);
+            useDashColors.setChecked(options.useDashColors);
+
+            useDashColors.setOnPreferenceChangeListener((preference, isChecked) -> {
+                if ((boolean)isChecked == true)
+                    useColors.setChecked(false);
+
+                boolean isuseColorChecked = useColors.isChecked();
+                for (ColorPreference noteColorPref : noteColors) {
+                    noteColorPref.setVisible((boolean)isuseColorChecked);
+                }
+
+                return true;
+            });
+            root.addPreference(useDashColors);
+            // CHU Stop
+
             useColors = new SwitchPreferenceCompat(context);
             useColors.setTitle(R.string.use_note_colors);
             useColors.setChecked(options.useColors);
             useColors.setOnPreferenceChangeListener((preference, isChecked) -> {
+                if ((boolean)isChecked == true)
+                    useDashColors.setChecked(false);
+
                 for (ColorPreference noteColorPref : noteColors) {
                     noteColorPref.setVisible((boolean)isChecked);
                 }
@@ -462,6 +499,8 @@ public class SettingsActivity extends AppCompatActivity {
             options.shade1Color = shade1Color.getColor();
             options.shade2Color = shade2Color.getColor();
             options.useColors = useColors.isChecked();
+            options.useDashColors = useDashColors.isChecked();      // CHU
+            options.useFullHeight = useFullHeight.isChecked();
         }
 
         @Override

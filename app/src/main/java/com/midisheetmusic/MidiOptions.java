@@ -63,6 +63,8 @@ public class MidiOptions implements Serializable {
     public int     lastMeasure;             /** The last measure in the song */
 
     public boolean useColors;
+    public boolean useDashColors;
+    public boolean useFullHeight;           /** Will enlarge the graphics to the full screen */
     public int[] noteColors;
     public int midiShift;
 
@@ -173,6 +175,8 @@ public class MidiOptions implements Serializable {
             json.put("shade1Color", shade1Color);
             json.put("shade2Color", shade2Color);
             json.put("useColors", useColors);
+            json.put("useDashColors", useDashColors);       // CHU
+            json.put("useFullHeight", useFullHeight);
             json.put("noteColors", jsonColors);
             json.put("showMeasures", showMeasures);
             json.put("playMeasuresInLoop", playMeasuresInLoop);
@@ -248,6 +252,12 @@ public class MidiOptions implements Serializable {
             if (json.has("useColors")) {
                 options.useColors = json.getBoolean("useColors");
             }
+            if (json.has("useFullHeight")) {
+                options.useFullHeight = json.getBoolean("useFullHeight");
+            }
+            if (json.has("useDashColors")) {
+                options.useDashColors = json.getBoolean("useDashColors");
+            }
             options.showMeasures = json.getBoolean("showMeasures");
             options.playMeasuresInLoop = json.getBoolean("playMeasuresInLoop");
             options.playMeasuresInLoopStart = json.getInt("playMeasuresInLoopStart");
@@ -277,6 +287,7 @@ public class MidiOptions implements Serializable {
         if (saved.useColors && saved.noteColors != null) {
             noteColors = saved.noteColors;
         }
+
         if (saved.time != null) {
             time = new TimeSignature(saved.time.getNumerator(), saved.time.getDenominator(), 
                     saved.time.getQuarter(), saved.time.getTempo());
@@ -295,6 +306,8 @@ public class MidiOptions implements Serializable {
         shade1Color = saved.shade1Color;
         shade2Color = saved.shade2Color;
         useColors = saved.useColors;
+        useDashColors = saved.useDashColors;        // CHU
+        useFullHeight = saved.useFullHeight;
         showMeasures = saved.showMeasures;
         playMeasuresInLoop = saved.playMeasuresInLoop;
         playMeasuresInLoopStart = saved.playMeasuresInLoopStart;
@@ -352,6 +365,8 @@ public class MidiOptions implements Serializable {
         options.shade1Color = shade1Color;
         options.shade2Color = shade2Color;
         options.useColors = useColors;
+        options.useDashColors = useDashColors;              // CHU
+        options.useFullHeight = useFullHeight;
         options.showMeasures = showMeasures;
         options.playMeasuresInLoop = playMeasuresInLoop;
         options.playMeasuresInLoopStart = playMeasuresInLoopStart;

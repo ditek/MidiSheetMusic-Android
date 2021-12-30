@@ -117,6 +117,7 @@ public class MidiPlayer extends LinearLayout {
     /** The parent activity. */
     Activity activity;
 
+
     /** A listener that allows us to send a request to update the sheet when needed */
     private SheetUpdateRequestListener mSheetUpdateRequestListener;
 
@@ -282,6 +283,11 @@ public class MidiPlayer extends LinearLayout {
         options.showPiano = !options.showPiano;
         piano.setVisibility(options.showPiano ? View.VISIBLE : View.GONE);
         updateToolbarButtons();
+
+        // CHU Start ---
+        if (sheet != null)
+            sheet.ReCalculateZoom();
+        // CHU Stop ---
     }
 
     /** Update the status of the toolbar buttons (show, hide, opacity, etc.) */
@@ -325,6 +331,7 @@ public class MidiPlayer extends LinearLayout {
     public void SetPiano(Piano p) {
         piano = p;
     }
+
 
     /** The MidiFile and/or SheetMusic has changed. Stop any playback sound,
      *  and store the current midifile and sheet music.

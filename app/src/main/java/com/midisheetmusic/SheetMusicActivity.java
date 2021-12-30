@@ -149,13 +149,37 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                     createSheetMusic(options);
                 });
 
+        //-- CHU Start
+        SwitchDrawerItem useDashColors = new SwitchDrawerItem();
+
         SwitchDrawerItem useColors = new SwitchDrawerItem()
                 .withName(R.string.use_note_colors)
                 .withChecked(options.useColors)
                 .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+                    if (isChecked == true)
+                    {
+                        options.useDashColors = false;
+                    }
+                    useDashColors.setChecked(options.useDashColors);
+
                     options.useColors = isChecked;
                     createSheetMusic(options);
                 });
+
+
+        useDashColors.withName(R.string.use_dash_colors)
+                .withChecked(options.useDashColors)
+                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+                    if (isChecked == true)
+                    {
+                        options.useColors = false;
+                    }
+
+                    useColors.setChecked(options.useColors);
+                    options.useDashColors = isChecked;
+                    createSheetMusic(options);
+                });
+        // -- CHU Stop
 
         SecondarySwitchDrawerItem showMeasures = new SecondarySwitchDrawerItem()
                 .withName(R.string.show_measures)
@@ -194,6 +218,7 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                 .addDrawerItems(
                         scrollVertically,
                         useColors,
+                        useDashColors,
                         loopSettings,
                         new DividerDrawerItem()
                 )

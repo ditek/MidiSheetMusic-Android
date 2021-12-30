@@ -18,6 +18,7 @@ import android.app.*;
 import android.content.*;
 import android.graphics.*;
 import android.view.*;
+import android.widget.ImageButton;
 
 import com.midisheetmusic.sheets.AccidSymbol;
 import com.midisheetmusic.sheets.BarSymbol;
@@ -89,6 +90,8 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
     private int      screenwidth;     /** The screen width */
     private int      screenheight;    /** The screen height */
 
+    private         MidiOptions optionsSaved;   // CHU
+
     /* fields used for scrolling */
 
     private int      sheetwidth;      /** The sheet music width (excluding zoom) */
@@ -128,9 +131,12 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
             options = new MidiOptions(file);
         }
         zoom = 1.0f;
+        optionsSaved = options;
 
         filename = file.getFileName();
-        SetColors(options.noteColors, options.useColors, options.shade1Color, options.shade2Color);
+        //-- CHU Start
+        SetColors(options.noteColors, options.useColors, options.useDashColors, options.shade1Color, options.shade2Color);
+        // -- CHU Stop
         paint = new Paint();
         paint.setTextSize(12.0f);
         Typeface typeface = Typeface.create(paint.getTypeface(), Typeface.NORMAL);
@@ -242,6 +248,19 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
     @Override
     protected void 
     onSizeChanged(int newwidth, int newheight, int oldwidth, int oldheight) {
+        onSizeChangedAll(newwidth, newheight, oldwidth, oldheight);
+    }
+
+    // CHU Start ----
+    public void ReCalculateZoom()
+    {
+        bufferCanvas = null;
+        onSizeChangedAll(viewwidth, viewheight, 0,0);
+    }
+
+
+    private void
+    onSizeChangedAll(int newwidth, int newheight, int oldwidth, int oldheight) {
         viewwidth = newwidth;
         viewheight = newheight;
 
@@ -255,16 +274,32 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
             zoom = (float)((newwidth - 2) * 1.0 / PageWidth);
         }
         else {
-            // Zoom to fit the height assuming the piano is visible
+            // CHU Start ----
             Point pianoSize = Piano.getPreferredSize(newwidth, newheight);
-            zoom = (float)((screenheight - pianoSize.y - playerHeight) * 1.0 / sheetheight);
+            int pianoratio = 1;
+            int playerration = 1;
+
+            if (optionsSaved.useFullHeight)
+            {
+                if( !optionsSaved.showPiano )
+                {
+                    pianoratio = 0;
+                }
+
+                playerration = -1;
+            }
+
+            zoom = (float)((screenheight - (pianoSize.y * pianoratio) - (playerHeight * playerration))  / sheetheight);
+
+            // CHU Stop --
         }
         if (bufferCanvas == null) {
             createBufferCanvas();
         }
+
         draw();
     }
-    
+    // CHU Stop --
 
     /** Get the best key signature given the midi notes in all the tracks. */
     private KeySignature GetKeySignature(ArrayList<MidiTrack> tracks) {
@@ -853,12 +888,17 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
 
 
     /** Change the note colors for the sheet music, and redraw. */
-    public void SetColors(int[] newcolors, boolean shouldUseColors, int newshade1, int newshade2) {
+    public void SetColors(int[] newcolors, boolean shouldUseColors, boolean shouldUseDashColors, int newshade1, int newshade2) {
         useColors = shouldUseColors;
         if (NoteColors == null) {
             NoteColors = new int[12];
             for (int i = 0; i < 12; i++) {
-                NoteColors[i] = Color.BLACK;
+                // CHU Start ----
+                if (shouldUseDashColors && NoteScale.IsBlackKey(i))
+                    NoteColors[i] = Color.RED;
+                else
+                    NoteColors[i] = Color.BLACK;
+                // CHU Stop
             }
         }
         if (shouldUseColors && newcolors != null) {
