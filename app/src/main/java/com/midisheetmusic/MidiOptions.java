@@ -63,8 +63,10 @@ public class MidiOptions implements Serializable {
     public int     lastMeasure;             /** The last measure in the song */
 
     public boolean useColors;
-    public boolean useDashColors;
+    public boolean useDashColors;           /* Will change the RED as color for dash and flat */
     public boolean useFullHeight;           /** Will enlarge the graphics to the full screen */
+    public int     delay2start;            /** delay after the play buttom **/
+
     public int[] noteColors;
     public int midiShift;
 
@@ -172,6 +174,7 @@ public class MidiOptions implements Serializable {
             json.put("midiShift", midiShift);
             json.put("key", key);
             json.put("combineInterval", combineInterval);
+            json.put("delay2start", delay2start);
             json.put("shade1Color", shade1Color);
             json.put("shade2Color", shade2Color);
             json.put("useColors", useColors);
@@ -257,6 +260,14 @@ public class MidiOptions implements Serializable {
             }
             if (json.has("useDashColors")) {
                 options.useDashColors = json.getBoolean("useDashColors");
+            }
+
+            if (json.has("delay2start")) {
+                options.delay2start = json.getInt("delay2start");
+            }
+            else
+            {
+                options.delay2start =0;
             }
             options.showMeasures = json.getBoolean("showMeasures");
             options.playMeasuresInLoop = json.getBoolean("playMeasuresInLoop");

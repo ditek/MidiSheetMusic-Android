@@ -161,7 +161,7 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                         options.useDashColors = false;
                     }
                     useDashColors.setChecked(options.useDashColors);
-
+                    drawer.updateItem(useDashColors);
                     options.useColors = isChecked;
                     createSheetMusic(options);
                 });
@@ -176,6 +176,7 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                     }
 
                     useColors.setChecked(options.useColors);
+                    drawer.updateItem(useColors);
                     options.useDashColors = isChecked;
                     createSheetMusic(options);
                 });

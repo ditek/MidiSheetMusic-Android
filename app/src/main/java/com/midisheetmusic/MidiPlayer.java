@@ -486,7 +486,7 @@ public class MidiPlayer extends LinearLayout {
         this.setVisibility(View.GONE);
         RemoveShading();
         timer.removeCallbacks(TimerCallback);
-        timer.postDelayed(DoPlay, 1000);
+        timer.postDelayed(DoPlay, options.delay2start);
     }
 
     Runnable DoPlay = new Runnable() {

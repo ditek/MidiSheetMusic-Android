@@ -124,6 +124,7 @@ public class SettingsActivity extends AppCompatActivity {
         private ListPreference key;                   /** Key Signature to use */
         private ListPreference time;                  /** Time Signature to use */
         private ListPreference combineInterval;       /** Interval (msec) to combine notes */
+        private ListPreference delay2start;              /** Delay before playing */
 
         private ColorPreference[] noteColors;
         private SwitchPreferenceCompat useColors;
@@ -167,6 +168,7 @@ public class SettingsActivity extends AppCompatActivity {
             createKeySignaturePrefs(root);
             createTimeSignaturePrefs(root);
             createCombineIntervalPrefs(root);
+            createDelay2StartPrefs(root);
             createColorPrefs(root);
             setPreferenceScreen(root);
         }
@@ -386,6 +388,30 @@ public class SettingsActivity extends AppCompatActivity {
             root.addPreference(combineInterval);
         }
 
+        /** Create the "Delay before start"  preference
+         * SetSummary is not to be used as The default mechanism will force the value but not the summary
+         * Therefore using call back to calculate the summary
+         */
+        private void createDelay2StartPrefs(PreferenceScreen root) {
+            int selected = options.delay2start;
+            delay2start = new ListPreference(context);
+            delay2start.setKey("DelayToStart");
+            delay2start.setOnPreferenceChangeListener((preference, isChecked) -> {
+                        options.delay2start = Integer.parseInt((String)isChecked);
+                        delay2start.setValueIndex(options.delay2start / 1000);
+
+                        return true;});
+            delay2start.setSummaryProvider((preference) -> {
+                return (Integer.parseInt((String)((ListPreference)preference).getValue()) / 1000) + " second(s)" ;
+            });
+
+            delay2start.setTitle(R.string.delay_to_start);
+            delay2start.setEntries(R.array.delay_to_start_entries);
+            delay2start.setEntryValues(R.array.delay_to_start_values);
+            delay2start.setValueIndex(selected / 1000);
+            root.addPreference(delay2start);
+        }
+
 
         /* Create the "Left-hand color" and "Right-hand color" preferences */
         private void createColorPrefs(PreferenceScreen root) {
@@ -496,6 +522,7 @@ public class SettingsActivity extends AppCompatActivity {
                     break;
             }
             options.combineInterval = Integer.parseInt(combineInterval.getValue());
+            options.delay2start = Integer.parseInt(delay2start.getValue());
             options.shade1Color = shade1Color.getColor();
             options.shade2Color = shade2Color.getColor();
             options.useColors = useColors.isChecked();
