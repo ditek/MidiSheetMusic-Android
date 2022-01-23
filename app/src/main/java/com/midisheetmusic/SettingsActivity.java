@@ -128,7 +128,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         private ColorPreference[] noteColors;
         private SwitchPreferenceCompat useColors;
-        private SwitchPreferenceCompat useDashColors;   /* CHU if Red as Dash is used */
+        private SwitchPreferenceCompat useDashColors;   /* if Red as Sharp is used */
         private SwitchPreferenceCompat useFullHeight;   /** Drawing on full height option */
 
         private ColorPreference shade1Color;          /** Right-hand color */
@@ -393,12 +393,12 @@ public class SettingsActivity extends AppCompatActivity {
          * Therefore using call back to calculate the summary
          */
         private void createDelay2StartPrefs(PreferenceScreen root) {
-            int selected = options.delay2start;
+            int selected = options.delayStartInterval;
             delay2start = new ListPreference(context);
             delay2start.setKey("DelayToStart");
             delay2start.setOnPreferenceChangeListener((preference, isChecked) -> {
-                        options.delay2start = Integer.parseInt((String)isChecked);
-                        delay2start.setValueIndex(options.delay2start / 1000);
+                        options.delayStartInterval = Integer.parseInt((String)isChecked);
+                        delay2start.setValueIndex(options.delayStartInterval / 1000);
 
                         return true;});
             delay2start.setSummaryProvider((preference) -> {
@@ -429,9 +429,6 @@ public class SettingsActivity extends AppCompatActivity {
             shade2Color.setTitle(R.string.left_hand_color);
             root.addPreference(shade2Color);
 
-            // CHU Start
-
-
             useDashColors = new SwitchPreferenceCompat(context);
             useDashColors.setTitle(R.string.use_dash_colors);
             useDashColors.setChecked(options.useDashColors);
@@ -448,7 +445,6 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             });
             root.addPreference(useDashColors);
-            // CHU Stop
 
             useColors = new SwitchPreferenceCompat(context);
             useColors.setTitle(R.string.use_note_colors);
@@ -522,11 +518,11 @@ public class SettingsActivity extends AppCompatActivity {
                     break;
             }
             options.combineInterval = Integer.parseInt(combineInterval.getValue());
-            options.delay2start = Integer.parseInt(delay2start.getValue());
+            options.delayStartInterval = Integer.parseInt(delay2start.getValue());
             options.shade1Color = shade1Color.getColor();
             options.shade2Color = shade2Color.getColor();
             options.useColors = useColors.isChecked();
-            options.useDashColors = useDashColors.isChecked();      // CHU
+            options.useDashColors = useDashColors.isChecked();
             options.useFullHeight = useFullHeight.isChecked();
         }
 

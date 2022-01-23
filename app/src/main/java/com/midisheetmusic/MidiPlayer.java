@@ -284,10 +284,8 @@ public class MidiPlayer extends LinearLayout {
         piano.setVisibility(options.showPiano ? View.VISIBLE : View.GONE);
         updateToolbarButtons();
 
-        // CHU Start ---
         if (sheet != null)
             sheet.ReCalculateZoom();
-        // CHU Stop ---
     }
 
     /** Update the status of the toolbar buttons (show, hide, opacity, etc.) */
@@ -486,7 +484,7 @@ public class MidiPlayer extends LinearLayout {
         this.setVisibility(View.GONE);
         RemoveShading();
         timer.removeCallbacks(TimerCallback);
-        timer.postDelayed(DoPlay, options.delay2start);
+        timer.postDelayed(DoPlay, options.delayStartInterval);
     }
 
     Runnable DoPlay = new Runnable() {

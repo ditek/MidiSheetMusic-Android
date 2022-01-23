@@ -90,7 +90,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
     private int      screenwidth;     /** The screen width */
     private int      screenheight;    /** The screen height */
 
-    private         MidiOptions optionsSaved;   // CHU
+    private         MidiOptions optionsSaved;
 
     /* fields used for scrolling */
 
@@ -113,7 +113,15 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         Activity activity = (Activity)context;
         screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
         screenheight = activity.getWindowManager().getDefaultDisplay().getHeight();
+        if (screenwidth < screenheight)
+        {
+            int temp = screenwidth;
+            screenwidth = screenheight;
+            screenheight = temp;
+        }
+
         playerHeight = MidiPlayer.getPreferredSize(screenwidth, screenheight).y;
+
     }
 
     /** Create a new SheetMusic View.
@@ -134,9 +142,9 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         optionsSaved = options;
 
         filename = file.getFileName();
-        //-- CHU Start
+
         SetColors(options.noteColors, options.useColors, options.useDashColors, options.shade1Color, options.shade2Color);
-        // -- CHU Stop
+
         paint = new Paint();
         paint.setTextSize(12.0f);
         Typeface typeface = Typeface.create(paint.getTypeface(), Typeface.NORMAL);
@@ -251,7 +259,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         onSizeChangedAll(newwidth, newheight, oldwidth, oldheight);
     }
 
-    // CHU Start ----
+
     public void ReCalculateZoom()
     {
         bufferCanvas = null;
@@ -274,7 +282,6 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
             zoom = (float)((newwidth - 2) * 1.0 / PageWidth);
         }
         else {
-            // CHU Start ----
             Point pianoSize = Piano.getPreferredSize(newwidth, newheight);
             int pianoratio = 1;
             int playerration = 1;
@@ -290,8 +297,6 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
             }
 
             zoom = (float)((screenheight - (pianoSize.y * pianoratio) - (playerHeight * playerration))  / sheetheight);
-
-            // CHU Stop --
         }
         if (bufferCanvas == null) {
             createBufferCanvas();
@@ -299,7 +304,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
 
         draw();
     }
-    // CHU Stop --
+
 
     /** Get the best key signature given the midi notes in all the tracks. */
     private KeySignature GetKeySignature(ArrayList<MidiTrack> tracks) {
@@ -893,12 +898,12 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         if (NoteColors == null) {
             NoteColors = new int[12];
             for (int i = 0; i < 12; i++) {
-                // CHU Start ----
+
                 if (shouldUseDashColors && NoteScale.IsBlackKey(i))
                     NoteColors[i] = Color.RED;
                 else
                     NoteColors[i] = Color.BLACK;
-                // CHU Stop
+
             }
         }
         if (shouldUseColors && newcolors != null) {

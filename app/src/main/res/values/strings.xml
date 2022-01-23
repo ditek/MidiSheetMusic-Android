@@ -51,7 +51,7 @@
     <string name="settings">Settings</string>
     <string name="use_full_height">Use full height</string>
     <string name="use_note_colors">Use Note Colors</string>
-    <string name="use_dash_colors">Use Dash Colors</string>
+    <string name="use_dash_colors">Use Sharp Colors</string>
     <string name="home">Home</string>
 
 </resources>
