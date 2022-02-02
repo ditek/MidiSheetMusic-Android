@@ -96,7 +96,7 @@
         <item>100 milliseconds</item>
     </string-array>
 
-    <string-array name="delay_to_start_entries">
+    <string-array name="delay_start_interval_entries">
         <item>0 second</item>
         <item>1 seconds</item>
         <item>2 seconds</item>
@@ -112,7 +112,7 @@
         <item>100</item>
     </string-array>
 
-    <string-array name="delay_to_start_values">
+    <string-array name="delay_start_interval_values">
         <item>0</item>
         <item>1000</item>
         <item>2000</item>

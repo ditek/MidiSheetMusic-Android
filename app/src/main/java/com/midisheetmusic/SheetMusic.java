@@ -155,7 +155,7 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
 
         filename = file.getFileName();
 
-        SetColors(options.noteColors, options.useColors, options.useDashColors, options.shade1Color, options.shade2Color);
+        SetColors(options.noteColors, options.useColors, options.colorAccidentals, options.shade1Color, options.shade2Color);
 
         paint = new Paint();
         paint.setTextSize(12.0f);
@@ -902,13 +902,13 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
 
 
     /** Change the note colors for the sheet music, and redraw. */
-    public void SetColors(int[] newcolors, boolean shouldUseColors, boolean shouldUseDashColors, int newshade1, int newshade2) {
+    public void SetColors(int[] newcolors, boolean shouldUseColors, boolean shouldColorAccidentals, int newshade1, int newshade2) {
         useColors = shouldUseColors;
         if (NoteColors == null) {
             NoteColors = new int[12];
             for (int i = 0; i < 12; i++) {
 
-                if (shouldUseDashColors && NoteScale.IsBlackKey(i))
+                if (shouldColorAccidentals && NoteScale.IsBlackKey(i))
                     NoteColors[i] = Color.RED;
                 else
                     NoteColors[i] = Color.BLACK;

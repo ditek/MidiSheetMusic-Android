@@ -149,7 +149,7 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                     createSheetMusic(options);
                 });
 
-        SwitchDrawerItem useDashColors = new SwitchDrawerItem();
+        SwitchDrawerItem colorAccidentals = new SwitchDrawerItem();
 
         SwitchDrawerItem useColors = new SwitchDrawerItem()
                 .withName(R.string.use_note_colors)
@@ -157,17 +157,17 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                 .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
                     if (isChecked == true)
                     {
-                        options.useDashColors = false;
+                        options.colorAccidentals = false;
                     }
-                    useDashColors.setChecked(options.useDashColors);
-                    drawer.updateItem(useDashColors);
+                    colorAccidentals.setChecked(options.colorAccidentals);
+                    drawer.updateItem(colorAccidentals);
                     options.useColors = isChecked;
                     createSheetMusic(options);
                 });
 
 
-        useDashColors.withName(R.string.use_dash_colors)
-                .withChecked(options.useDashColors)
+        colorAccidentals.withName(R.string.use_accidental_colors)
+                .withChecked(options.colorAccidentals)
                 .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
                     if (isChecked == true)
                     {
@@ -176,7 +176,7 @@ public class SheetMusicActivity extends MidiHandlingActivity {
 
                     useColors.setChecked(options.useColors);
                     drawer.updateItem(useColors);
-                    options.useDashColors = isChecked;
+                    options.colorAccidentals = isChecked;
                     createSheetMusic(options);
                 });
 
@@ -217,7 +217,7 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                 .addDrawerItems(
                         scrollVertically,
                         useColors,
-                        useDashColors,
+                        colorAccidentals,
                         loopSettings,
                         new DividerDrawerItem()
                 )

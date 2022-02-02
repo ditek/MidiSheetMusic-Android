@@ -25,8 +25,8 @@
     <string name="time_signature">Time Signature</string>
     <string name="combine_interval">Combine Interval</string>
     <string name="combine_interval_summary">Notes within the given interval (in milliseconds) are combined into a single chord</string>
-    <string name="delay_to_start">Delay before start</string>
-    <string name="delay_to_start_summary">Delay before staring music</string>
+    <string name="delay_start_interval">Delay before start</string>
+    <string name="delay_start_interval_summary">Delay before staring music</string>
     <string name="right_hand_color">Right Hand Color</string>
     <string name="left_hand_color">Left Hand Color</string>
     <string name="show_measures">Show Measure Numbers</string>
@@ -51,7 +51,7 @@
     <string name="settings">Settings</string>
     <string name="use_full_height">Use full height</string>
     <string name="use_note_colors">Use Note Colors</string>
-    <string name="use_dash_colors">Use Sharp Colors</string>
+    <string name="use_accidental_colors">Use Accidental Colors</string>
     <string name="home">Home</string>
 
 </resources>
