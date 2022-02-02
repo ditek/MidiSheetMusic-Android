@@ -778,6 +778,14 @@ public class MidiPlayer extends LinearLayout {
     public void setDrawer(Drawer drawer) {
         this.drawer = drawer;
     }
+
+    @Override
+    public void setVisibility(int visibility) {
+        super.setVisibility(visibility);
+        if (sheet != null) {
+            sheet.ReCalculateZoom();
+        }
+    }
 }
 
 

@@ -12,13 +12,19 @@
 
 package com.midisheetmusic;
 
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import android.app.*;
-import android.content.*;
-import android.graphics.*;
-import android.view.*;
-import android.widget.ImageButton;
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
 
 import com.midisheetmusic.sheets.AccidSymbol;
 import com.midisheetmusic.sheets.BarSymbol;
@@ -32,6 +38,10 @@ import com.midisheetmusic.sheets.MusicSymbol;
 import com.midisheetmusic.sheets.RestSymbol;
 import com.midisheetmusic.sheets.Staff;
 import com.midisheetmusic.sheets.SymbolWidths;
+
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 class BoxedInt {
     public int value;
@@ -113,8 +123,10 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         Activity activity = (Activity)context;
         screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
         screenheight = activity.getWindowManager().getDefaultDisplay().getHeight();
-        if (screenwidth < screenheight)
-        {
+
+        // Size could've been captured while the screen was still in portrait.
+        // In this case, swap the dimensions.
+        if (screenwidth < screenheight) {
             int temp = screenwidth;
             screenwidth = screenheight;
             screenheight = temp;
@@ -283,20 +295,17 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         }
         else {
             Point pianoSize = Piano.getPreferredSize(newwidth, newheight);
-            int pianoratio = 1;
-            int playerration = 1;
-
-            if (optionsSaved.useFullHeight)
-            {
-                if( !optionsSaved.showPiano )
-                {
-                    pianoratio = 0;
-                }
-
-                playerration = -1;
+            int pianoRatio = 1;
+            if (optionsSaved.useFullHeight && !optionsSaved.showPiano) {
+                pianoRatio = 0;
             }
 
-            zoom = (float)((screenheight - (pianoSize.y * pianoratio) - (playerHeight * playerration))  / sheetheight);
+            int playerRatio = 0;
+            if (player.getVisibility() == VISIBLE) {
+                playerRatio = 1;
+            }
+
+            zoom = (float) (screenheight - (pianoSize.y * pianoRatio) - (playerHeight * playerRatio)) / (float) sheetheight;
         }
         if (bufferCanvas == null) {
             createBufferCanvas();
