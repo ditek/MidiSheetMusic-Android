@@ -14,7 +14,7 @@
 package com.midisheetmusic;
 
 import java.io.*;
-import android.util.Log;
+
 import org.json.*;
 import android.graphics.*;
 
@@ -63,6 +63,10 @@ public class MidiOptions implements Serializable {
     public int     lastMeasure;             /** The last measure in the song */
 
     public boolean useColors;
+    public boolean colorAccidentals;        /** Will set RED as color for sharps and flats */
+    public boolean useFullHeight;           /** Will enlarge the graphics to the full screen */
+    public int     delayStartInterval;      /** Delay playing after the play button is pressed **/
+
     public int[] noteColors;
     public int midiShift;
 
@@ -170,9 +174,12 @@ public class MidiOptions implements Serializable {
             json.put("midiShift", midiShift);
             json.put("key", key);
             json.put("combineInterval", combineInterval);
+            json.put("delayStartInterval", delayStartInterval);
             json.put("shade1Color", shade1Color);
             json.put("shade2Color", shade2Color);
             json.put("useColors", useColors);
+            json.put("colorAccidentals", colorAccidentals);
+            json.put("useFullHeight", useFullHeight);
             json.put("noteColors", jsonColors);
             json.put("showMeasures", showMeasures);
             json.put("playMeasuresInLoop", playMeasuresInLoop);
@@ -248,6 +255,20 @@ public class MidiOptions implements Serializable {
             if (json.has("useColors")) {
                 options.useColors = json.getBoolean("useColors");
             }
+            if (json.has("useFullHeight")) {
+                options.useFullHeight = json.getBoolean("useFullHeight");
+            }
+            if (json.has("colorAccidentals")) {
+                options.colorAccidentals = json.getBoolean("colorAccidentals");
+            }
+
+            if (json.has("delayStartInterval")) {
+                options.delayStartInterval = json.getInt("delayStartInterval");
+            }
+            else
+            {
+                options.delayStartInterval =0;
+            }
             options.showMeasures = json.getBoolean("showMeasures");
             options.playMeasuresInLoop = json.getBoolean("playMeasuresInLoop");
             options.playMeasuresInLoopStart = json.getInt("playMeasuresInLoopStart");
@@ -277,6 +298,7 @@ public class MidiOptions implements Serializable {
         if (saved.useColors && saved.noteColors != null) {
             noteColors = saved.noteColors;
         }
+
         if (saved.time != null) {
             time = new TimeSignature(saved.time.getNumerator(), saved.time.getDenominator(), 
                     saved.time.getQuarter(), saved.time.getTempo());
@@ -295,6 +317,8 @@ public class MidiOptions implements Serializable {
         shade1Color = saved.shade1Color;
         shade2Color = saved.shade2Color;
         useColors = saved.useColors;
+        colorAccidentals = saved.colorAccidentals;
+        useFullHeight = saved.useFullHeight;
         showMeasures = saved.showMeasures;
         playMeasuresInLoop = saved.playMeasuresInLoop;
         playMeasuresInLoopStart = saved.playMeasuresInLoopStart;
@@ -352,6 +376,8 @@ public class MidiOptions implements Serializable {
         options.shade1Color = shade1Color;
         options.shade2Color = shade2Color;
         options.useColors = useColors;
+        options.colorAccidentals = colorAccidentals;
+        options.useFullHeight = useFullHeight;
         options.showMeasures = showMeasures;
         options.playMeasuresInLoop = playMeasuresInLoop;
         options.playMeasuresInLoopStart = playMeasuresInLoopStart;

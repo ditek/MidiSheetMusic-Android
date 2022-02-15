@@ -149,11 +149,34 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                     createSheetMusic(options);
                 });
 
+        SwitchDrawerItem colorAccidentals = new SwitchDrawerItem();
+
         SwitchDrawerItem useColors = new SwitchDrawerItem()
                 .withName(R.string.use_note_colors)
                 .withChecked(options.useColors)
                 .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+                    if (isChecked == true)
+                    {
+                        options.colorAccidentals = false;
+                    }
+                    colorAccidentals.setChecked(options.colorAccidentals);
+                    drawer.updateItem(colorAccidentals);
                     options.useColors = isChecked;
+                    createSheetMusic(options);
+                });
+
+
+        colorAccidentals.withName(R.string.use_accidental_colors)
+                .withChecked(options.colorAccidentals)
+                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+                    if (isChecked == true)
+                    {
+                        options.useColors = false;
+                    }
+
+                    useColors.setChecked(options.useColors);
+                    drawer.updateItem(useColors);
+                    options.colorAccidentals = isChecked;
                     createSheetMusic(options);
                 });
 
@@ -194,6 +217,7 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                 .addDrawerItems(
                         scrollVertically,
                         useColors,
+                        colorAccidentals,
                         loopSettings,
                         new DividerDrawerItem()
                 )

@@ -12,12 +12,19 @@
 
 package com.midisheetmusic;
 
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import android.app.*;
-import android.content.*;
-import android.graphics.*;
-import android.view.*;
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
 
 import com.midisheetmusic.sheets.AccidSymbol;
 import com.midisheetmusic.sheets.BarSymbol;
@@ -31,6 +38,10 @@ import com.midisheetmusic.sheets.MusicSymbol;
 import com.midisheetmusic.sheets.RestSymbol;
 import com.midisheetmusic.sheets.Staff;
 import com.midisheetmusic.sheets.SymbolWidths;
+
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 class BoxedInt {
     public int value;
@@ -89,6 +100,8 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
     private int      screenwidth;     /** The screen width */
     private int      screenheight;    /** The screen height */
 
+    private         MidiOptions optionsSaved;
+
     /* fields used for scrolling */
 
     private int      sheetwidth;      /** The sheet music width (excluding zoom) */
@@ -110,7 +123,17 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
         Activity activity = (Activity)context;
         screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
         screenheight = activity.getWindowManager().getDefaultDisplay().getHeight();
+
+        // Size could've been captured while the screen was still in portrait.
+        // In this case, swap the dimensions.
+        if (screenwidth < screenheight) {
+            int temp = screenwidth;
+            screenwidth = screenheight;
+            screenheight = temp;
+        }
+
         playerHeight = MidiPlayer.getPreferredSize(screenwidth, screenheight).y;
+
     }
 
     /** Create a new SheetMusic View.
@@ -128,9 +151,12 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
             options = new MidiOptions(file);
         }
         zoom = 1.0f;
+        optionsSaved = options;
 
         filename = file.getFileName();
-        SetColors(options.noteColors, options.useColors, options.shade1Color, options.shade2Color);
+
+        SetColors(options.noteColors, options.useColors, options.colorAccidentals, options.shade1Color, options.shade2Color);
+
         paint = new Paint();
         paint.setTextSize(12.0f);
         Typeface typeface = Typeface.create(paint.getTypeface(), Typeface.NORMAL);
@@ -242,6 +268,19 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
     @Override
     protected void 
     onSizeChanged(int newwidth, int newheight, int oldwidth, int oldheight) {
+        onSizeChangedAll(newwidth, newheight, oldwidth, oldheight);
+    }
+
+
+    public void ReCalculateZoom()
+    {
+        bufferCanvas = null;
+        onSizeChangedAll(viewwidth, viewheight, 0,0);
+    }
+
+
+    private void
+    onSizeChangedAll(int newwidth, int newheight, int oldwidth, int oldheight) {
         viewwidth = newwidth;
         viewheight = newheight;
 
@@ -255,16 +294,26 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
             zoom = (float)((newwidth - 2) * 1.0 / PageWidth);
         }
         else {
-            // Zoom to fit the height assuming the piano is visible
             Point pianoSize = Piano.getPreferredSize(newwidth, newheight);
-            zoom = (float)((screenheight - pianoSize.y - playerHeight) * 1.0 / sheetheight);
+            int pianoRatio = 1;
+            if (optionsSaved.useFullHeight && !optionsSaved.showPiano) {
+                pianoRatio = 0;
+            }
+
+            int playerRatio = 0;
+            if (player.getVisibility() == VISIBLE) {
+                playerRatio = 1;
+            }
+
+            zoom = (float) (screenheight - (pianoSize.y * pianoRatio) - (playerHeight * playerRatio)) / (float) sheetheight;
         }
         if (bufferCanvas == null) {
             createBufferCanvas();
         }
+
         draw();
     }
-    
+
 
     /** Get the best key signature given the midi notes in all the tracks. */
     private KeySignature GetKeySignature(ArrayList<MidiTrack> tracks) {
@@ -853,12 +902,17 @@ public class SheetMusic extends SurfaceView implements SurfaceHolder.Callback, S
 
 
     /** Change the note colors for the sheet music, and redraw. */
-    public void SetColors(int[] newcolors, boolean shouldUseColors, int newshade1, int newshade2) {
+    public void SetColors(int[] newcolors, boolean shouldUseColors, boolean shouldColorAccidentals, int newshade1, int newshade2) {
         useColors = shouldUseColors;
         if (NoteColors == null) {
             NoteColors = new int[12];
             for (int i = 0; i < 12; i++) {
-                NoteColors[i] = Color.BLACK;
+
+                if (shouldColorAccidentals && NoteScale.IsBlackKey(i))
+                    NoteColors[i] = Color.RED;
+                else
+                    NoteColors[i] = Color.BLACK;
+
             }
         }
         if (shouldUseColors && newcolors != null) {

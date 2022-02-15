@@ -124,9 +124,12 @@ public class SettingsActivity extends AppCompatActivity {
         private ListPreference key;                   /** Key Signature to use */
         private ListPreference time;                  /** Time Signature to use */
         private ListPreference combineInterval;       /** Interval (msec) to combine notes */
+        private ListPreference delayStartInterval;    /** Delay before playing */
 
         private ColorPreference[] noteColors;
         private SwitchPreferenceCompat useColors;
+        private SwitchPreferenceCompat colorAccidentals;    /** Use RED as color for sharps and flats */
+        private SwitchPreferenceCompat useFullHeight;       /** Drawing on full height option */
 
         private ColorPreference shade1Color;          /** Right-hand color */
         private ColorPreference shade2Color;          /** Left-hand color */
@@ -165,6 +168,7 @@ public class SettingsActivity extends AppCompatActivity {
             createKeySignaturePrefs(root);
             createTimeSignaturePrefs(root);
             createCombineIntervalPrefs(root);
+            createDelayStartIntervalPrefs(root);
             createColorPrefs(root);
             setPreferenceScreen(root);
         }
@@ -257,6 +261,17 @@ public class SettingsActivity extends AppCompatActivity {
             showLyrics.setTitle(R.string.show_lyrics);
             showLyrics.setChecked(options.showLyrics);
             root.addPreference(showLyrics);
+
+            useFullHeight = new SwitchPreferenceCompat(context);
+            useFullHeight.setTitle(R.string.use_full_height);
+            useFullHeight.setChecked(options.useFullHeight);
+
+            useFullHeight.setOnPreferenceChangeListener((preference, isChecked) -> {
+                options.useFullHeight = (boolean) isChecked;
+
+                return true;
+            });
+            root.addPreference(useFullHeight);
         }
 
         /** Create the "Show Note Letters" preference */
@@ -373,6 +388,30 @@ public class SettingsActivity extends AppCompatActivity {
             root.addPreference(combineInterval);
         }
 
+        /** Create the "Delay before start"  preference
+         * SetSummary is not to be used as The default mechanism will force the value but not the summary
+         * Therefore using call back to calculate the summary
+         */
+        private void createDelayStartIntervalPrefs(PreferenceScreen root) {
+            int selected = options.delayStartInterval;
+            delayStartInterval = new ListPreference(context);
+            delayStartInterval.setKey("DelayToStart");
+            delayStartInterval.setOnPreferenceChangeListener((preference, isChecked) -> {
+                        options.delayStartInterval = Integer.parseInt((String)isChecked);
+                        delayStartInterval.setValueIndex(options.delayStartInterval / 1000);
+
+                        return true;});
+            delayStartInterval.setSummaryProvider((preference) -> {
+                return (Integer.parseInt((String)((ListPreference)preference).getValue()) / 1000) + " second(s)" ;
+            });
+
+            delayStartInterval.setTitle(R.string.delay_start_interval);
+            delayStartInterval.setEntries(R.array.delay_start_interval_entries);
+            delayStartInterval.setEntryValues(R.array.delay_start_interval_values);
+            delayStartInterval.setValueIndex(selected / 1000);
+            root.addPreference(delayStartInterval);
+        }
+
 
         /* Create the "Left-hand color" and "Right-hand color" preferences */
         private void createColorPrefs(PreferenceScreen root) {
@@ -390,10 +429,30 @@ public class SettingsActivity extends AppCompatActivity {
             shade2Color.setTitle(R.string.left_hand_color);
             root.addPreference(shade2Color);
 
+            colorAccidentals = new SwitchPreferenceCompat(context);
+            colorAccidentals.setTitle(R.string.use_accidental_colors);
+            colorAccidentals.setChecked(options.colorAccidentals);
+
+            colorAccidentals.setOnPreferenceChangeListener((preference, isChecked) -> {
+                if ((boolean)isChecked == true)
+                    useColors.setChecked(false);
+
+                boolean isuseColorChecked = useColors.isChecked();
+                for (ColorPreference noteColorPref : noteColors) {
+                    noteColorPref.setVisible((boolean)isuseColorChecked);
+                }
+
+                return true;
+            });
+            root.addPreference(colorAccidentals);
+
             useColors = new SwitchPreferenceCompat(context);
             useColors.setTitle(R.string.use_note_colors);
             useColors.setChecked(options.useColors);
             useColors.setOnPreferenceChangeListener((preference, isChecked) -> {
+                if ((boolean)isChecked == true)
+                    colorAccidentals.setChecked(false);
+
                 for (ColorPreference noteColorPref : noteColors) {
                     noteColorPref.setVisible((boolean)isChecked);
                 }
@@ -459,9 +518,12 @@ public class SettingsActivity extends AppCompatActivity {
                     break;
             }
             options.combineInterval = Integer.parseInt(combineInterval.getValue());
+            options.delayStartInterval = Integer.parseInt(delayStartInterval.getValue());
             options.shade1Color = shade1Color.getColor();
             options.shade2Color = shade2Color.getColor();
             options.useColors = useColors.isChecked();
+            options.colorAccidentals = colorAccidentals.isChecked();
+            options.useFullHeight = useFullHeight.isChecked();
         }
 
         @Override

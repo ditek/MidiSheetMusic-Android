@@ -55,8 +55,9 @@
 
     <SeekBar
         android:id="@+id/speed_bar"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="@dimen/toolbar_height"
+        android:layout_weight="2"
         android:max="150"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
@@ -65,15 +66,15 @@
     <Button
         android:id="@+id/btn_midi"
         style="@style/DisabledToolbarButton"
-        android:text="MIDI"
         android:enabled="false"
-        android:layout_width="80dp"
+        android:text="MIDI"
+        android:layout_width="70dp"
         android:textSize="16sp" />
 
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+         />
 
     <Button
         android:id="@+id/btn_left"
@@ -92,13 +93,14 @@
     <ImageButton
         android:id="@+id/btn_piano"
         style="@style/ToolbarButtonStyle"
-        android:src="@drawable/ic_piano"
-        android:contentDescription="@string/show_hide_piano" />
+        android:contentDescription="@string/show_hide_piano"
+        android:src="@drawable/ic_piano" />
 
     <ImageButton
         android:id="@+id/btn_settings"
         style="@style/ToolbarButtonStyle"
-        android:src="@drawable/ic_settings"
-        android:contentDescription="@string/settings" />
+        android:layout_width="wrap_content"
+        android:contentDescription="@string/settings"
+        android:src="@drawable/ic_settings" />
 </LinearLayout>
 <!--</merge>-->
