@@ -66,10 +66,6 @@ public class MidiTrack {
             }
             else if (mevent.Metaevent == MidiFile.MetaEventLyric) {
                 AddLyric(mevent);
-                if (lyrics == null) {
-                    lyrics = new ArrayList<MidiEvent>();
-                }
-                lyrics.add(mevent);
             }
         }
         if (notes.size() > 0 && notes.get(0).getChannel() == 9)  {
