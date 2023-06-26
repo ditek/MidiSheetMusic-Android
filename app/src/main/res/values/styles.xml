@@ -19,8 +19,11 @@
         <item name="android:layout_height">40dp</item>
     </style>
 
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/background_splash</item>
+    <style name="SplashTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/primary</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>
     <style name="DisabledToolbarButton" parent="ToolbarButtonStyle">
         <item name="android:textColor">@android:color/holo_red_dark</item>
