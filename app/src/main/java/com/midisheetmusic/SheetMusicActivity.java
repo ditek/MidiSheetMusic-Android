@@ -22,7 +22,6 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -34,14 +33,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.midisheetmusic.drawerItems.ExpandableSwitchDrawerItem;
 import com.midisheetmusic.sheets.ClefSymbol;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondarySwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.util.MaterialDrawerSliderViewExtensionsKt;
+import com.mikepenz.materialdrawer.util.MenuDrawerUtilsKt;
+import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -73,7 +73,8 @@ public class SheetMusicActivity extends MidiHandlingActivity {
     private MidiFile midifile;   /* The midi file to play */
     private MidiOptions options; /* The options for sheet music and sound */
     private long midiCRC;        /* CRC of the midi bytes */
-    private Drawer drawer;
+    private MaterialDrawerSliderView drawer;
+    private DrawerLayout drawerLayout;
 
      /** Create this SheetMusicActivity.
       * The Intent should have two parameters:
@@ -140,99 +141,91 @@ public class SheetMusicActivity extends MidiHandlingActivity {
     /* Create the MidiPlayer and Piano views */
     void createViews() {
         layout = findViewById(R.id.sheet_content);
+        drawer = findViewById(R.id.sheet_content_drawer);
+        drawerLayout = findViewById(R.id.sheet_content_drawer_layout);
 
-        SwitchDrawerItem scrollVertically = new SwitchDrawerItem()
-                .withName(R.string.scroll_vertically)
-                .withChecked(options.scrollVert)
-                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
-                    options.scrollVert = isChecked;
-                    createSheetMusic(options);
-                });
+        SwitchDrawerItem scrollVertically = new SwitchDrawerItem();
+        scrollVertically.setName(new StringHolder(R.string.scroll_vertically));
+        scrollVertically.setChecked(options.scrollVert);
+        scrollVertically.setOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+            options.scrollVert = isChecked;
+            createSheetMusic(options);
+        });
 
         SwitchDrawerItem colorAccidentals = new SwitchDrawerItem();
 
-        SwitchDrawerItem useColors = new SwitchDrawerItem()
-                .withName(R.string.use_note_colors)
-                .withChecked(options.useColors)
-                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
-                    if (isChecked == true)
-                    {
-                        options.colorAccidentals = false;
-                    }
-                    colorAccidentals.setChecked(options.colorAccidentals);
-                    drawer.updateItem(colorAccidentals);
-                    options.useColors = isChecked;
-                    createSheetMusic(options);
-                });
+        SwitchDrawerItem useColors = new SwitchDrawerItem();
+        useColors.setName(new StringHolder(R.string.use_note_colors));
+        useColors.setChecked(options.useColors);
+        useColors.setOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+            if (isChecked) {
+                options.colorAccidentals = false;
+            }
 
+            colorAccidentals.setChecked(options.colorAccidentals);
+            MaterialDrawerSliderViewExtensionsKt.updateItem(drawer, colorAccidentals);
+            options.useColors = isChecked;
+            createSheetMusic(options);
+        });
 
-        colorAccidentals.withName(R.string.use_accidental_colors)
-                .withChecked(options.colorAccidentals)
-                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
-                    if (isChecked == true)
-                    {
-                        options.useColors = false;
-                    }
+        colorAccidentals.setName(new StringHolder(R.string.use_accidental_colors));
+        colorAccidentals.setChecked(options.colorAccidentals);
+        colorAccidentals.setOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+            if (isChecked) {
+                options.useColors = false;
+            }
 
-                    useColors.setChecked(options.useColors);
-                    drawer.updateItem(useColors);
-                    options.colorAccidentals = isChecked;
-                    createSheetMusic(options);
-                });
+            useColors.setChecked(options.useColors);
+            MaterialDrawerSliderViewExtensionsKt.updateItem(drawer, useColors);
+            options.colorAccidentals = isChecked;
+            createSheetMusic(options);
+        });
 
-        SecondarySwitchDrawerItem showMeasures = new SecondarySwitchDrawerItem()
-                .withName(R.string.show_measures)
-                .withLevel(2)
-                .withChecked(options.showMeasures)
-                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
-                    options.showMeasures = isChecked;
-                    createSheetMusic(options);
-                });
+        SecondarySwitchDrawerItem showMeasures = new SecondarySwitchDrawerItem();
+        showMeasures.setName(new StringHolder(R.string.show_measures));
+        showMeasures.setLevel(2);
+        showMeasures.setChecked(options.showMeasures);
+        showMeasures.setOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+            options.showMeasures = isChecked;
+            createSheetMusic(options);
+        });
 
-        SecondaryDrawerItem loopStart = new SecondaryDrawerItem()
-                .withIdentifier(ID_LOOP_START)
-                .withBadge(Integer.toString(options.playMeasuresInLoopStart + 1))
-                .withName(R.string.play_measures_in_loop_start)
-                .withLevel(2);
+        SecondaryDrawerItem loopStart = new SecondaryDrawerItem();
+        loopStart.setIdentifier(ID_LOOP_START);
+        loopStart.setBadge(new StringHolder(Integer.toString(options.playMeasuresInLoopStart + 1)));
+        loopStart.setName(new StringHolder(R.string.play_measures_in_loop_start));
+        loopStart.setLevel(2);
 
-        SecondaryDrawerItem loopEnd = new SecondaryDrawerItem()
-                .withIdentifier(ID_LOOP_END)
-                .withBadge(Integer.toString(options.playMeasuresInLoopEnd + 1))
-                .withName(R.string.play_measures_in_loop_end)
-                .withLevel(2);
+        SecondaryDrawerItem loopEnd = new SecondaryDrawerItem();
+        loopEnd.setIdentifier(ID_LOOP_END);
+        loopEnd.setBadge(new StringHolder(Integer.toString(options.playMeasuresInLoopEnd + 1)));
+        loopEnd.setName(new StringHolder(R.string.play_measures_in_loop_end));
+        loopEnd.setLevel(2);
 
-        ExpandableSwitchDrawerItem loopSettings = new ExpandableSwitchDrawerItem()
-                .withIdentifier(ID_LOOP_ENABLE)
-                .withName(R.string.loop_on_measures)
-                .withChecked(options.playMeasuresInLoop)
-                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
-                    options.playMeasuresInLoop = isChecked;
-                })
-                .withSubItems(showMeasures, loopStart, loopEnd);
+        ExpandableSwitchDrawerItem loopSettings = new ExpandableSwitchDrawerItem();
+        loopSettings.setIdentifier(ID_LOOP_ENABLE);
+        loopSettings.setName(new StringHolder(R.string.loop_on_measures));
+        loopSettings.setChecked(options.playMeasuresInLoop);
+        loopSettings.setOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
+            options.playMeasuresInLoop = isChecked;
+        });
+        loopSettings.setSubItems(showMeasures, loopStart, loopEnd);
 
-        // Drawer
-        drawer = new DrawerBuilder()
-                .withActivity(this)
-                .withInnerShadow(true)
-                .addDrawerItems(
-                        scrollVertically,
-                        useColors,
-                        colorAccidentals,
-                        loopSettings,
-                        new DividerDrawerItem()
-                )
-                .inflateMenu(R.menu.sheet_menu)
-                .withOnDrawerItemClickListener((view, i, item) -> drawerItemClickListener(item))
-                .withDrawerGravity(Gravity.RIGHT)
-                .build();
+        drawer.setInnerShadow(true);
+        MaterialDrawerSliderViewExtensionsKt.addItems(drawer,
+                scrollVertically,
+                useColors,
+                colorAccidentals,
+                loopSettings,
+                new DividerDrawerItem());
+        MenuDrawerUtilsKt.inflateMenu(drawer, R.menu.sheet_menu);
+        drawer.setOnDrawerItemClickListener((view, i, item) -> drawerItemClickListener(i));
 
-        // Make sure that the view extends over the navigation buttons area
-        drawer.getDrawerLayout().setFitsSystemWindows(false);
         // Lock the drawer so swiping doesn't open it
-        drawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         player = new MidiPlayer(this);
-        player.setDrawer(drawer);
+        player.setDrawer(drawer, drawerLayout);
         layout.addView(player);
 
         piano = new Piano(this);
@@ -288,11 +281,11 @@ public class SheetMusicActivity extends MidiHandlingActivity {
         switch ((int)item.getIdentifier()) {
             case R.id.song_settings:
                 changeSettings();
-                drawer.closeDrawer();
+                drawerLayout.closeDrawer(drawer);
                 break;
             case R.id.save_images:
                 showSaveImagesDialog();
-                drawer.closeDrawer();
+                drawerLayout.closeDrawer(drawer);
                 break;
             case ID_LOOP_START:
                 // Note that we display the measure numbers starting at 1,
@@ -305,10 +298,11 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                     // Make sure End is not smaller than Start
                     if (options.playMeasuresInLoopStart > options.playMeasuresInLoopEnd) {
                         options.playMeasuresInLoopEnd = options.playMeasuresInLoopStart;
-                        drawer.updateBadge(ID_LOOP_END, new StringHolder(items[i]));
+                        MaterialDrawerSliderViewExtensionsKt.updateBadge(
+                                drawer, ID_LOOP_END, new StringHolder(items[i]));
                     }
-                    ((SecondaryDrawerItem) item).withBadge(items[i]);
-                    drawer.updateItem(item);
+                    ((SecondaryDrawerItem) item).setBadge(new StringHolder(items[i]));
+                    MaterialDrawerSliderViewExtensionsKt.updateItem(drawer, item);
                 });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
@@ -325,10 +319,11 @@ public class SheetMusicActivity extends MidiHandlingActivity {
                     // Make sure End is not smaller than Start
                     if (options.playMeasuresInLoopStart > options.playMeasuresInLoopEnd) {
                         options.playMeasuresInLoopStart = options.playMeasuresInLoopEnd;
-                        drawer.updateBadge(ID_LOOP_START, new StringHolder(items[i]));
+                        MaterialDrawerSliderViewExtensionsKt.updateBadge(
+                                drawer, ID_LOOP_START, new StringHolder(items[i]));
                     }
-                    ((SecondaryDrawerItem) item).withBadge(items[i]);
-                    drawer.updateItem(item);
+                    ((SecondaryDrawerItem) item).setBadge(new StringHolder(items[i]));
+                    MaterialDrawerSliderViewExtensionsKt.updateItem(drawer, item);
                 });
                 alertDialog = builder.create();
                 alertDialog.show();
