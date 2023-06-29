@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.midisheetmusic'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.ditek.midisheetmusic"
         minSdk 21
-        targetSdk 33
+        targetSdk 34
         versionCode 9
         versionName "2.6"
 
