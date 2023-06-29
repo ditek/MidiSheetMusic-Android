@@ -4,9 +4,16 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
@@ -22,54 +29,87 @@ import com.midisheetmusic.sheets.ClefSymbol;
  */
 public class SplashActivity extends AppCompatActivity {
 
-    private static final int PERMISSION_REQUEST_CODE_EXT_STORAGE_ = 724;
+    private SplashScreen splashScreen;
+    private final String requestPermission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.RequestPermission(),
+                    this::checkPermissionApi21AfterResult);
+    private boolean waitForPermission = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        final SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
+        splashScreen = SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
-        // Keep the splash screen visible for this Activity
-        splashScreen.setKeepOnScreenCondition(() -> true );
         loadImages();
-        startActivity();
-    }
-
-    /** Check for required permissions and start ChooseSongActivity */
-    private void startActivity() {
-        // Check if we have WRITE_EXTERNAL_STORAGE permission
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    PERMISSION_REQUEST_CODE_EXT_STORAGE_);
-            return;
-        }
-
-        Intent intent = new Intent(this, ChooseSongActivity.class);
-        startActivity(intent);
-        finish();
+        waitForPermission = true;
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE_EXT_STORAGE_: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission granted
-                    startActivity();
-                } else {
-                    // permission denied
-                    Snackbar.make(findViewById(android.R.id.content),
+    protected void onResume() {
+        super.onResume();
+
+        if (!waitForPermission)
+            return;
+        waitForPermission = false;
+
+        splashScreen.setKeepOnScreenCondition(() -> {
+            checkPermission(
+                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+                    ? Environment.isExternalStorageManager()
+                    : (ContextCompat.checkSelfPermission(this, requestPermission)
+                        == PackageManager.PERMISSION_GRANTED)
+            );
+            return false;
+        });
+    }
+
+    /** check permission **/
+    private void checkPermission(boolean granted) {
+        if (granted) {
+            Intent intent = new Intent(this, ChooseSongActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+                requestPermissionApi30();
+            else
+                requestPermissionLauncher.launch(requestPermission);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void requestPermissionApi30() {
+        Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+        startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+        waitForPermission = true;
+
+        Snackbar.make(findViewById(android.R.id.content),
+                        R.string.msg_permission_denied, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.msg_permission_denied_retry, view -> requestPermissionApi30())
+                .show();
+    }
+
+    private void checkPermissionApi21AfterResult(boolean granted) {
+        if (granted)
+            checkPermission(true);
+        else
+            Snackbar.make(findViewById(android.R.id.content),
                             R.string.msg_permission_denied, Snackbar.LENGTH_INDEFINITE)
-                            .setAction(R.string.msg_permission_denied_retry, view -> startActivity())
-                            .show();
-                }
-            }
+                    .setAction(R.string.msg_permission_denied_retry, view -> {
+                        requestPermissionApi21AfterResult();
+                    })
+                    .show();
+    }
+
+    private void requestPermissionApi21AfterResult() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(SplashActivity.this, requestPermission)) {
+            requestPermissionLauncher.launch(requestPermission);
+        } else {
+            Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+            startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, uri));
+            waitForPermission = true;
         }
     }
 
