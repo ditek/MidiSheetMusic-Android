@@ -15,6 +15,7 @@
 
     <style name="AppTheme" parent="@style/Theme.AppCompat.NoActionBar"/>
     <style name="PlayerTheme" parent="@style/Theme.AppCompat.NoActionBar.Fullscreen"/>
+    <style name="SettingsTheme" parent="@style/Theme.AppCompat.DayNight"/>
 
     <style name="ToolbarButtonStyle" parent="@android:style/Widget.Material.Button.Borderless">
         <item name="android:layout_width">40dp</item>

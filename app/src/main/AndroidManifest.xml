@@ -27,7 +27,7 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/Theme.AppCompat"
+            android:theme="@style/SettingsTheme"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.SETTINGS" />
