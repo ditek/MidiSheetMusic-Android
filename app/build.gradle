@@ -1,50 +1,61 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-
-repositories {
-    maven {
-        url 'https://github.com/joytunes/USB-MIDI-Driver/raw/master/MIDIDriver/snapshots'
-    }
-    mavenCentral()
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
+
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    namespace 'com.midisheetmusic'
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.ditek.midisheetmusic"
-        minSdkVersion 21
-        targetSdkVersion 28
+        minSdk 21
+        targetSdk 34
+        versionCode 9
+        versionName "2.6"
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    bundle {
+        storeArchive {
+            enable = false
         }
     }
     compileOptions {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
-
-    packagingOptions {
-        exclude 'META-INF/library-core_release.kotlin_module'
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'jp.kshoji:midi-driver:0.1.5:@aar'
-    implementation 'androidx.preference:preference:1.1.0-rc01'
-    implementation 'com.android.support:design:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'jp.kshoji:midi-driver:0.1.5.2:@aar'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
 
     // For the navigation drawer
-    implementation "com.mikepenz:materialdrawer:7.0.0-rc01"
-    implementation "androidx.recyclerview:recyclerview:1.0.0"
-    implementation "androidx.annotation:annotation:1.1.0"
-    implementation "com.google.android.material:material:1.0.0"
-    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
+    implementation 'com.mikepenz:materialdrawer:9.0.2'
+    implementation 'com.mikepenz:materialdrawer-iconics:9.0.2'
+    implementation 'com.mikepenz:materialdrawer-nav:9.0.2'
+    implementation 'com.mikepenz:material-design-icons-dx-typeface:5.0.1.2-kotlin@aar'
+    implementation 'com.mikepenz:fastadapter-extensions-utils:5.7.0'
+    implementation "androidx.recyclerview:recyclerview:1.3.1"
+    implementation "androidx.annotation:annotation:1.6.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 }

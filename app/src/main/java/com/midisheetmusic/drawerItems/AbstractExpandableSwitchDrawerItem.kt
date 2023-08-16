@@ -17,16 +17,19 @@ import androidx.core.view.ViewCompat
 import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.IconicsSize
-import com.mikepenz.materialdrawer.Drawer
+import com.mikepenz.iconics.typeface.library.materialdesigndx.MaterialDesignDx
+import com.mikepenz.iconics.utils.color
+import com.mikepenz.iconics.utils.padding
+import com.mikepenz.iconics.utils.size
 import com.mikepenz.materialdrawer.holder.ColorHolder
-import com.mikepenz.materialdrawer.icons.MaterialDrawerFont
 import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener
+import com.mikepenz.materialdrawer.model.interfaces.Checkable
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 
 /**
  * Created by ditek on 09-Jul-19
  */
-abstract class AbstractExpandableSwitchDrawerItem<Item : AbstractExpandableSwitchDrawerItem<Item>> : BaseDescribeableDrawerItem<Item, AbstractExpandableSwitchDrawerItem.ViewHolder>() {
+abstract class AbstractExpandableSwitchDrawerItem<Item : AbstractExpandableSwitchDrawerItem<Item>> : Checkable, BaseDescribeableDrawerItem<Item, AbstractExpandableSwitchDrawerItem.ViewHolder>() {
 
     override val type: Int
         get() = R.id.drawer_item_expandable_switch
@@ -41,7 +44,7 @@ abstract class AbstractExpandableSwitchDrawerItem<Item : AbstractExpandableSwitc
     /* *************************************/
 
     var isSwitchEnabled = true
-    var isChecked = false
+    override var isChecked = false
     var onCheckedChangeListener: OnCheckedChangeListener? = null
 
     private val checkedChangeListener = object : CompoundButton.OnCheckedChangeListener {
@@ -62,18 +65,16 @@ abstract class AbstractExpandableSwitchDrawerItem<Item : AbstractExpandableSwitc
         return this as Item
     }
 
+    @Deprecated("Please consider to replace with the actual property setter")
     fun withSwitchEnabled(switchEnabled: Boolean): Item {
         this.isSwitchEnabled = switchEnabled
         return this as Item
     }
 
+    @Deprecated("Please consider to replace with the actual property setter")
     fun withOnCheckedChangeListener(onCheckedChangeListener: OnCheckedChangeListener): Item {
         this.onCheckedChangeListener = onCheckedChangeListener
         return this as Item
-    }
-
-    fun withCheckable(checkable: Boolean): Item {
-        return withSelectable(checkable)
     }
 
 
@@ -81,7 +82,7 @@ abstract class AbstractExpandableSwitchDrawerItem<Item : AbstractExpandableSwitc
     /* Expandable Specific Part                */
     /* *************************************/
 
-    var mOnDrawerItemClickListener: Drawer.OnDrawerItemClickListener? = null
+    private var mOnDrawerItemClickListener: ((v: View?, item: IDrawerItem<*>, position: Int) -> Boolean)? = null
     var arrowColor: ColorHolder? = null
     var arrowRotationAngleStart = 0
     var arrowRotationAngleEnd = 180
@@ -89,8 +90,7 @@ abstract class AbstractExpandableSwitchDrawerItem<Item : AbstractExpandableSwitc
     /**
      * our internal onDrawerItemClickListener which will handle the arrow animation
      */
-    override var onDrawerItemClickListener: Drawer.OnDrawerItemClickListener? = object : Drawer.OnDrawerItemClickListener {
-        override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*>): Boolean {
+    override var onDrawerItemClickListener: ((View?, IDrawerItem<*>, Int) -> Boolean)? = { view, drawerItem, position ->
             if (drawerItem is AbstractDrawerItem<*, *> && drawerItem.isEnabled) {
                 view?.let {
                     if (drawerItem.isExpanded) {
@@ -100,10 +100,8 @@ abstract class AbstractExpandableSwitchDrawerItem<Item : AbstractExpandableSwitc
                     }
                 }
             }
-
-            return mOnDrawerItemClickListener?.onItemClick(view, position, drawerItem) ?: false
+            mOnDrawerItemClickListener?.invoke(view, drawerItem, position) ?: false
         }
-    }
 
     fun withArrowColor(@ColorInt arrowColor: Int): Item {
         this.arrowColor = ColorHolder.fromColor(arrowColor)
@@ -125,12 +123,12 @@ abstract class AbstractExpandableSwitchDrawerItem<Item : AbstractExpandableSwitc
         return this as Item
     }
 
-    override fun withOnDrawerItemClickListener(onDrawerItemClickListener: Drawer.OnDrawerItemClickListener): Item {
+    override fun withOnDrawerItemClickListener(onDrawerItemClickListener: ((v: View?, item: IDrawerItem<*>, position: Int) -> Boolean)?): Item {
         mOnDrawerItemClickListener = onDrawerItemClickListener
         return this as Item
     }
 
-    override fun bindView(holder: ViewHolder, payloads: MutableList<Any>) {
+    override fun bindView(holder: ViewHolder, payloads: List<Any>) {
         super.bindView(holder, payloads)
 
         val ctx = holder.itemView.context
@@ -144,21 +142,22 @@ abstract class AbstractExpandableSwitchDrawerItem<Item : AbstractExpandableSwitc
         holder.switchView.isEnabled = isSwitchEnabled
 
         //add a onDrawerItemClickListener here to be able to check / uncheck if the drawerItem can't be selected
-        withOnDrawerItemClickListener(object : Drawer.OnDrawerItemClickListener {
-            override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*>): Boolean {
+        withOnDrawerItemClickListener { v, item, position ->
                 if (!isSelectable) {
                     isChecked = !isChecked
                     holder.switchView.isChecked = isChecked
                 }
-
-                return false
+                false
             }
-        })
 
         //make sure all animations are stopped
         if (holder.arrow.drawable is IconicsDrawable) {
-            (holder.arrow.drawable as IconicsDrawable).color(IconicsColor.colorInt(this.arrowColor?.color(ctx)
-                    ?: getIconColor(ctx)))
+            (holder.arrow.drawable as IconicsDrawable).color {
+                this.arrowColor?.color(ctx)?.let { color ->
+                    return@color IconicsColor.colorInt(color)
+                }
+                IconicsColor.colorList(getIconColor(ctx))
+            }
         }
         holder.arrow.clearAnimation()
         if (!isExpanded) {
@@ -180,7 +179,10 @@ abstract class AbstractExpandableSwitchDrawerItem<Item : AbstractExpandableSwitc
         var arrow: ImageView = view.findViewById(R.id.material_drawer_arrow)
 
         init {
-            arrow.setImageDrawable(IconicsDrawable(view.context, MaterialDrawerFont.Icon.mdf_expand_more).size(IconicsSize.dp(16)).padding(IconicsSize.dp(2)).color(IconicsColor.colorInt(Color.BLACK)))
+            arrow.setImageDrawable(IconicsDrawable(view.context, MaterialDesignDx.Icon.gmf_expand_more)
+                .size {IconicsSize.dp(16)}
+                .padding{IconicsSize.dp(2)}
+                .color{IconicsColor.colorInt(Color.BLACK)})
         }
     }
 }

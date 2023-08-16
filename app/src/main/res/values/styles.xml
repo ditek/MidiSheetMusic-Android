@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.AppCompat.NoActionBar.Fullscreen" parent="@style/MaterialDrawerTheme">
+    <style name="Theme.AppCompat.NoActionBar.Fullscreen" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
@@ -8,19 +8,25 @@
         <item name="colorAccent">@color/accent</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="material_drawer_selected_text">@color/primary</item>
+        <item name="materialDrawerStyle">@style/Widget.MaterialDrawerStyle</item>
+        <item name="materialDrawerHeaderStyle">@style/Widget.MaterialDrawerHeaderStyle</item>
+        <item name="materialDrawerSelectedBackgroundColor">@color/primary</item>
     </style>
 
     <style name="AppTheme" parent="@style/Theme.AppCompat.NoActionBar"/>
     <style name="PlayerTheme" parent="@style/Theme.AppCompat.NoActionBar.Fullscreen"/>
+    <style name="SettingsTheme" parent="@style/Theme.AppCompat.DayNight"/>
 
     <style name="ToolbarButtonStyle" parent="@android:style/Widget.Material.Button.Borderless">
         <item name="android:layout_width">40dp</item>
         <item name="android:layout_height">40dp</item>
     </style>
 
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/background_splash</item>
+    <style name="SplashTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/primary</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>
     <style name="DisabledToolbarButton" parent="ToolbarButtonStyle">
         <item name="android:textColor">@android:color/holo_red_dark</item>

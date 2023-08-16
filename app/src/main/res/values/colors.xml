@@ -13,4 +13,20 @@
     <color name="material_drawer_primary_dark">#1976D2</color>
     <color name="material_drawer_primary_light">#BBDEFB</color>
     <color name="material_drawer_accent">#FF4081</color>
+
+    <!-- teal -->
+    <color name="md_teal_50">#E0F2F1</color>
+    <color name="md_teal_100">#B2DFDB</color>
+    <color name="md_teal_200">#80CBC4</color>
+    <color name="md_teal_300">#4DB6AC</color>
+    <color name="md_teal_400">#26A69A</color>
+    <color name="md_teal_500">#009688</color>
+    <color name="md_teal_600">#00897B</color>
+    <color name="md_teal_700">#00796B</color>
+    <color name="md_teal_800">#00695C</color>
+    <color name="md_teal_900">#004D40</color>
+    <color name="md_teal_A100">#A7FFEB</color>
+    <color name="md_teal_A200">#64FFDA</color>
+    <color name="md_teal_A400">#1DE9B6</color>
+    <color name="md_teal_A700">#00BFA5</color>
 </resources>
